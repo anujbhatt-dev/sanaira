@@ -1,7 +1,7 @@
 // import { categories, CategoryType } from "@/utils/categorySeed";
 import Link from "next/link";
 // import { useRef } from "react";
-import { SignedIn, SignedOut, SignInButton, SignUpButton, UserButton, useUser } from "@clerk/nextjs";
+import { SignedIn, SignedOut, SignInButton, SignUpButton, UserButton } from "@clerk/nextjs";
 import { getAllCategories } from "@/sanity/lib/categories/getAllCategory";
 
 

@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
+import Image from "next/image";
 // import { useCursorStore } from "@/store/useCursorStore";
 
 const mediaArray = [
@@ -112,8 +113,10 @@ const FullScreenMedia: React.FC = () => {
         transition={{ duration: 1 }}
       >
         {currentMedia.type === "image" ? (
-          <img
+          <Image
             src={currentMedia.src}
+            width={1600}
+            height={800}
             alt="media"
             className="w-full h-full object-cover"
           />
