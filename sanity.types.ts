@@ -68,6 +68,25 @@ export type Geopoint = {
   alt?: number;
 };
 
+export type ShippingAddress = {
+  _type: "shippingAddress";
+  userId?: {
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    [internalGroqTypeReferenceTo]?: "user";
+  };
+  recipientName?: string;
+  phone?: string;
+  addressLine1?: string;
+  addressLine2?: string;
+  city?: string;
+  state?: string;
+  provinceOrRegion?: string;
+  postalCode?: string;
+  country?: "IN" | "US" | "UK" | "CA" | "AU" | "DE" | "FR" | "AE";
+};
+
 export type Product = {
   _id: string;
   _type: "product";
@@ -107,7 +126,12 @@ export type Product = {
     _key: string;
   }>;
   price?: number;
-  category?: "Men" | "Women" | "Kids" | "Accessories" | "Shoes";
+  category?: {
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    [internalGroqTypeReferenceTo]?: "category";
+  };
   mainImages?: Array<{
     asset?: {
       _ref: string;
@@ -306,7 +330,7 @@ export type SanityImageMetadata = {
   isOpaque?: boolean;
 };
 
-export type AllSanitySchemaTypes = SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityFileAsset | Geopoint | Product | User | Category | Slug | BlockContent | SanityImageCrop | SanityImageHotspot | SanityImageAsset | SanityAssetSourceData | SanityImageMetadata;
+export type AllSanitySchemaTypes = SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityFileAsset | Geopoint | ShippingAddress | Product | User | Category | Slug | BlockContent | SanityImageCrop | SanityImageHotspot | SanityImageAsset | SanityAssetSourceData | SanityImageMetadata;
 export declare const internalGroqTypeReferenceTo: unique symbol;
 // Source: ./sanity/lib/categories/getAllCategory.ts
 // Variable: ALL_CATEGORIES_QUERY
@@ -415,7 +439,12 @@ export type ALL_PRODUCTS_QUERYResult = Array<{
     _key: string;
   }>;
   price?: number;
-  category?: "Accessories" | "Kids" | "Men" | "Shoes" | "Women";
+  category?: {
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    [internalGroqTypeReferenceTo]?: "category";
+  };
   mainImages?: Array<{
     asset?: {
       _ref: string;

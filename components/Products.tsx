@@ -5,9 +5,14 @@ import Heading from './Heading';
 
 export default async function Products() {
   const productsData = await getAllProducts();
+  console.log(productsData);
+  
   return (
-    <div className='pb-[50rem] px-[1rem] md:px-[10rem]'>
-        <Heading text="New Arrivals"/>
+    <div className='pb-[50rem] px-[1rem] md:px-[4rem]'>
+        <div className='flex justify-center gap-x-4'>
+          <Heading text="New"/>
+          <Heading text="Arrivals"/>
+        </div>
         <ProductGrid products={productsData}/>
     </div>
   )

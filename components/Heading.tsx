@@ -41,7 +41,7 @@ const Heading: React.FC<HeadingProps> = ({ text }) => {
   return (
     <h1
       ref={containerRef}
-      className="md:text-[4rem] text-[3rem] font-serif uppercase tracking-widest flex overflow-hidden"
+      className="md:text-[3rem] text-[3rem] font-serif uppercase tracking-widest flex overflow-hidden my-8"
     >
       {text.split("").map((letter, index) => (
         <span
@@ -49,7 +49,7 @@ const Heading: React.FC<HeadingProps> = ({ text }) => {
           ref={(el) => {
             if (el) lettersRef.current[index] = el;
           }}
-          className="inline-block"
+          className="inline-block "
         >
           {letter}
         </span>
