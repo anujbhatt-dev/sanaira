@@ -1,10 +1,11 @@
 "use client"
 import { Product } from '@/sanity.types'
 import React, { useState } from 'react'
-import { Circle, Plus, Star } from 'lucide-react';
+import { Circle, Star } from 'lucide-react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { imageUrl } from '@/lib/imageUrl';
+import AddToBasketButton from './AddToBasketButton';
 
 export default function ProductThumbnail({ product, index }: { product: Product, index: number }) {
   const [hoverState,setHoverState] = useState<number>(0)
@@ -37,9 +38,10 @@ export default function ProductThumbnail({ product, index }: { product: Product,
             <span className="text-lg">₹{product.price ?? 'N/A'}</span>
             {product.price && <span className="line-through text-[#497D74] ml-2"> ₹{product.price * 2}</span>}
           </p>
-          <button className="gap-x-2 p-2 px-4 bg-[beige] text-[0.8rem] uppercase font-bold font-sans tracking-widest flex items-center cursor-pointer">
-            <Plus className="font-semibold h-5 w-5   " /> quick add
-          </button>
+          <div className="gap-x-2 p-2 px-4 bg-[beige] text-[0.8rem] uppercase font-bold font-sans tracking-widest flex items-center cursor-pointer">
+            {/* <Plus className="font-semibold h-5 w-5   " /> quick add */}
+            <AddToBasketButton product={product}/>
+          </div>
         </div>
       </div>
 

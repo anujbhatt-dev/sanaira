@@ -6,7 +6,8 @@ import { userType } from './userType'
 import { productType } from './productType'
 import { shippingAddressType } from './shippingAddressType'
 import { saleType } from './saleType'
+import { orderType } from './orderType'
 
 export const schema: { types: SchemaTypeDefinition[] } = {
-  types: [blockContentType, categoryType, userType, productType, shippingAddressType, saleType],
+  types: [blockContentType, categoryType, userType, productType, shippingAddressType, saleType, orderType],
 }

@@ -3,6 +3,7 @@ import Link from "next/link";
 // import { useRef } from "react";
 import { SignedIn, SignedOut, SignInButton, SignUpButton, UserButton } from "@clerk/nextjs";
 import { getAllCategories } from "@/sanity/lib/categories/getAllCategory";
+import MyBasketButton from "./MyBasketButton";
 
 
 const Header = async () => {
@@ -22,12 +23,13 @@ const Header = async () => {
         </div>
         <div className="flex justify-cneter items-center gap-x-4">
         <SignedOut>
-            <SignInButton />
-            <SignUpButton />
+            <SignInButton mode="modal" />
+            <SignUpButton mode="modal" />
         </SignedOut>
         <SignedIn>
             <UserButton />
         </SignedIn>
+        <MyBasketButton/>
         </div></div>
     </>
   );
