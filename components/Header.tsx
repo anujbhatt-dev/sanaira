@@ -11,16 +11,18 @@ const Header = async () => {
   return (
     <>
       <div
-        className={`backdrop-blur-md px-[10rem] mx-auto border-b border-white/0 flex justify-between h-[4rem] fixed top-0 right-0 left-0 gap-x-4 z-20 transition-all duration-75 items-center `}
+        className={`backdrop-blur-sm bg-white/20 px-[2rem] mx-auto border-b border-white/0 flex justify-between h-[4rem] fixed top-0 right-0 left-0 gap-x-4 z-20 transition-all duration-75 items-center `}
       >
-        <Link href={"/"} className="text-[2rem] ml-[1rem] font-semibold tracking-wider uppercase">
-          Anaira
-        </Link>    
-        <div>
-          {ALL_CATEGORY.map((category,i)=>{
-              return <div key={category._id+i}>{category.name}</div>
-          })}
-        </div>
+        <div className="flex justify-cneter items-center gap-x-10">
+            <Link href={"/"} className="text-[2rem] ml-[1rem] font-semibold tracking-wider uppercase">
+              Anaira
+            </Link>    
+            <div className="flex justify-center space-x-4 capitalize font-serif tracking-wider">
+              {ALL_CATEGORY.map((category,i)=>{
+                return <div className="cursor-pointer hover:underline" key={category._id+i}>{category.name}</div>
+              })}
+            </div>
+          </div>
         <div className="flex justify-cneter items-center gap-x-4">
         <SignedOut>
             <SignInButton mode="modal" />

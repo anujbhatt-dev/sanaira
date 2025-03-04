@@ -8,12 +8,14 @@ export default async function Products() {
   console.log(productsData);
   
   return (
-    <div className='pb-[50rem] px-[1rem] md:px-[4rem]'>
+    <div className='pb-[50rem] px-[1rem] md:px-[2rem]'>
         <div className='flex justify-center gap-x-4'>
           <Heading text="New"/>
           <Heading text="Arrivals"/>
         </div>
+        <div className='mx-auto'>
         <ProductGrid products={productsData}/>
+        </div>
     </div>
   )
 }

@@ -1,36 +1,38 @@
 "use client"
-import { Product } from '@/sanity.types'
 import React, { useState } from 'react'
 import { Circle, Star } from 'lucide-react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { imageUrl } from '@/lib/imageUrl';
 import AddToBasketButton from './AddToBasketButton';
+import Link from 'next/link';
+import { ProductPageType } from '@/types';
 
-export default function ProductThumbnail({ product, index }: { product: Product, index: number }) {
+
+export default function ProductThumbnail({ product, index }: { product: ProductPageType, index: number }) {
   const [hoverState,setHoverState] = useState<number>(0)
   return (
     <motion.div
       key={product._id}
-      className={`relative overflow-hidden bg-white shadow-lg ${index % 2 === 0 ? 'translate-x-4' : '-translate-x-4'} cursor-pointer`}
+      className={`relative overflow-hidden bg-white shadow-lg cursor-pointer`}
       initial={{ opacity: 0, x: index % 2 === 0 ? 50 : -50 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ delay: index * 0.1, type: 'spring', stiffness: 50 }}
       onMouseOver={()=>setHoverState(1)}
       onMouseOut={()=>setHoverState(0)}
     >
+      <Link href={`${product.productPath && product.productPath[0]}/${product.productPath && product.productPath[1]}/${product.productPath && product.productPath[2]}/${product.slug?.current}`}>
       { product.mainImages && product.mainImages?.length > 0 && (
         <div className="relative w-full h-[500px]"> {/* Ensure defined height */}
           <Image
             className="object-cover transition-transform duration-300 ease-in-out hover:scale-105"
-            src={imageUrl(product.mainImages![hoverState]).url()}
+            src={product.mainImages.length>1 ? imageUrl(product.mainImages![hoverState]).url() : imageUrl(product.mainImages![0]).url()}
             fill
             sizes="(max-width:760px) 100vw, (max-width:1200px) 50vw, 33vw"
             alt={product.title || 'Product Image'}
-          />
+            />
         </div>
        )}
-
       <div className="absolute bottom-0 left-0 p-3 bg-white/80 backdrop-blur-sm text-black w-full">
         <h3 className="text-xl  capitalize">{product.title || "Untitled Product"}</h3>
         <div className="flex gap-4 justify-between items-baseline">
@@ -54,10 +56,11 @@ export default function ProductThumbnail({ product, index }: { product: Product,
 
       <div className="absolute top-0 left-0 p-2 flex items-center bg-black/10 backdrop-blur-sm gap-x-1">
         {product.variants!.map((variant)=>(
-            <Circle style={{ fill: variant.color }} key={variant._key} className={`h-3 w-3`} />        
+          <Circle style={{ fill: variant.color }} key={variant._key} className={`h-3 w-3`} />        
         ))}
         <span className="ml-2 font-sans font-semibold text-xs">+3</span>
       </div>
+      </Link>
     </motion.div>
   );
 }

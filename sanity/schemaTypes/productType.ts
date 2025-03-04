@@ -1,7 +1,7 @@
 import { PinIcon } from '@sanity/icons';
 import { defineField, defineType } from 'sanity';
 
-export const productType =  defineType({
+export const productType = defineType({
   name: 'product',
   title: 'Product',
   type: 'document',
@@ -10,7 +10,17 @@ export const productType =  defineType({
     select: {
       title: 'title',
       media: 'mainImages.0',
-      subtitle: 'category.name',
+      category: 'category.name',
+      categoryParent: 'category.parent.name',
+      categoryTop: 'category.parent.parent.name',
+    },
+    prepare({ title, media, category, categoryParent, categoryTop }) {
+      const categoryPath = [categoryTop, categoryParent, category].filter(Boolean).join(' > ') || 'No Category';
+      return {
+        title,
+        subtitle: `Category: ${categoryPath}`,
+        media,
+      };
     },
   },
   fields: [
@@ -44,6 +54,9 @@ export const productType =  defineType({
       type: 'reference',
       to: [{ type: 'category' }],
       validation: Rule => Rule.required(),
+      options: {
+        filter: 'categoryType == "base"', // Only base categories allowed
+      },
     }),
     defineField({
       name: 'mainImages',
@@ -89,25 +102,12 @@ export const productType =  defineType({
         },
       ],
     }),
-    // defineField({
-    //   name: 'rating',
-    //   title: 'Average Rating',
-    //   type: 'number',
-    //   description: 'Calculated from reviews',
-    //   validation: Rule => Rule.min(1).max(5),
-    // }),
-    // defineField({
-    //   name: 'reviewCount',
-    //   title: 'Review Count',
-    //   type: 'number',
-    //   description: 'Total number of reviews',
-    //   validation: Rule => Rule.min(0),
-    // }),
-    // defineField({
-    //   name: 'reviews',
-    //   title: 'Reviews',
-    //   type: 'array',
-    //   of: [{ type: 'reference', to: [{ type: 'review' }] }],
-    // }),
+    defineField({
+      name: 'productPath',
+      title: 'Product Path',
+      type: 'array',
+      of: [{ type: 'reference', to: [{ type: 'category' }] }],
+      readOnly: true, // Auto-populated
+    }),
   ],
 });

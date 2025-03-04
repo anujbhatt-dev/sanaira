@@ -68,8 +68,66 @@ export type Geopoint = {
   alt?: number;
 };
 
+export type Order = {
+  _id: string;
+  _type: "order";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  orderNumber?: string;
+  stripeCheckoutSessionId?: string;
+  stripeCustomerId?: string;
+  clerkUserId?: string;
+  customerName?: string;
+  email?: string;
+  stripePaymentIntentId?: string;
+  products?: Array<{
+    product?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "product";
+    };
+    quantity?: number;
+    variant?: string;
+    _key: string;
+  }>;
+  totalPrice?: number;
+  currency?: string;
+  amountDiscount?: number;
+  status?: "pending" | "paid" | "shipped" | "delivered" | "cancelled";
+  orderDate?: string;
+};
+
+export type Sale = {
+  _id: string;
+  _type: "sale";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title?: string;
+  description?: string;
+  saleType?: "discount" | "clearance" | "limited_time_offer";
+  discountPercentage?: number;
+  startDate?: string;
+  endDate?: string;
+  status?: "active" | "inactive" | "completed";
+  applyToAllProducts?: boolean;
+  products?: Array<{
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    _key: string;
+    [internalGroqTypeReferenceTo]?: "product";
+  }>;
+};
+
 export type ShippingAddress = {
+  _id: string;
   _type: "shippingAddress";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
   userId?: {
     _ref: string;
     _type: "reference";
@@ -162,6 +220,13 @@ export type Product = {
     }>;
     _key: string;
   }>;
+  productPath?: Array<{
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    _key: string;
+    [internalGroqTypeReferenceTo]?: "category";
+  }>;
 };
 
 export type User = {
@@ -233,6 +298,13 @@ export type Category = {
     _type: "image";
   };
   isFeatured?: boolean;
+  categoryPath?: Array<{
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    _key: string;
+    [internalGroqTypeReferenceTo]?: "category";
+  }>;
   status?: "active" | "inactive";
 };
 
@@ -330,7 +402,7 @@ export type SanityImageMetadata = {
   isOpaque?: boolean;
 };
 
-export type AllSanitySchemaTypes = SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityFileAsset | Geopoint | ShippingAddress | Product | User | Category | Slug | BlockContent | SanityImageCrop | SanityImageHotspot | SanityImageAsset | SanityAssetSourceData | SanityImageMetadata;
+export type AllSanitySchemaTypes = SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityFileAsset | Geopoint | Order | Sale | ShippingAddress | Product | User | Category | Slug | BlockContent | SanityImageCrop | SanityImageHotspot | SanityImageAsset | SanityAssetSourceData | SanityImageMetadata;
 export declare const internalGroqTypeReferenceTo: unique symbol;
 // Source: ./sanity/lib/categories/getAllCategory.ts
 // Variable: ALL_CATEGORIES_QUERY
@@ -394,12 +466,19 @@ export type ALL_CATEGORIES_QUERYResult = Array<{
     _type: "image";
   };
   isFeatured?: boolean;
+  categoryPath?: Array<{
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    _key: string;
+    [internalGroqTypeReferenceTo]?: "category";
+  }>;
   status?: "active" | "inactive";
 }>;
 
 // Source: ./sanity/lib/products/getAllProducts.ts
 // Variable: ALL_PRODUCTS_QUERY
-// Query: *[_type=="product"]
+// Query: *[_type == "product"]{            ...,            "productPath": [                category->parent->parent->slug.current,                 category->parent->slug.current,                 category->slug.current            ]        }
 export type ALL_PRODUCTS_QUERYResult = Array<{
   _id: string;
   _type: "product";
@@ -475,13 +554,96 @@ export type ALL_PRODUCTS_QUERYResult = Array<{
     }>;
     _key: string;
   }>;
+  productPath: Array<string | null>;
 }>;
+
+// Source: ./sanity/lib/products/getProductBySlug.ts
+// Variable: PRODUCT_BY_SLUG_QUERY
+// Query: *[_type == "product" && slug.current == $slug][0]{            ...,            "productPath": [                category->parent->parent->slug.current,                 category->parent->slug.current,                 category->slug.current            ]        }
+export type PRODUCT_BY_SLUG_QUERYResult = {
+  _id: string;
+  _type: "product";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title?: string;
+  slug?: Slug;
+  description?: Array<{
+    children?: Array<{
+      marks?: Array<string>;
+      text?: string;
+      _type: "span";
+      _key: string;
+    }>;
+    style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "normal";
+    listItem?: "bullet";
+    markDefs?: Array<{
+      href?: string;
+      _type: "link";
+      _key: string;
+    }>;
+    level?: number;
+    _type: "block";
+    _key: string;
+  } | {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt?: string;
+    _type: "image";
+    _key: string;
+  }>;
+  price?: number;
+  category?: {
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    [internalGroqTypeReferenceTo]?: "category";
+  };
+  mainImages?: Array<{
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: "image";
+    _key: string;
+  }>;
+  variants?: Array<{
+    size?: string;
+    color?: string;
+    stock?: number;
+    variantImages?: Array<{
+      asset?: {
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+      };
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      _type: "image";
+      _key: string;
+    }>;
+    _key: string;
+  }>;
+  productPath: Array<string | null>;
+} | null;
 
 // Query TypeMap
 import "@sanity/client";
 declare module "@sanity/client" {
   interface SanityQueries {
     "\n          *[_type==\"category\"] \n        ": ALL_CATEGORIES_QUERYResult;
-    "\n        *[_type==\"product\"] \n    ": ALL_PRODUCTS_QUERYResult;
+    "\n        *[_type == \"product\"]{\n            ...,\n            \"productPath\": [\n                category->parent->parent->slug.current, \n                category->parent->slug.current, \n                category->slug.current\n            ]\n        }\n    ": ALL_PRODUCTS_QUERYResult;
+    "\n        *[_type == \"product\" && slug.current == $slug][0]{\n            ...,\n            \"productPath\": [\n                category->parent->parent->slug.current, \n                category->parent->slug.current, \n                category->slug.current\n            ]\n        }\n    ": PRODUCT_BY_SLUG_QUERYResult;
   }
 }

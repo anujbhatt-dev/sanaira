@@ -1,9 +1,10 @@
 import { Product } from '@/sanity.types'
+import { ProductPageType } from '@/types'
 import { create } from 'zustand'
 import { persist } from "zustand/middleware"
 
 export interface IBasketItem {
-    product: Product
+    product: ProductPageType
     quantity: number
 }
 
@@ -12,7 +13,7 @@ interface BasketState {
 }
 
 interface BasketActions {
-    addItem: (product: Product) => void
+    addItem: (product: ProductPageType) => void
     removeItem: (productId: string) => void
     clearBasket: () => void
     getTotalPrice: () => number
@@ -27,7 +28,7 @@ export const useBasketStore = create<BasketState & BasketActions>()(
         (set, get) => ({
             items: [],
 
-            addItem: (product: Product) => {
+            addItem: (product: ProductPageType) => {
                 set((state) => {
                     const existingItem = state.items.find((item) => item.product._id === product._id)
                     if (existingItem) {

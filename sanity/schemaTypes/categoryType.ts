@@ -53,12 +53,19 @@ export const categoryType = defineType({
       },
       validation: Rule => Rule.required(),
     }),
+    
     defineField({
       name: 'parent',
       title: 'Parent Category',
       type: 'reference',
       to: [{ type: 'category' }],
-      hidden: ({ parent }) => parent?.categoryType === 'top', // Top categories shouldn't have parents
+      validation: Rule => Rule.custom((parent, context) => {
+        const categoryType = context.document?.categoryType;
+        if (categoryType === 'sub' && !parent) return 'Sub-category must have a Top category';
+        if (categoryType === 'base' && !parent) return 'Base category must have a Sub category';
+        if (categoryType === 'top' && parent) return 'Top category should not have a parent';
+        return true;
+      }),
     }),
     defineField({
       name: 'image',
@@ -74,6 +81,13 @@ export const categoryType = defineType({
       type: 'boolean',
       description: 'Mark as a featured category on the homepage.',
     }),
+    defineField({
+      name: 'categoryPath',
+      title: 'Category Path',
+      type: 'array',
+      of: [{ type: 'reference', to: [{ type: 'category' }] }],
+      readOnly: true, // Auto-populated
+    }),    
     defineField({
       name: 'status',
       title: 'Status',

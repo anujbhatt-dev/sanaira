@@ -1,12 +1,15 @@
 "use client"
-import { Product } from '@/sanity.types'
 import { useBasketStore } from '@/store/useBasketStore'
+import { ProductPageType } from '@/types'
 import React, { useEffect, useState } from 'react'
 
+
+
 interface IAddToBasketButtonProps{
-    product:Product
+    product:ProductPageType
     disabled?:boolean
 }
+
 
 export default function AddToBasketButton({product,disabled}:IAddToBasketButtonProps) {
     const {addItem, removeItem,getSingleItemCount} = useBasketStore()
