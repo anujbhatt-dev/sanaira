@@ -31,7 +31,7 @@ export default function RootLayout({
     <ClerkProvider dynamic>
       <html lang="en">
         <body
-          className={`${geistSans.variable} ${geistMono.variable} antialiased bg-[white] `}
+          className={`${geistSans.variable} ${geistMono.variable} antialiased bg-[#F8F5E9] `}
         >
           <Header/>
           <div className="h-[4rem]"></div>

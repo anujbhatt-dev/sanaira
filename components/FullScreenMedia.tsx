@@ -6,8 +6,8 @@ import Image from "next/image";
 
 const mediaArray = [
   {
-    type: "image",
-    src: "https://images.pexels.com/photos/1937336/pexels-photo-1937336.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+    type: "video",
+    src: "/luxury-b-roll.mp4",
     title: "The Legacy of Elegance",
     subtitle: "Timeless Fashion for the Elite",
     cta: "Shop the Collection",
@@ -102,7 +102,7 @@ const FullScreenMedia: React.FC = () => {
   return (
     <div
     
-    className="h-[calc(100vh)] relative overflow-hidden flex items-center justify-center text-center" >
+    className="h-[calc(70vh)] relative overflow-hidden flex items-center justify-center text-center text-white " >
       {/* Background Media */}
       <motion.div
         className="absolute top-0 left-0 w-full h-full"
@@ -134,7 +134,7 @@ const FullScreenMedia: React.FC = () => {
       {/* Overlay Text */}
       <motion.div
         key={`${currentIndex}-text`}
-        className={`absolute ${positionClasses[currentMedia.position]}  bg-opacity-40 backdrop-blur-sm px-6 py-4 /5`}
+        className={`absolute ${positionClasses[currentMedia.position]}  bg-opacity-40 px-6 py-4 /5`}
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: -30 }}

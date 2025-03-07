@@ -11,7 +11,7 @@ const Header = async () => {
   return (
     <>
       <div
-        className={`backdrop-blur-sm bg-white/20 px-[2rem] mx-auto border-b border-white/0 flex justify-between h-[4rem] fixed top-0 right-0 left-0 gap-x-4 z-20 transition-all duration-75 items-center `}
+        className={`px-[2rem] mx-auto border-b border-white/0 flex justify-between h-[4rem] fixed top-0 right-0 left-0 gap-x-4 z-20 transition-all duration-75 items-center `}
       >
         <div className="flex justify-cneter items-center gap-x-10">
             <Link href={"/"} className="text-[2rem] ml-[1rem] font-semibold tracking-wider uppercase">
