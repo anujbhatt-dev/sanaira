@@ -15,7 +15,7 @@ const Header = async () => {
       >
         <div className="flex justify-cneter items-center gap-x-10">
             <Link href={"/"} className="text-[2rem] ml-[1rem] font-semibold tracking-wider uppercase">
-              Anaira
+              Sanaira
             </Link>    
             <div className="flex justify-center space-x-4 capitalize font-serif tracking-wider">
               {ALL_CATEGORY.map((category,i)=>{
