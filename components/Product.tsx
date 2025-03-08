@@ -9,11 +9,11 @@ function Product({product}:{product:ProductPageType}) {
   return (
     <div><div className='flex mt-[2rem] mb-[10rem]'>
     <div className='w-[50%] grid grid-cols-5  gap-[2rem]  overflow-hidden  flex-shrink-0'>
-        {
+        {/* {
          product.mainImages && product.mainImages.map((image,i)=>(
              <img key={image._key+i} src={"/1.jpeg"} alt="" className='w-full' />
          ))   
-        }
+        } */}
         <div className='col-span-4'>
             <img src={"/1.jpeg"} alt="" className='' />
         </div>

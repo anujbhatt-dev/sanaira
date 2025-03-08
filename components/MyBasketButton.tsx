@@ -16,7 +16,7 @@ export default function MyBasketButton() {
       if(!isClient) return null
   return (
     <Link href="/my-basket" className='relative'>
-        <ShoppingBagIcon className='h-8 w-8'/>
+        <ShoppingBagIcon className='lg:h-8 lg:w-8 h-6 w-6'/>
         {itemsCount!= 0 && 
         <div className='h-5 w-5 absolute -top-2 -right-2 bg-rose-200 rounded-full flex justify-center items-center '>
             {itemsCount}

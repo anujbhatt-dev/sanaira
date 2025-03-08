@@ -39,28 +39,6 @@ export type SanityImageDimensions = {
   aspectRatio?: number;
 };
 
-export type SanityFileAsset = {
-  _id: string;
-  _type: "sanity.fileAsset";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  originalFilename?: string;
-  label?: string;
-  title?: string;
-  description?: string;
-  altText?: string;
-  sha1hash?: string;
-  extension?: string;
-  mimeType?: string;
-  size?: number;
-  assetId?: string;
-  uploadId?: string;
-  path?: string;
-  url?: string;
-  source?: SanityAssetSourceData;
-};
-
 export type Geopoint = {
   _type: "geopoint";
   lat?: number;
@@ -183,28 +161,26 @@ export type Product = {
     _type: "image";
     _key: string;
   }>;
-  price?: number;
   category?: {
     _ref: string;
     _type: "reference";
     _weak?: boolean;
     [internalGroqTypeReferenceTo]?: "category";
   };
-  mainImages?: Array<{
+  video?: {
     asset?: {
       _ref: string;
       _type: "reference";
       _weak?: boolean;
-      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+      [internalGroqTypeReferenceTo]?: "sanity.fileAsset";
     };
-    hotspot?: SanityImageHotspot;
-    crop?: SanityImageCrop;
-    _type: "image";
-    _key: string;
-  }>;
+    _type: "file";
+  };
   variants?: Array<{
+    name?: string;
     size?: string;
     color?: string;
+    price?: number;
     stock?: number;
     variantImages?: Array<{
       asset?: {
@@ -215,6 +191,7 @@ export type Product = {
       };
       hotspot?: SanityImageHotspot;
       crop?: SanityImageCrop;
+      alt?: string;
       _type: "image";
       _key: string;
     }>;
@@ -227,6 +204,28 @@ export type Product = {
     _key: string;
     [internalGroqTypeReferenceTo]?: "category";
   }>;
+};
+
+export type SanityFileAsset = {
+  _id: string;
+  _type: "sanity.fileAsset";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  originalFilename?: string;
+  label?: string;
+  title?: string;
+  description?: string;
+  altText?: string;
+  sha1hash?: string;
+  extension?: string;
+  mimeType?: string;
+  size?: number;
+  assetId?: string;
+  uploadId?: string;
+  path?: string;
+  url?: string;
+  source?: SanityAssetSourceData;
 };
 
 export type User = {
@@ -402,12 +401,84 @@ export type SanityImageMetadata = {
   isOpaque?: boolean;
 };
 
-export type AllSanitySchemaTypes = SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityFileAsset | Geopoint | Order | Sale | ShippingAddress | Product | User | Category | Slug | BlockContent | SanityImageCrop | SanityImageHotspot | SanityImageAsset | SanityAssetSourceData | SanityImageMetadata;
+export type AllSanitySchemaTypes = SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | Geopoint | Order | Sale | ShippingAddress | Product | SanityFileAsset | User | Category | Slug | BlockContent | SanityImageCrop | SanityImageHotspot | SanityImageAsset | SanityAssetSourceData | SanityImageMetadata;
 export declare const internalGroqTypeReferenceTo: unique symbol;
 // Source: ./sanity/lib/categories/getAllCategory.ts
 // Variable: ALL_CATEGORIES_QUERY
 // Query: *[_type=="category"]
 export type ALL_CATEGORIES_QUERYResult = Array<{
+  _id: string;
+  _type: "category";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  name?: string;
+  slug?: Slug;
+  description?: Array<{
+    children?: Array<{
+      marks?: Array<string>;
+      text?: string;
+      _type: "span";
+      _key: string;
+    }>;
+    style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "normal";
+    listItem?: "bullet";
+    markDefs?: Array<{
+      href?: string;
+      _type: "link";
+      _key: string;
+    }>;
+    level?: number;
+    _type: "block";
+    _key: string;
+  } | {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt?: string;
+    _type: "image";
+    _key: string;
+  }>;
+  metaTitle?: string;
+  metaDescription?: string;
+  categoryType?: "base" | "sub" | "top";
+  parent?: {
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    [internalGroqTypeReferenceTo]?: "category";
+  };
+  image?: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: "image";
+  };
+  isFeatured?: boolean;
+  categoryPath?: Array<{
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    _key: string;
+    [internalGroqTypeReferenceTo]?: "category";
+  }>;
+  status?: "active" | "inactive";
+}>;
+
+// Source: ./sanity/lib/categories/getAllFeaturedCategories.ts
+// Variable: ALL_FEATURED_CATEGORIES_QUERY
+// Query: *[_type=="category" && isFeatured==true]
+export type ALL_FEATURED_CATEGORIES_QUERYResult = Array<{
   _id: string;
   _type: "category";
   _createdAt: string;
@@ -517,28 +588,26 @@ export type ALL_PRODUCTS_QUERYResult = Array<{
     _type: "image";
     _key: string;
   }>;
-  price?: number;
   category?: {
     _ref: string;
     _type: "reference";
     _weak?: boolean;
     [internalGroqTypeReferenceTo]?: "category";
   };
-  mainImages?: Array<{
+  video?: {
     asset?: {
       _ref: string;
       _type: "reference";
       _weak?: boolean;
-      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+      [internalGroqTypeReferenceTo]?: "sanity.fileAsset";
     };
-    hotspot?: SanityImageHotspot;
-    crop?: SanityImageCrop;
-    _type: "image";
-    _key: string;
-  }>;
+    _type: "file";
+  };
   variants?: Array<{
+    name?: string;
     size?: string;
     color?: string;
+    price?: number;
     stock?: number;
     variantImages?: Array<{
       asset?: {
@@ -549,6 +618,7 @@ export type ALL_PRODUCTS_QUERYResult = Array<{
       };
       hotspot?: SanityImageHotspot;
       crop?: SanityImageCrop;
+      alt?: string;
       _type: "image";
       _key: string;
     }>;
@@ -598,28 +668,26 @@ export type PRODUCT_BY_SLUG_QUERYResult = {
     _type: "image";
     _key: string;
   }>;
-  price?: number;
   category?: {
     _ref: string;
     _type: "reference";
     _weak?: boolean;
     [internalGroqTypeReferenceTo]?: "category";
   };
-  mainImages?: Array<{
+  video?: {
     asset?: {
       _ref: string;
       _type: "reference";
       _weak?: boolean;
-      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+      [internalGroqTypeReferenceTo]?: "sanity.fileAsset";
     };
-    hotspot?: SanityImageHotspot;
-    crop?: SanityImageCrop;
-    _type: "image";
-    _key: string;
-  }>;
+    _type: "file";
+  };
   variants?: Array<{
+    name?: string;
     size?: string;
     color?: string;
+    price?: number;
     stock?: number;
     variantImages?: Array<{
       asset?: {
@@ -630,6 +698,7 @@ export type PRODUCT_BY_SLUG_QUERYResult = {
       };
       hotspot?: SanityImageHotspot;
       crop?: SanityImageCrop;
+      alt?: string;
       _type: "image";
       _key: string;
     }>;
@@ -638,12 +707,94 @@ export type PRODUCT_BY_SLUG_QUERYResult = {
   productPath: Array<string | null>;
 } | null;
 
+// Source: ./sanity/lib/products/getSearchProducts.tsx
+// Variable: PRODUCTS_BY_SEARCH_QUERY
+// Query: *[          _type=="product" &&           (            title match $q ||             description[].children[].text match $q // Corrected description search          )        ] | order(title asc){            ...,            "productPath": [                category->parent->parent->slug.current,                 category->parent->slug.current,                 category->slug.current            ]        }
+export type PRODUCTS_BY_SEARCH_QUERYResult = Array<{
+  _id: string;
+  _type: "product";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title?: string;
+  slug?: Slug;
+  description?: Array<{
+    children?: Array<{
+      marks?: Array<string>;
+      text?: string;
+      _type: "span";
+      _key: string;
+    }>;
+    style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "normal";
+    listItem?: "bullet";
+    markDefs?: Array<{
+      href?: string;
+      _type: "link";
+      _key: string;
+    }>;
+    level?: number;
+    _type: "block";
+    _key: string;
+  } | {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt?: string;
+    _type: "image";
+    _key: string;
+  }>;
+  category?: {
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    [internalGroqTypeReferenceTo]?: "category";
+  };
+  video?: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.fileAsset";
+    };
+    _type: "file";
+  };
+  variants?: Array<{
+    name?: string;
+    size?: string;
+    color?: string;
+    price?: number;
+    stock?: number;
+    variantImages?: Array<{
+      asset?: {
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+      };
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      alt?: string;
+      _type: "image";
+      _key: string;
+    }>;
+    _key: string;
+  }>;
+  productPath: Array<string | null>;
+}>;
+
 // Query TypeMap
 import "@sanity/client";
 declare module "@sanity/client" {
   interface SanityQueries {
     "\n          *[_type==\"category\"] \n        ": ALL_CATEGORIES_QUERYResult;
+    "\n          *[_type==\"category\" && isFeatured==true] \n        ": ALL_FEATURED_CATEGORIES_QUERYResult;
     "\n        *[_type == \"product\"]{\n            ...,\n            \"productPath\": [\n                category->parent->parent->slug.current, \n                category->parent->slug.current, \n                category->slug.current\n            ]\n        }\n    ": ALL_PRODUCTS_QUERYResult;
     "\n        *[_type == \"product\" && slug.current == $slug][0]{\n            ...,\n            \"productPath\": [\n                category->parent->parent->slug.current, \n                category->parent->slug.current, \n                category->slug.current\n            ]\n        }\n    ": PRODUCT_BY_SLUG_QUERYResult;
+    "\n        *[\n          _type==\"product\" && \n          (\n            title match $q || \n            description[].children[].text match $q // Corrected description search\n          )\n        ] | order(title asc){\n            ...,\n            \"productPath\": [\n                category->parent->parent->slug.current, \n                category->parent->slug.current, \n                category->slug.current\n            ]\n        }\n    ": PRODUCTS_BY_SEARCH_QUERYResult;
   }
 }
