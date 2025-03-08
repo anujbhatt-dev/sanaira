@@ -2,9 +2,8 @@
 import Link from "next/link";
 // import { useRef } from "react";
 import { SignedIn, SignedOut, SignInButton, SignUpButton, UserButton } from "@clerk/nextjs";
-import MyBasketButton from "./MyBasketButton";
+// import MyBasketButton from "./MyBasketButton";
 import { getAllFeaturedCategories } from "@/sanity/lib/categories/getAllFeaturedCategories";
-import { Search } from "lucide-react";
 import SearchBar from "./SearchBar";
 
 
@@ -27,7 +26,7 @@ const Header = async () => {
           </div>
           <div className="flex justify-cneter items-center gap-x-4 text-[0.8rem]">
             <SearchBar/>     
-            <MyBasketButton/>
+            {/* <MyBasketButton/> */}
             <SignedOut>
                 <SignInButton mode="modal" />
                 <SignUpButton mode="modal" />
