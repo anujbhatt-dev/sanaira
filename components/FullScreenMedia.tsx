@@ -8,7 +8,7 @@ import { Pause, Play } from "lucide-react";
 const mediaArray = [
   {
     type: "video",
-    src: "https://videos.pexels.com/video-files/7299607/7299607-uhd_1440_2732_25fps.mp4",
+    src: "luxury-b-roll.mp4",
     title: "The Legacy of Elegance",
     subtitle: "Timeless Fashion for the Elite",
     cta: "Shop the Collection",
@@ -52,19 +52,6 @@ const mediaArray = [
 const FullScreenMedia: React.FC = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
-//   const { scaleUp, scaleDown} = useCursorStore()
-  
-//   const handleCursorEnter = ()=>{
-//       if(isPaused)
-//       scaleUp("Play slide")
-//       else
-//       scaleUp("Pause Slide")
-//   }
-
-//   const handleCursorLeave = ()=>{
-//     scaleDown()
-//   }
-
   useEffect(() => {
     if (isPaused) return;
     const interval = setInterval(() => {
@@ -158,7 +145,7 @@ const FullScreenMedia: React.FC = () => {
         onClick={togglePause}
         // onMouseEnter={handleCursorEnter}
         // onMouseLeave={handleCursorLeave}
-        className="absolute left-2 bottom-2  bg-opacity-50  rounded-full hover:bg-opacity-75 transition-all z-10 h-[2rem] w-[2rem] flex justify-center items-center text-[1rem] origin-center"
+        className="absolute left-2 bottom-2  bg-opacity-50 rounded-full hover:bg-opacity-75 transition-all z-10 h-[2rem] w-[2rem] flex justify-center items-center text-[1rem] origin-center"
       >
         {isPaused ? <Play/> : <Pause/>}
       </button>
