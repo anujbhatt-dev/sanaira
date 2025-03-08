@@ -8,7 +8,7 @@ import { Pause, Play } from "lucide-react";
 const mediaArray = [
   {
     type: "video",
-    src: "https://videos.pexels.com/video-files/7299607/7299607-uhd_1440_2732_25fps.mp4",
+    src: "/luxury-b-roll.mp4",
     title: "The Legacy of Elegance",
     subtitle: "Timeless Fashion for the Elite",
     cta: "Shop the Collection",
