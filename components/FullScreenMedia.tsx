@@ -106,6 +106,7 @@ const FullScreenMedia: React.FC = () => {
             autoPlay
             loop
             muted
+            playsInline
             className="w-full h-full object-cover"
           />
         )}
