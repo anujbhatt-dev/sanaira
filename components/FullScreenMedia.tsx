@@ -69,7 +69,7 @@ const FullScreenMedia: React.FC = () => {
     if (isPaused) return;
     const interval = setInterval(() => {
       setCurrentIndex((prevIndex) => (prevIndex + 1) % mediaArray.length);
-    }, 30000);
+    }, 22000);
     return () => clearInterval(interval);
   }, [isPaused]);
 
@@ -149,7 +149,7 @@ const FullScreenMedia: React.FC = () => {
           className="h-full bg-white w-full"
           initial={{ translateX: "-100%" }}
           animate={isPaused ? { translateX: "-100%" } : { translateX: "0%" }}
-          transition={{ duration: isPaused ? 0 : 30, ease: "linear" }}
+          transition={{ duration: isPaused ? 0 : 22, ease: "linear" }}
         />
       </div>
 
