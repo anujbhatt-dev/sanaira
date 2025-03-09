@@ -6,6 +6,7 @@ import {
   ClerkProvider
 } from '@clerk/nextjs'
 import { SanityLive } from "@/sanity/lib/live";
+// import QuickAddWrapper from "@/components/QuickAddWrapper";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -36,6 +37,7 @@ export default function RootLayout({
           <Header/>
           <div className="h-[4rem]"></div>
           {children}
+          {/* <QuickAddWrapper/> */}
           <SanityLive/>
         </body>
       </html>
