@@ -9,17 +9,17 @@ export const productType = defineType({
   preview: {
     select: {
       title: 'title',
-      media: 'video', // Use video for preview
+      // media: 'video', // Now a URL
       category: 'category.name',
       categoryParent: 'category.parent.name',
       categoryTop: 'category.parent.parent.name',
     },
-    prepare({ title, media, category, categoryParent, categoryTop }) {
+    prepare({ title, category, categoryParent, categoryTop }) {
       const categoryPath = [categoryTop, categoryParent, category].filter(Boolean).join(' > ') || 'No Category';
       return {
         title,
         subtitle: `Category: ${categoryPath}`,
-        media, // Note: Sanity may not preview videos directly
+        // media, // Sanity won’t preview video URLs, so you might need a placeholder image
       };
     },
   },
@@ -49,16 +49,17 @@ export const productType = defineType({
       to: [{ type: 'category' }],
       validation: Rule => Rule.required(),
       options: {
-        filter: 'categoryType == "base"', // Only base categories allowed
+        filter: 'categoryType == "base"',
       },
     }),
     defineField({
       name: 'video',
-      title: 'Product Video',
-      type: 'file', // Allows video upload
-      options: {
-        accept: 'video/*', // Restrict to video files
-      },
+      title: 'Product Video (AWS S3 URL)',
+      type: 'url', // ✅ Changed from file upload to URL storage
+      validation: Rule => Rule.uri({
+        scheme: ['http', 'https'],
+        allowRelative: false,
+      }),
     }),
     defineField({
       name: 'variants',
@@ -71,8 +72,8 @@ export const productType = defineType({
           fields: [
             { name: 'name', title: 'Variant Name', type: 'string', validation: Rule => Rule.required() },
             { name: 'size', title: 'Size', type: 'string' },
-            { name: 'color', title: 'Color', type: 'string' }, // Stores Xcode
-            { name: 'price', title: 'Price', type: 'number', validation: Rule => Rule.min(0).required() }, // ✅ Price moved inside variant
+            { name: 'color', title: 'Color', type: 'string' },
+            { name: 'price', title: 'Price', type: 'number', validation: Rule => Rule.min(0).required() },
             { name: 'stock', title: 'Stock', type: 'number', validation: Rule => Rule.min(0) },
             {
               name: 'variantImages',
@@ -81,7 +82,7 @@ export const productType = defineType({
               of: [
                 {
                   type: 'image',
-                  fields: [{ name: 'alt', title: 'Alt Text', type: 'string' }], // ✅ SEO-friendly alt text
+                  fields: [{ name: 'alt', title: 'Alt Text', type: 'string' }],
                 },
               ],
               options: { layout: 'grid' },
