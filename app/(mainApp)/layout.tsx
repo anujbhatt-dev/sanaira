@@ -1,22 +1,11 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
 import {
   ClerkProvider
 } from '@clerk/nextjs'
 import { SanityLive } from "@/sanity/lib/live";
-// import QuickAddWrapper from "@/components/QuickAddWrapper";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+import { poppins } from "@/utils/font";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -32,7 +21,7 @@ export default function RootLayout({
     <ClerkProvider dynamic>
       <html lang="en">
         <body
-          className={`${geistSans.variable} ${geistMono.variable} antialiased bg-[#c7c7c78e] `}
+          className={`${poppins.className} antialiased bg-[#c7c7c78e] `}
         >
           <Header/>
           <div className="h-[4rem]"></div>

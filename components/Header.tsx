@@ -5,6 +5,7 @@ import { SignedIn, SignedOut, SignInButton, SignUpButton, UserButton } from "@cl
 // import MyBasketButton from "./MyBasketButton";
 import { getAllFeaturedCategories } from "@/sanity/lib/categories/getAllFeaturedCategories";
 import SearchBar from "./SearchBar";
+import { gruppo } from "@/utils/font";
 
 
 const Header = async () => {
@@ -12,10 +13,10 @@ const Header = async () => {
   return (
     <>
       <div
-        className={`px-4 lg:px-[2rem] mx-auto border-b border-white/0 flex justify-between h-[4rem] fixed top-0 right-0 left-0 gap-x-4 z-20 transition-all duration-150 items-center hover:bg-black/20 hover:backdrop-blur-sm text-white`}
+        className={`px-4 lg:px-[2rem] mx-auto border-b border-white/0 flex justify-between h-[4rem] fixed top-0 right-0 left-0 gap-x-4 z-20 transition-all duration-150 items-center hover:bg-black/20 hover:backdrop-blur-sm text-white ${gruppo.className}`}
       >
         <div className="flex justify-cneter items-center gap-x-10">
-            <Link href={"/"} className="lg:text-[2rem] lg:ml-[1rem] font-semibold tracking-wider uppercase">
+            <Link href={"/"} className={`lg:text-[2rem] lg:ml-[1rem] font-semibold tracking-wider uppercase `}>
               Sanaira
             </Link>    
           </div>
