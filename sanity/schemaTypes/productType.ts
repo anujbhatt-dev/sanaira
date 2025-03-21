@@ -59,7 +59,7 @@ export const productType = defineType({
       validation: Rule => Rule.uri({
         scheme: ['http', 'https'],
         allowRelative: false,
-      }),
+      }).required(),
     }),
     defineField({
       name: 'variants',

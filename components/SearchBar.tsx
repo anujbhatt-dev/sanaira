@@ -5,10 +5,10 @@ import { Search } from 'lucide-react'
 
 export default function SearchBar() {
   return (
-    <Form action="/search" className='lg:bg-white p-2 h-full flex items-center'>
-        <input type="text" name='query' className={`pl-[1rem] hidden lg:flex lg:w-[20rem] py-2`}/>
-        <button type='submit'>
-          <Search />
+    <Form action="/search" className='lg:bg-white flex items-center border rounded overflow-hidden'>
+        <input type="text" name='query' className={`pl-[1rem] hidden lg:flex lg:w-[20rem] py-2 outline-0 text-black focus:bg-transparent`} placeholder='Search product'/>
+        <button type='submit' className='mr-2'>
+          <Search  className='text-black'/>
         </button>
     </Form>
   )
