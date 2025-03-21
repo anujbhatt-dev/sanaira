@@ -41,7 +41,7 @@ const Heading: React.FC<HeadingProps> = ({ text }) => {
   return (
     <h1
       ref={containerRef}
-      className="md:text-[3rem] text-[1rem] font-serif uppercase tracking-widest flex overflow-hidden my-4 lg:my-8"
+      className=" uppercase tracking-widest flex overflow-hidden my-4 lg:my-8"
     >
       {text.split("").map((letter, index) => (
         <span
@@ -59,3 +59,6 @@ const Heading: React.FC<HeadingProps> = ({ text }) => {
 };
 
 export default Heading;
+
+
+// md:text-[3rem] text-[1rem]

@@ -8,7 +8,7 @@ export default async function Products() {
   // console.log("Product data "+ JSON.stringify(productsData));
   
   return (
-    <div className='pb-[50rem] px-[0.2rem] md:px-[2rem]'>
+    <div className='pb-[50rem] px-[0.2rem] md:px-[2rem] '>
         <div className='flex justify-center gap-x-4'>
           <Heading text="New"/>
           <Heading text="Arrivals"/>

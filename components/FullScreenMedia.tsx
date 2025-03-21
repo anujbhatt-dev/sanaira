@@ -2,7 +2,8 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
-import { Pause, Play } from "lucide-react";
+import { Dot, Pause, Play } from "lucide-react";
+import Heading from "./Heading";
 // import { useCursorStore } from "@/store/useCursorStore";
 
 const mediaArray = [
@@ -79,14 +80,7 @@ const FullScreenMedia: React.FC = () => {
         )}
       </motion.div>
 
-      {/* <div className="h-full w-full flex justify-center items-center text-9xl">
-        <div>
-          TIMELESS
-        </div>
-        <div>
-          PRICELESS
-        </div>
-      </div> */}
+      
 
       {/* Centered Progress Bar */}
       <div className="absolute bottom-5 left-1/2 transform -translate-x-1/2 w-1/2 h-1 bg-gray-300/30 overflow-hidden">
@@ -108,6 +102,16 @@ const FullScreenMedia: React.FC = () => {
       >
         {isPaused ? <Play/> : <Pause/>}
       </button>
+
+        <div className="h-full w-full flex justify-center lg:justify-end items-center text-2xl md:text-5xl lg:text-6xl xl:text-7xl z-50 font-bold md:font-thin gap-2 lg:gap-0">
+        <div >
+          <Heading text="TIMELESS"/>
+        </div>
+        <div className="lg:rotate-90">
+          <Heading text="PRICELESS"/>
+        </div>
+      </div>
+      
     </div>
   );
 };

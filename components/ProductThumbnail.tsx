@@ -19,7 +19,7 @@ export default function ProductThumbnail({ product, index }: { product: ProductP
   return (
     <motion.div
       key={product._id}
-      className={`relative overflow-hidden bg-white shadow-lg cursor-pointer`}
+      className={`relative overflow-hidden bg-white cursor-pointer`}
       initial={{ opacity: 0, x: index % 2 === 0 ? 50 : -50 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ delay: index * 0.1, type: 'spring', stiffness: 50 }}
