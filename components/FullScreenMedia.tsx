@@ -49,7 +49,7 @@ const FullScreenMedia: React.FC = () => {
   return (
     <div
     
-    className="h-[calc(100vh)] relative overflow-hidden flex items-start justify-end  text-white text-right" >
+    className="h-[calc(100vh)] relative overflow-hidden flex items-start justify-end  text-white text-right -mt-[4rem]" >
       {/* Background Media */}
       <motion.div
         className="absolute top-0 left-0 w-full h-full"

@@ -1,15 +1,21 @@
 "use client"
 import React, { useState } from 'react'
-import { Plus, Star } from 'lucide-react';
+import { Plus } from 'lucide-react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { imageUrl } from '@/lib/imageUrl';
 import { ProductPageType } from '@/types';
+import { useRouter } from 'next/navigation';
 
 export default function ProductThumbnail({ product, index }: { product: ProductPageType, index: number }) {
+  const router = useRouter();
   const [variantNumber,setVariantNumber] = useState<number>(0)
   const [variantImage,setVariantImage] = useState<number>(0) 
   const [isVideovisble, setIsVideoVisible] = useState(false) 
+
+  const handleClick = () => {
+    router.push(`${product.productPath && product.productPath[0]}/${product.productPath && product.productPath[1]}/${product.productPath && product.productPath[2]}/${product.slug?.current}`);
+  }
   return (
     <motion.div
       key={product._id}
@@ -22,7 +28,7 @@ export default function ProductThumbnail({ product, index }: { product: ProductP
       // href={`${product.productPath && product.productPath[0]}/${product.productPath && product.productPath[1]}/${product.productPath && product.productPath[2]}/${product.slug?.current}`}
       >
           { product.variants && product.variants?.length>0 && product.variants[variantNumber].variantImages && product.variants[variantNumber].variantImages.length>0 &&  (
-          <div onMouseEnter={()=>setIsVideoVisible(true)} onMouseLeave={()=>setIsVideoVisible(false)} className="relative h-[200px] lg:w-full lg:h-[600px]"> {/* Ensure defined height */}
+          <div  onClick={handleClick} onMouseEnter={()=>setIsVideoVisible(true)} onMouseLeave={()=>setIsVideoVisible(false)} className="relative h-[200px] lg:w-full lg:h-[600px]"> {/* Ensure defined height */}
             {
               !isVideovisble && product.variants && product.variants[variantNumber].variantImages &&
             <Image
@@ -71,13 +77,13 @@ export default function ProductThumbnail({ product, index }: { product: ProductP
           </div>
           </div>
       </div>
-      {/* <div className='absolute top-0 left-0 p-2 flex items-center  gap-x-1'>
+      <div className='absolute top-0 left-0 p-2 flex items-center  gap-x-1'>
         {product.variants?.map((variant,i)=>(
           <div onClick={()=>{setVariantNumber(i); setVariantImage(0);}} title={variant.name} key={variant._key} className='h-4 w-4 border border-black/20 hover:border-black transition-all duration-150 relative backdrop-blur-sm rounded-full' style={{backgroundColor:variant.color}}>
                 
           </div>              
         ))}
-      </div> */}
+      </div>
       
     </motion.div>
   );

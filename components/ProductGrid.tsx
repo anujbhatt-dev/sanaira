@@ -5,7 +5,7 @@ import ProductThumbnail from './ProductThumbnail'
 
 export default function ProductGrid({products}:{products:ALL_PRODUCTS_QUERYResult}) {
   return (
-    <div className='grid grid-cols-2 lg:grid-cols-4 lg:gap-[2rem] gap-2'>
+    <div className='grid grid-cols-2 lg:grid-cols-4 lg:gap-[0.5rem] gap-2'>
         {products.map((product,i)=>(
             <ProductThumbnail key={product._id} product={product} index={i}/>
         ))}

@@ -12,7 +12,7 @@ const Header = async () => {
   return (
     <>
       <div
-        className={`px-4 lg:px-[2rem] mx-auto border-b border-white/0 flex justify-between h-[4rem] fixed top-0 right-0 left-0 gap-x-4 z-20 transition-all duration-75 items-center hover:bg-black/50 hover:backdrop-blur-sm text-white`}
+        className={`px-4 lg:px-[2rem] mx-auto border-b border-white/0 flex justify-between h-[4rem] fixed top-0 right-0 left-0 gap-x-4 z-20 transition-all duration-150 items-center hover:bg-black/20 hover:backdrop-blur-sm text-white font-serif`}
       >
         <div className="flex justify-cneter items-center gap-x-10">
             <Link href={"/"} className="lg:text-[2rem] lg:ml-[1rem] font-semibold tracking-wider uppercase">
@@ -24,13 +24,18 @@ const Header = async () => {
               return <div className="cursor-pointer hover:underline" key={category._id+i}>{category.name}</div>
             })}
           </div>
-          <div className="flex justify-cneter items-center gap-x-4 text-[0.8rem]">
+          <div className="flex justify-cneter items-center gap-x-2 text-[0.8rem]">
+            
+            <SignedOut>
+                <div className=" text-black  p-2 md:px-4 md:py-2 rounded font-thin">
+                  <SignUpButton mode="modal" />
+                </div>
+                <div className=" bg-teal-700 p-2 md:px-4 md:py-2 rounded font-thin">
+                  <SignInButton mode="modal" />
+                </div>
+            </SignedOut>
             <SearchBar/>     
             {/* <MyBasketButton/> */}
-            <SignedOut>
-                <SignInButton mode="modal" />
-                <SignUpButton mode="modal" />
-            </SignedOut>
             <SignedIn>
                 <UserButton />
             </SignedIn>

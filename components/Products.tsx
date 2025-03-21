@@ -5,7 +5,7 @@ import Heading from './Heading';
 
 export default async function Products() {
   const productsData = await getAllProducts();
-  console.log("Product data "+ JSON.stringify(productsData));
+  // console.log("Product data "+ JSON.stringify(productsData));
   
   return (
     <div className='pb-[50rem] px-[0.2rem] md:px-[2rem]'>

@@ -10,8 +10,9 @@ type ProductPageParamsType = {
     productSlug:string
 }
 
-export default async function ProductPage({params}:{params:Promise<ProductPageParamsType>}) {
+export default async function ProductPage({params,searchParams}:{params:Promise<ProductPageParamsType>,searchParams:Promise<{ v?:string }>}) {
     const {topCategory,subCategory,baseCategory,productSlug} = await params;
+    const {v=""} = await searchParams 
     const product = await getProductBySlug(productSlug);
     console.log(product);
     
@@ -29,7 +30,7 @@ export default async function ProductPage({params}:{params:Promise<ProductPagePa
             <span className='capitalize'>{productSlug.replaceAll("-"," ")}</span>
         </div>
         {product &&
-        <Product product={product}/>
+        <Product product={product} v={v}/>
         }
     </div>
   )

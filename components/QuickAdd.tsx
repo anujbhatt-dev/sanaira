@@ -3,11 +3,18 @@ import { imageUrl } from '@/lib/imageUrl'
 import { ProductPageType } from '@/types'
 import { Plus, Star, X } from 'lucide-react'
 import Image from 'next/image'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 export default function QuickAdd({product}:{product:ProductPageType}) {
   const [variantNumber,setVariantNumber] = useState<number>(0)
   const [variantImage,setVariantImage] = useState<number>(0)  
+
+  useEffect(()=>{
+     if(0){
+      setVariantNumber(0)
+     }
+  },[])
+
   return (
     <div className='fixed bottom-0 right-0 m-2 border border-black bg-emerald-700 shadow-sm h-[25rem] w-[25rem] rounded overflow-hidden'>
        <X className='absolute top-0 right-0 m-2'/>
