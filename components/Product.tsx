@@ -109,7 +109,7 @@ function Product({product,v}:{product:ProductPageType,v: string}) {
         <div className='flex gap-2 drop-shadow-lg drop-shadow-amber-600 my-4 text-[0.7rem]'>
           {currentVariant?.stock && currentVariant?.stock > 0 ? <span className='text-amber-600 '>{currentVariant?.stock} in stock</span> : <span className='text-red-500'>Out of Stock</span>}
         </div>
-         
+         <h4 className={`${montserrat.className} text-[0.8rem] font-[500] uppercase`}>Quantity</h4>
          <div className='flex gap-2'>
             <button className='border border-gray-300 text-gray-600 px-4 py-2 rounded-sm cursor-pointer transition-all duration-300 hover:text-black hover:border-gray-600'>-</button>
             <span className='border border-gray-300 px-4 py-2 rounded-sm'>1</span>
@@ -133,7 +133,7 @@ function Product({product,v}:{product:ProductPageType,v: string}) {
           <div className=''>             
               <h4 className={`${montserrat.className} text-[0.8rem] font-[500] my-2 uppercase flex justify-between`} onClick={()=>setShowShippingPolicy(!showShippingPolicy)}> <span className=''>Shipping Policy</span><span><Plus className='w-4 h-4'/></span></h4>
               <p className={`${montserrat.className} text-[0.8rem] text-gray-600 font-thin ${showShippingPolicy ? 'block' : 'hidden'}`} ref={shippingPolicyRef}>
-                We offer free shipping on all orders over ₹1500. For orders under ₹1500, shipping is a flat rate of ₹100.
+                We offer free <Link href='/shipping-policy' className='text-blue-600 underline'>shipping</Link> on all orders over ₹1500. For orders under ₹1500, shipping is a flat rate of ₹100.
               </p>             
           </div>
           <hr className='border-t border-gray-300 my-4'/>

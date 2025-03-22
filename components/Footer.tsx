@@ -23,19 +23,16 @@ export default function Footer() {
                     <h4 className='text-gray-200 text-lg font-semibold mb-4 h-[3rem] flex items-center'>Quick Links</h4>
                     <ul className='flex flex-col gap-1'>
                         <li>
-                            <Link className='text-gray-200 text-sm mb-2 hover:text-gray-400 cursor-pointer' href={"/privacy"}>Privacy</Link>
+                            <Link className='text-gray-200 text-sm mb-2 hover:text-gray-400 cursor-pointer' href={"/privacy-policy"}>Privacy Policy</Link>
                         </li>
                         <li>
-                            <Link className='text-gray-200 text-sm mb-2 hover:text-gray-400 cursor-pointer' href={"/terms"}>Terms</Link>
+                            <Link className='text-gray-200 text-sm mb-2 hover:text-gray-400 cursor-pointer' href={"/terms-and-conditions-policy"}>Terms & Conditions</Link>
                         </li>
                         <li>
-                            <Link className='text-gray-200 text-sm mb-2 hover:text-gray-400 cursor-pointer' href={"/refund"}>Refund</Link>
+                            <Link className='text-gray-200 text-sm mb-2 hover:text-gray-400 cursor-pointer' href={"/shipping-policy"}>Shipping Policy</Link>
                         </li>
                         <li>
-                            <Link className='text-gray-200 text-sm mb-2 hover:text-gray-400 cursor-pointer' href={"/shipping"}>Shipping</Link>
-                        </li>
-                        <li>
-                            <Link className='text-gray-200 text-sm mb-2 hover:text-gray-400 cursor-pointer' href={"/returns"}>Returns</Link>
+                            <Link className='text-gray-200 text-sm mb-2 hover:text-gray-400 cursor-pointer' href={"/return-and-exchange-policy"}>Returns and Exchanges</Link>
                         </li>
                     </ul>
                 </div>
