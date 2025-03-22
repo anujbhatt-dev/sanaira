@@ -77,9 +77,9 @@ export default function ProductThumbnail({ product, index }: { product: ProductP
           </div>
           </div>
       </div>
-      <div className='absolute top-0 left-0 p-2 flex items-center  gap-x-1'>
+      <div className='absolute top-0 left-0 p-2  items-center  gap-x-1 hidden'>
         {product.variants?.map((variant,i)=>(
-          <div onClick={()=>{setVariantNumber(i); setVariantImage(0);}} title={variant.name} key={variant._key} className='h-4 w-4 border border-black/20 hover:border-black transition-all duration-150 relative backdrop-blur-sm rounded-full' style={{backgroundColor:variant.color}}>
+          <div onClick={()=>{setVariantNumber(i); setVariantImage(0);}} title={variant.name} key={variant._key} className='h-4 w-4 border border-black/20 hover:border-black transition-all duration-150 relative backdrop-blur-sm rounded-full ' style={{backgroundColor:variant.color}}>
                 
           </div>              
         ))}

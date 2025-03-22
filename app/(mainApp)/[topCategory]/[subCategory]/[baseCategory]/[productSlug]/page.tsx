@@ -1,4 +1,6 @@
 import Product from '@/components/Product'
+import Reviews from '@/components/Reviews'
+import SimilarProduct from '@/components/SimilarProduct'
 import { getProductBySlug } from '@/sanity/lib/products/getProductBySlug'
 import {  ChevronRight } from 'lucide-react'
 import React from 'react'
@@ -31,7 +33,9 @@ export default async function ProductPage({params,searchParams}:{params:Promise<
         </div>
         {product &&
            <Product product={product} v={v}/>
-        }
+        }        
+        <Reviews />
+        <SimilarProduct /> 
     </div>
   )
 }

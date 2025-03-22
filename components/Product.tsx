@@ -9,6 +9,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import React, { useEffect, useRef, useState } from 'react'
 import { gsap } from 'gsap';
+import ProductSkeleton from './Skeletons/ProductSkeleton';
 
 
 
@@ -55,7 +56,7 @@ function Product({product,v}:{product:ProductPageType,v: string}) {
   },[])
 
   if(!isClient){
-    return <div>Loading...</div>
+    return <ProductSkeleton />
   }
 
   if(!currentVariant){
@@ -146,7 +147,7 @@ function Product({product,v}:{product:ProductPageType,v: string}) {
           <div className=''>
             <h4  className={`${montserrat.className} text-[0.8rem] font-[500] my-2 uppercase flex justify-between`} onClick={()=>setShowCustomization(!showCustomization)}> <span className=''>Customization</span><span><Plus className='w-4 h-4'/></span></h4>
             <p className={`${montserrat.className} text-[0.8rem] text-gray-600 font-thin ${showCustomization ? 'block' : 'hidden'}`} ref={customizationRef}>
-              email us at <Link href='mailto:customization@gmail.com'>customization@anira.shop</Link> to customize your product.
+              email us at <Link href='mailto:customization@gmail.com'>customize@anira.shop</Link> to customize your product.
             </p>
           </div>
         </div>
