@@ -5,7 +5,7 @@ import React from 'react'
 
 export default function Footer() {
   return (
-        <div className={`${mulish.className } bg-zinc-800 text-white md:px-[5rem] p-4 md:py-10 `}>
+        <div className={`${mulish.className } bg-zinc-800 text-white md:px-[5rem] p-4 md:py-10 mt-10`}>
             <div className='grid grid-cols-1 lg:grid-cols-5 gap-10'>
                 <div className='md:col-span-2 flex flex-col gap-5'>
                     <div className='flex gap-2 items-center'>
