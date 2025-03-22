@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
-import { Dot, Pause, Play } from "lucide-react";
+import { Pause, Play } from "lucide-react";
 import Heading from "./Heading";
 // import { useCursorStore } from "@/store/useCursorStore";
 

@@ -21,7 +21,7 @@ export default function RootLayout({
     <ClerkProvider dynamic>
       <html lang="en">
         <body
-          className={`${poppins.className} antialiased bg-[#c7c7c78e] `}
+          className={`${poppins.className} antialiased bg-[white] overflow-x-hidden`}
         >
           <Header/>
           <div className="h-[4rem]"></div>
