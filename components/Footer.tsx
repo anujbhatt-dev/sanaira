@@ -13,8 +13,8 @@ export default function Footer() {
                     <p className='text-gray-200 text-lg font-semibold mb-1'>ANAIRA</p>
                     </div>
                     <p className='text-[0.7rem] text-gray-200 leading-6 grow-1 md:mr-4'>
-                    Anaira is more than just a clothing brand—it's a statement of style, confidence, and individuality. Rooted in a passion for fashion and quality craftsmanship, we bring you a collection that blends modern aesthetics with timeless elegance.
-                    We believe in making fashion accessible without compromising on quality. Every piece is designed with attention to detail, ensuring comfort and durability. Whether you're looking for everyday essentials or standout pieces, Anaira has something for everyone.
+                    Anaira is more than just a clothing brand—it&apos;s a statement of style, confidence, and individuality. Rooted in a passion for fashion and quality craftsmanship, we bring you a collection that blends modern aesthetics with timeless elegance.
+                    We believe in making fashion accessible without compromising on quality. Every piece is designed with attention to detail, ensuring comfort and durability. Whether you&apos;re looking for everyday essentials or standout pieces, Anaira has something for everyone.
                     Join us on this journey as we redefine fashion, one outfit at a time.
                     Anaira – Wear Your Confidence.
                     </p>
