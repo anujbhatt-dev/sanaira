@@ -14,7 +14,7 @@ export default function ProductThumbnail({ product, index }: { product: ProductP
   const [isVideovisble, setIsVideoVisible] = useState(false) 
 
   const handleClick = () => {
-    router.push(`${product.productPath && product.productPath[0]}/${product.productPath && product.productPath[1]}/${product.productPath && product.productPath[2]}/${product.slug?.current}`);
+    router.push(`/${product.productPath && product.productPath[0]}/${product.productPath && product.productPath[1]}/${product.productPath && product.productPath[2]}/${product.slug?.current}`);
   }
   return (
     <motion.div
