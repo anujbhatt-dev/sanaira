@@ -13,7 +13,7 @@ const Header = async () => {
   return (
     <>
       <div
-        className={`px-4 lg:px-[5rem] mx-auto border-b border-white/0 flex justify-between h-[4rem] fixed top-0 right-0 left-0 gap-x-4 z-20 transition-all duration-150 items-center bg-black/100  md:bg-black/80 hover:bg-black/100 hover:backdrop-blur-sm text-white ${gruppo.className}`}
+        className={`px-4 lg:px-[5rem] mx-auto border-b border-white/0 flex justify-between h-[4rem] fixed top-0 right-0 left-0 gap-x-4 z-20 transition-all duration-150 items-center bg-black/100  md:bg-black/80 hover:bg-black/100 backdrop-blur-sm text-white ${gruppo.className}`}
       >
         <div className="flex justify-cneter items-center gap-x-10">
             <Link href={"/"} className={`lg:text-[2rem] font-semibold tracking-wider uppercase `}>
@@ -25,13 +25,12 @@ const Header = async () => {
               return <div className="cursor-pointer hover:underline" key={category._id+i}>{category.name}</div>
             })}
           </div>
-          <div className="flex justify-cneter items-center gap-x-2 text-[0.8rem]">
-            
+          <div className="flex justify-cneter items-center gap-x-2 text-[0.8rem]">            
             <SignedOut>
                 <div className="p-2 md:px-4 md:py-2 rounded font-thin cursor-pointer">
                   <SignUpButton mode="modal" />
                 </div>
-                <div className=" bg-teal-700 p-2 md:px-4 md:py-2 rounded font-thin cursor-pointer">
+                <div className="bg-teal-700 p-2 md:px-4 md:py-2 rounded font-thin cursor-pointer">
                   <SignInButton mode="modal" />
                 </div>
             </SignedOut>

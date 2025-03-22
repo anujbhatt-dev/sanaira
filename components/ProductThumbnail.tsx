@@ -1,5 +1,5 @@
 "use client"
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Plus } from 'lucide-react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
@@ -9,6 +9,7 @@ import { useRouter } from 'next/navigation';
 
 export default function ProductThumbnail({ product, index }: { product: ProductPageType, index: number }) {
   const router = useRouter();
+  const [isClient, setIsClient] = useState(false);
   const [variantNumber,setVariantNumber] = useState<number>(0)
   const [variantImage,setVariantImage] = useState<number>(0) 
   const [isVideovisble, setIsVideoVisible] = useState(false) 
@@ -16,6 +17,13 @@ export default function ProductThumbnail({ product, index }: { product: ProductP
   const handleClick = () => {
     router.push(`/${product.productPath && product.productPath[0]}/${product.productPath && product.productPath[1]}/${product.productPath && product.productPath[2]}/${product.slug?.current}`);
   }
+  useEffect(()=>{
+    setIsClient(true);
+  },[])
+
+  if(!isClient) return null;
+
+  
   return (
     <motion.div
       key={product._id}
@@ -24,20 +32,18 @@ export default function ProductThumbnail({ product, index }: { product: ProductP
       animate={{ opacity: 1, x: 0 }}
       transition={{ delay: index * 0.1, type: 'spring', stiffness: 50 }}
     >
-      <div 
-      // href={`${product.productPath && product.productPath[0]}/${product.productPath && product.productPath[1]}/${product.productPath && product.productPath[2]}/${product.slug?.current}`}
-      >
-          { product.variants && product.variants?.length>0 && product.variants[variantNumber].variantImages && product.variants[variantNumber].variantImages.length>0 &&  (
-          <div  onClick={handleClick} onMouseEnter={()=>setIsVideoVisible(true)} onMouseLeave={()=>setIsVideoVisible(false)} className="relative h-[200px] lg:w-full lg:h-[600px]"> {/* Ensure defined height */}
+      <div>
+          {product.variants && product.variants?.length>0 && product.variants[variantNumber].variantImages && product.variants[variantNumber].variantImages.length>0 &&  (
+          <div onClick={handleClick} onMouseEnter={()=>setIsVideoVisible(true)} onMouseLeave={()=>setIsVideoVisible(false)} className="relative h-[200px] lg:w-full lg:h-[500px]"> {/* Ensure defined height */}
             {
               !isVideovisble && product.variants && product.variants[variantNumber].variantImages &&
-            <Image
-              className="object-cover transition-transform duration-300 ease-in-out hover:scale-105"
-              src={imageUrl(product.variants[variantNumber].variantImages[variantImage]).url()}
-              fill
-              sizes="(max-width:760px) 100vw, (max-width:1200px) 50vw, 33vw"
-              alt={product.variants![variantNumber].variantImages![variantImage].alt|| 'Product Image'}
-              />
+              <Image
+                className="object-cover transition-transform duration-300 ease-in-out hover:scale-105"
+                src={imageUrl(product.variants[variantNumber].variantImages[variantImage]).url()}
+                fill
+                sizes="(max-width:760px) 100vw, (max-width:1200px) 50vw, 33vw"
+                alt={product.variants![variantNumber].variantImages![variantImage].alt|| 'Product Image'}
+                />
             }
             {
               isVideovisble && product.video && 
@@ -55,7 +61,7 @@ export default function ProductThumbnail({ product, index }: { product: ProductP
 
           
           <div className="lg:absolute bottom-0 left-0 p-1 bg-white/80 backdrop-blur-sm text-black w-full">
-          <div className='p-2 flex items-center  gap-x-1 justify-center'>
+          <div className='p-2 flex items-center gap-x-1 justify-center'>
             {product.variants && product.variants[variantNumber].variantImages && product.variants[variantNumber]?.variantImages.map((image,i)=>(
               <div onClick={()=>setVariantImage(i)} key={image._key} className={`h-3 w-3 border border-black/50 bg-black ${variantImage!=i && "opacity-20"} relative rounded-full`}>
                     

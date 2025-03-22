@@ -103,7 +103,7 @@ const FullScreenMedia: React.FC = () => {
         {isPaused ? <Play/> : <Pause/>}
       </button>
 
-        <div className="h-full w-full flex justify-center lg:justify-end items-center text-2xl md:text-5xl lg:text-6xl xl:text-7xl z-50 font-bold md:font-thin gap-2 lg:gap-0">
+        <div className="h-full w-full flex justify-center lg:justify-end items-center text-2xl md:text-5xl lg:text-6xl xl:text-7xl z-10 font-bold md:font-thin gap-2 lg:gap-0">
         <div >
           <Heading text="TIMELESS"/>
         </div>

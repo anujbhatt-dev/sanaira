@@ -6,6 +6,7 @@ import {
 } from '@clerk/nextjs'
 import { SanityLive } from "@/sanity/lib/live";
 import { poppins } from "@/utils/font";
+import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -27,6 +28,7 @@ export default function RootLayout({
           <div className="h-[4rem]"></div>
           {children}
           {/* <QuickAddWrapper/> */}
+          <Footer/>
           <SanityLive/>
         </body>
       </html>
