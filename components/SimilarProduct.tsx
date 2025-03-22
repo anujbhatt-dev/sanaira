@@ -1,6 +1,5 @@
 import React from 'react'
 import Heading from './Heading'
-import ProductThumbnail from './ProductThumbnail'
 import { getAllProducts } from '@/sanity/lib/products/getAllProducts';
 import ProductGrid from './ProductGrid';
 
