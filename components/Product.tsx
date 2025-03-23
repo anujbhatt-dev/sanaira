@@ -131,7 +131,7 @@ function Product({product,v}:{product:ProductPageType,v: string}) {
         </div>
         <h4 className={`${montserrat.className} text-[0.8rem] font-[500] uppercase mt-4`}>Size</h4>
         <div className='flex gap-2 uppercase flex-wrap text-[0.7rem]'>
-          {currentVariant?.sizes?.map((item,i)=>(
+          {currentVariant?.sizes?.map((item)=>(
               <div key={item._key} className={`${item.size===selectedSize ? 'border-black border-2' : 'border-gray-300'} text-gray-600 flex gap-x-2 border p-3 px-6 w-[4rem] justify-center items-center cursor-pointer`} onClick={()=>setSelectedSize(item?.size || '')}>
                   {item.size}
               </div>

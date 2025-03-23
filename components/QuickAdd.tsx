@@ -53,8 +53,8 @@ export default function QuickAdd({product}:{product:ProductPageType}) {
             {
                 product.variants &&
                 <p className="mt-2 text-[0.7rem] md:text-xs font-bold font-sans">
-                <span className="text-sm lg:text-lg">₹{product.variants[0].price ?? 'N/A'}</span>
-              {product.variants[0].price && <span className="line-through text-[#497D74] ml-2"> ₹{product.variants[0].price * 2}</span>}
+                <span className="text-sm lg:text-lg">₹{product.variants[0].sizes?.[0].price ?? 'N/A'}</span>
+              {product.variants[0].sizes?.[0].price && <span className="line-through text-[#497D74] ml-2"> ₹{product.variants[0].sizes?.[0].price * 2}</span>}
               </p>
             }
            <div className="lg:gap-x-2 p-2 lg:px-4 bg-[beige] text-[0.8rem] uppercase font-bold font-sans tracking-widest flex items-center cursor-pointer" title='Quick Add'>
