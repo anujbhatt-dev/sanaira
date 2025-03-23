@@ -5,7 +5,7 @@ import { SignedIn, SignedOut, SignInButton, SignUpButton, UserButton } from "@cl
 import { getAllFeaturedCategories } from "@/sanity/lib/categories/getAllFeaturedCategories";
 import SearchBar from "./SearchBar";
 import {  mulish } from "@/utils/font";
-import { ShoppingBasket, ShoppingBasketIcon, ShoppingCart } from "lucide-react";
+import { ShoppingCart } from "lucide-react";
 
 
 const Header = async () => {
