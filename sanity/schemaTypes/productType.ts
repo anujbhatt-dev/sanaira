@@ -9,7 +9,6 @@ export const productType = defineType({
   preview: {
     select: {
       title: 'title',
-      // media: 'video', // Now a URL
       category: 'category.name',
       categoryParent: 'category.parent.name',
       categoryTop: 'category.parent.parent.name',
@@ -19,17 +18,19 @@ export const productType = defineType({
       return {
         title,
         subtitle: `Category: ${categoryPath}`,
-        // media, // Sanity won’t preview video URLs, so you might need a placeholder image
       };
     },
   },
   fields: [
+    // Product Title
     defineField({
       name: 'title',
       title: 'Title',
       type: 'string',
       validation: Rule => Rule.required(),
     }),
+
+    // Product Slug
     defineField({
       name: 'slug',
       title: 'Slug',
@@ -37,11 +38,15 @@ export const productType = defineType({
       options: { source: 'title', maxLength: 96 },
       validation: Rule => Rule.required(),
     }),
+
+    // Product Description
     defineField({
       name: 'description',
       title: 'Description',
       type: 'blockContent',
     }),
+
+    // Product Category
     defineField({
       name: 'category',
       title: 'Category',
@@ -52,15 +57,19 @@ export const productType = defineType({
         filter: 'categoryType == "base"',
       },
     }),
+
+    // Product Video (AWS S3 URL)
     defineField({
       name: 'video',
       title: 'Product Video (AWS S3 URL)',
-      type: 'url', // ✅ Changed from file upload to URL storage
+      type: 'url',
       validation: Rule => Rule.uri({
         scheme: ['http', 'https'],
         allowRelative: false,
       }).required(),
     }),
+
+    // Product Variants
     defineField({
       name: 'variants',
       title: 'Variants',
@@ -71,10 +80,35 @@ export const productType = defineType({
           title: 'Variant',
           fields: [
             { name: 'name', title: 'Variant Name', type: 'string', validation: Rule => Rule.required() },
-            { name: 'size', title: 'Size', type: 'string' },
-            { name: 'color', title: 'Color', type: 'string' },
-            { name: 'price', title: 'Price', type: 'number', validation: Rule => Rule.min(0).required() },
-            { name: 'stock', title: 'Stock', type: 'number', validation: Rule => Rule.min(0) },
+            { name: 'color', title: 'Color', type: 'string', validation: Rule => Rule.required() },
+            {
+              name: 'sizes',
+              title: 'Sizes',
+              type: 'array',
+              of: [
+                {
+                  type: 'object',
+                  title: 'Size',
+                  fields: [
+                    { name: 'size', title: 'Size', type: 'string', validation: Rule => Rule.required() },
+                    { name: 'price', title: 'Price', type: 'number', validation: Rule => Rule.min(0).required() },
+                    { name: 'stock', title: 'Stock', type: 'number', validation: Rule => Rule.min(0) },
+                  ],
+                  preview: {
+                    select: {
+                      title: 'size',
+                      subtitle: 'price',
+                    },
+                    prepare({ title, subtitle }) {
+                      return {
+                        title: `Size: ${title}`,
+                        subtitle: `Price: ₹${subtitle || 'N/A'}`,
+                      };
+                    },
+                  },
+                },
+              ],
+            },
             {
               name: 'variantImages',
               title: 'Variant Images',
@@ -90,14 +124,14 @@ export const productType = defineType({
           ],
           preview: {
             select: {
-              title: 'name',
-              subtitle: 'price',
+              title: 'color',
+              subtitle: 'sizes.0.price',
               media: 'variantImages.0',
             },
             prepare({ title, subtitle, media }) {
               return {
-                title: title || 'Unnamed Variant',
-                subtitle: `Price: ₹${subtitle || 'N/A'}`,
+                title: `Color: ${title}`,
+                subtitle: `Starting Price: ₹${subtitle || 'N/A'}`,
                 media,
               };
             },
@@ -105,6 +139,8 @@ export const productType = defineType({
         },
       ],
     }),
+
+    // Product Path (Auto-Populated)
     defineField({
       name: 'productPath',
       title: 'Product Path',

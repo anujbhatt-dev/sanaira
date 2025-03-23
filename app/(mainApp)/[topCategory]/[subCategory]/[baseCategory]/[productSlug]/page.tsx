@@ -16,7 +16,6 @@ export default async function ProductPage({params,searchParams}:{params:Promise<
     const {topCategory,subCategory,baseCategory,productSlug} = await params;
     const {v=""} = await searchParams 
     const product = await getProductBySlug(productSlug);
-    console.log(product);
     
   return (
     <div className='px-4 lg:px-[5rem]'>

@@ -60,7 +60,7 @@ export default function ProductThumbnail({ product, index }: { product: ProductP
           )}
 
           
-          <div className="lg:absolute bottom-0 left-0 p-1 bg-white/80 backdrop-blur-sm text-black w-full">
+          <div className="lg:absolute bottom-0 left-0 p-1 bg-white/80 backdrop-blur-sm text-black w-full px-2">
           <div className='p-2 flex items-center gap-x-1 justify-center'>
             {product.variants && product.variants[variantNumber].variantImages && product.variants[variantNumber]?.variantImages.map((image,i)=>(
               <div onClick={()=>setVariantImage(i)} key={image._key} className={`h-3 w-3 border border-black/50 bg-black ${variantImage!=i && "opacity-20"} relative rounded-full`}>
@@ -68,13 +68,13 @@ export default function ProductThumbnail({ product, index }: { product: ProductP
               </div>              
             ))}
           </div>
-          <h3 className="text-md lg:text-xl  capitalize">{product.title || "Untitled Product"}</h3>
+          <h3 className="text-md lg:text-sm  capitalize">{product.title || "Untitled Product"}</h3>
           <div className="flex gap-4 justify-between items-baseline ">
             {
               product.variants &&
-              <p className="mt-2 text-[0.7rem] md:text-xs font-bold font-sans">
-                <span className="text-sm lg:text-lg">₹{product.variants[0].price ?? 'N/A'}</span>
-              {product.variants[0].price && <span className="line-through text-[#497D74] ml-2"> ₹{product.variants[0].price * 2}</span>}
+              <p className="mt-2 text-[0.7rem] md:text-xs font-sans">
+                <span className="text-sm lg:text-lg">₹{product.variants[0].sizes?.[0].price ?? 'N/A'}</span>
+              {product.variants[0].sizes?.[0].price && <span className="line-through text-[#497D74] ml-2"> ₹{product.variants[0].sizes?.[0].price * 2}</span>}
               </p>
             }
            <div className="lg:gap-x-2 p-2 lg:px-4 bg-[beige] text-[0.8rem] uppercase font-bold font-sans tracking-widest flex items-center cursor-pointer" title='Quick Add'>

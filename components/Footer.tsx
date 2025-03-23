@@ -39,8 +39,8 @@ export default function Footer() {
                 <div className='md:col-span-2'>
                     <h4 className='text-gray-200 text-lg font-semibold mb-2 h-[3rem] flex items-center'>Subscribe to our newsletter</h4>
                     <form className='flex gap-2 mb-6'>
-                        <input type='email' placeholder='Enter your email' className='w-full p-2 py-4  border border-zinc-200/10 text-[0.8rem]' />
-                        <button type='submit' className='bg-zinc-900 text-white p-6 text-[0.8rem] py-4'>Subscribe</button>
+                        <input type='email' placeholder='Enter your email' className='w-full p-2 py-4  border border-zinc-200/10 text-[12px]' />
+                        <button type='submit' className='bg-zinc-900 text-white p-6 text-[12px] py-4'>Subscribe</button>
                     </form>
                     <h4 className='text-gray-200 text-lg font-semibold mb-2 h-[3rem] flex items-center'>Follow us</h4>
                     <div className='flex gap-2'>

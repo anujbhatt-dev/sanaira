@@ -192,10 +192,13 @@ export type Product = {
   video?: string;
   variants?: Array<{
     name?: string;
-    size?: string;
     color?: string;
-    price?: number;
-    stock?: number;
+    sizes?: Array<{
+      size?: string;
+      price?: number;
+      stock?: number;
+      _key: string;
+    }>;
     variantImages?: Array<{
       asset?: {
         _ref: string;
@@ -589,10 +592,13 @@ export type ALL_PRODUCTS_QUERYResult = Array<{
   video?: string;
   variants?: Array<{
     name?: string;
-    size?: string;
     color?: string;
-    price?: number;
-    stock?: number;
+    sizes?: Array<{
+      size?: string;
+      price?: number;
+      stock?: number;
+      _key: string;
+    }>;
     variantImages?: Array<{
       asset?: {
         _ref: string;
@@ -661,10 +667,13 @@ export type PRODUCT_BY_SLUG_QUERYResult = {
   video?: string;
   variants?: Array<{
     name?: string;
-    size?: string;
     color?: string;
-    price?: number;
-    stock?: number;
+    sizes?: Array<{
+      size?: string;
+      price?: number;
+      stock?: number;
+      _key: string;
+    }>;
     variantImages?: Array<{
       asset?: {
         _ref: string;
@@ -733,10 +742,13 @@ export type PRODUCTS_BY_SEARCH_QUERYResult = Array<{
   video?: string;
   variants?: Array<{
     name?: string;
-    size?: string;
     color?: string;
-    price?: number;
-    stock?: number;
+    sizes?: Array<{
+      size?: string;
+      price?: number;
+      stock?: number;
+      _key: string;
+    }>;
     variantImages?: Array<{
       asset?: {
         _ref: string;

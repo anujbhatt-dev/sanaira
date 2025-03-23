@@ -26,26 +26,26 @@ const reviews = [
 
 const ReviewCard = ({ name, image, rating, text }: { name: string; image: string; rating: number; text: string }) => {
   return (
-    <div className="bg-zinc-100 p-4 rounded-lg">
-      <div className="flex items-center gap-x-4">
-        <Image src={image} alt="avatar" width={160} height={160} className="w-20 h-20 object-cover rounded-full" />
+    <div className="bg-zinc-100 rounded-lg overflow-hidden ">
+      <div className="flex flex-col gap-4">
+        <Image src={image} alt="avatar" width={500} height={600} className="w-full h-[600px] object-cover " />
         <div>
-          <div className="text-sm font-bold">{name}</div>
-          <div className="text-sm text-zinc-500 flex gap-1">
+          <div className="text-sm font-bold px-4">{name}</div>
+          <div className="text-sm text-zinc-500 flex gap-2 px-4 mt-2">
             {Array.from({ length: rating }).map((_, i) => (
-              <StarIcon key={i} className="w-4 h-4 text-amber-600 fill-amber-400" />
+              <StarIcon key={i} className="w-4 h-4 text-zinc-800 fill-zinc-800" />
             ))}
           </div>
         </div>
       </div>
-      <div className="text-sm text-zinc-500 mt-2">{text}</div>
+      <div className="text-sm text-zinc-500 mt-2 p-4">{text}</div>
     </div>
   );
 };
 
 export default function Reviews() {
   return (
-    <div className="mt-6">
+    <div className="mt-12">
       <div className="mx-auto max-w-screen-xl">
         <div className="text-xl md:text-3xl flex items-center justify-center gap-x-4">
           <Heading text="What " />

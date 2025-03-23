@@ -1213,13 +1213,6 @@
                 },
                 "optional": true
               },
-              "size": {
-                "type": "objectAttribute",
-                "value": {
-                  "type": "string"
-                },
-                "optional": true
-              },
               "color": {
                 "type": "objectAttribute",
                 "value": {
@@ -1227,17 +1220,47 @@
                 },
                 "optional": true
               },
-              "price": {
+              "sizes": {
                 "type": "objectAttribute",
                 "value": {
-                  "type": "number"
-                },
-                "optional": true
-              },
-              "stock": {
-                "type": "objectAttribute",
-                "value": {
-                  "type": "number"
+                  "type": "array",
+                  "of": {
+                    "type": "object",
+                    "attributes": {
+                      "size": {
+                        "type": "objectAttribute",
+                        "value": {
+                          "type": "string"
+                        },
+                        "optional": true
+                      },
+                      "price": {
+                        "type": "objectAttribute",
+                        "value": {
+                          "type": "number"
+                        },
+                        "optional": true
+                      },
+                      "stock": {
+                        "type": "objectAttribute",
+                        "value": {
+                          "type": "number"
+                        },
+                        "optional": true
+                      }
+                    },
+                    "rest": {
+                      "type": "object",
+                      "attributes": {
+                        "_key": {
+                          "type": "objectAttribute",
+                          "value": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
                 },
                 "optional": true
               },
