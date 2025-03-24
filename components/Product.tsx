@@ -42,7 +42,8 @@ function Product({product,v}:{product:ProductPageType,v: string}) {
     console.log(currentVariant?.color);    
     console.log(quantity);
     console.log(selectedSize);
-    addItem(product,selectedSize,currentVariant?.color || '',quantity);
+    const price = currentVariant?.sizes?.find((size)=>size.size===selectedSize)?.price || 0;
+    addItem(product,selectedSize,currentVariant?.color || '',quantity,price);
     
   }
   
@@ -118,7 +119,7 @@ function Product({product,v}:{product:ProductPageType,v: string}) {
         <p className='text-sm text-gray-600 uppercase text-[0.8rem] '>Anaira</p>  
         <h1 className={`text-xl font-[400] uppercase ${montserrat.className}`}>{product.title}</h1>  
         <p className={`flex gap-y-1 font-thin items-baseline`}>
-            <span className='flex items-baseline text-xl'><IndianRupeeIcon className='w-4 h-4'/>{currentVariant?.sizes?.[0].price}</span> <span className='flex items-baseline text-sm ml-1 text-red-500 line-through'><IndianRupeeIcon className='w-3 h-3'/>{(currentVariant?.sizes?.[0].price || 1000) *3 }</span>            
+            <span className='flex items-baseline text-xl'><IndianRupeeIcon className='w-4 h-4'/>{currentVariant?.sizes?.find((size)=>size.size===selectedSize)?.price || 0}</span> <span className='flex items-baseline text-sm ml-1 text-red-500 line-through'><IndianRupeeIcon className='w-3 h-3'/>{(currentVariant?.sizes?.[0].price || 1000) *3 }</span>            
         </p>
         <hr className='border-t border-gray-300 my-4'/>
         <h4 className={`${montserrat.className} text-[0.8rem] font-[500] uppercase`}>Color</h4>

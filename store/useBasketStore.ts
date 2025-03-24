@@ -7,6 +7,7 @@ export interface IBasketItem {
     quantity: number
     size: string
     color: string
+    price: number
 }
 
 interface BasketState {
@@ -14,13 +15,15 @@ interface BasketState {
 }
 
 interface BasketActions {
-    addItem: (product: ProductPageType, size: string, color: string, quantity: number) => void
+    addItem: (product: ProductPageType, size: string, color: string, quantity: number,price:number) => void
     removeItem: (productId: string, size: string, color: string) => void
     clearBasket: () => void
     getTotalPrice: () => number
     getItemCount: () => number
     getGroupedItems: () => IBasketItem[]
     getSingleItemCount: (productId: string, size: string, color: string) => number
+    incrementQuantity: (title: string, size: string, color: string) => void 
+    decrementQuantity: (title: string, size: string, color: string) => void 
 }
 
 // Zustand store with persistence
@@ -29,7 +32,7 @@ export const useBasketStore = create<BasketState & BasketActions>()(
         (set, get) => ({
             items: [],
 
-            addItem: (product: ProductPageType, size: string, color: string, quantity: number) => {
+            addItem: (product: ProductPageType, size: string, color: string, quantity: number,price:number) => {
                 set((state) => {
                     // Check if the item already exists in the basket
                     const existingItemIndex = state.items.findIndex(
@@ -49,7 +52,7 @@ export const useBasketStore = create<BasketState & BasketActions>()(
                         return { items: updatedItems };
                     } else {
                         // If the item doesn't exist, add it to the basket
-                        return { items: [...state.items, { product, quantity, size, color }] };
+                        return { items: [...state.items, { product, quantity, size, color, price }] };
                     }
                 });
             },
@@ -64,6 +67,28 @@ export const useBasketStore = create<BasketState & BasketActions>()(
                         )
                         .filter((item) => item.quantity > 0),
                 }))
+            },
+
+            incrementQuantity: (title: string, size: string, color: string) => {
+                set((state) => ({
+                    items: state.items.map((item) =>
+                        item.product.title === title && item.size === size && item.color === color
+                            ? { ...item, quantity: item.quantity + 1 }
+                            : item
+                    ),
+                }));
+            },
+
+            decrementQuantity: (title: string, size: string, color: string) => {
+                set((state) => ({
+                    items: state.items
+                        .map((item) =>
+                            item.product.title === title && item.size === size && item.color === color
+                                ? { ...item, quantity: item.quantity - 1 }
+                                : item
+                        )
+                        .filter((item) => item.quantity > 0),
+                }));
             },
 
             clearBasket: () => set({ items: [] }),

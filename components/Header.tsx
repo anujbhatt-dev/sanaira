@@ -1,11 +1,10 @@
-// import { categories, CategoryType } from "@/utils/categorySeed";
 import Link from "next/link";
-// import { useRef } from "react";
 import { SignedIn, SignedOut, SignInButton, SignUpButton, UserButton } from "@clerk/nextjs";
 import { getAllFeaturedCategories } from "@/sanity/lib/categories/getAllFeaturedCategories";
 import SearchBar from "./SearchBar";
 import {  mulish } from "@/utils/font";
 import { ShoppingCart } from "lucide-react";
+import TotalItemCount from "./TotalItemsCount";
 
 
 const Header = async () => {
@@ -40,7 +39,7 @@ const Header = async () => {
             </SignedIn>
             <Link className="relative w-8 h-8" href={"/my-basket"}>
               <ShoppingCart className="w-8 h-8 cursor-pointer"/>
-              <span className="absolute top-0 right-[0rem] text-xs text-white bg-black px-2 py-1 rounded-full translate-x-1/2 -translate-y-1/2">{0}</span>
+              <TotalItemCount/>
             </Link>
           </div>
         </div>

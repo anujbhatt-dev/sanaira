@@ -9,7 +9,9 @@ import { mulish } from "@/utils/font";
 
 export default function MyBasket() {
     const [isClient, setIsClient] = useState(false);
-    const { items } = useBasketStore();
+    const { items, incrementQuantity, decrementQuantity } = useBasketStore();
+    
+    
 
     useEffect(() => {
         setIsClient(true);
@@ -18,7 +20,7 @@ export default function MyBasket() {
     if (!isClient) {
         // Custom loading skeleton
         return (
-            <div className={`${mulish.className} px-[0.2rem] md:px-[2rem]`}>
+            <div className={`${mulish.className} px-[0.2rem] md:px-[2rem] max-w-[1200px] mx-auto`}>
                 <div className="mt-6 min-h-[calc(100vh-4rem)]">
                     <div className="flex items-center justify-center gap-2 text-2xl">
                         <div className="w-20 h-8 bg-gray-200 rounded animate-pulse"></div>
@@ -42,18 +44,32 @@ export default function MyBasket() {
     }
 
     return (
-        <div className={`${mulish.className} px-[0.2rem] md:px-[2rem]`}>
+        <div className={`${mulish.className} px-[0.2rem] md:px-[2rem] max-w-[1200px] mx-auto tracking-wide`}>
             {items.length > 0 ? (
                 <div className="mt-6 min-h-[calc(100vh-4rem)]">
                     <div className="flex items-center justify-center gap-2 text-2xl">
                         <Heading text="My" />
                         <Heading text="Basket" />
                     </div>
-                    <div className="flex flex-col gap-4 mt-6">
+                    <div className="grid grid-cols-8 gap-4 uppercase text-gray-600 text-sm mt-4">
+                        <p>
+                            Image
+                        </p>
+                        <p className="col-span-3">
+                            Details
+                        </p>
+                        <p className="col-span-3">
+                            Quantity
+                        </p>
+                        <p className="col-span-1">
+                            Total Price
+                        </p>
+                    </div>
+                    <div className="flex flex-col gap-4 mt-4 ">
                         {items.map((item, i) => (
                             <div
                                 key={item.product._id + i}
-                                className="flex flex-row gap-4 p-4 border rounded-lg shadow-sm hover:shadow-md transition-shadow"
+                                className="grid grid-cols-8 gap-4 transition-shadow items-start py-2 pt-4 bg-zinc-50"
                             >
                                 {item.product.variants?.map(
                                     (variant, j) =>
@@ -64,15 +80,22 @@ export default function MyBasket() {
                                                 alt={item.product.title || ""}
                                                 width={100}
                                                 height={100}
-                                                className="w-[100px] h-auto object-contain"
+                                                className="w-[100px] h-auto object-contain p-2"
                                             />
                                         )
                                 )}
+                                <div className="flex flex-col justify-center col-span-3 self-start uppercase">
+                                    <p className="text-sm font-semibold mb-2">{item.product.title}</p>
+                                    <p className="text-sm text-gray-600 mb-1">{item.color}</p>
+                                    <p className="text-sm text-gray-600">{item.size}</p>
+                                </div>
+                                <div className='flex gap-2 col-span-3'>
+                                    <button onClick={() => decrementQuantity(item.product?.title || "", item.size, item.color)} className={`${item.quantity===1 ? 'opacity-50 cursor-not-allowed' : ''} border border-gray-300 text-gray-600 px-4 py-2 rounded-sm cursor-pointer transition-all duration-300 hover:text-black hover:border-gray-600`}>-</button>
+                                    <span className='border border-gray-300 px-4 py-2 rounded-sm'>{item.quantity}</span>
+                                    <button onClick={() => incrementQuantity(item.product?.title || "", item.size, item.color)} className={`${item.product.variants?.[0].sizes?.[0].stock && item.product.variants?.[0].sizes?.[0].stock <= item.quantity ? 'opacity-50 cursor-not-allowed' : ''} border border-gray-300 text-gray-600 px-4 py-2 rounded-sm cursor-pointer transition-all duration-300 hover:text-black hover:border-gray-600`}>+</button>
+                                </div>
                                 <div className="flex flex-col justify-center">
-                                    <p className="text-lg font-semibold">{item.product.title}</p>
-                                    <p className="text-sm text-gray-600">{item.color}</p>
-                                    <p className="text-sm text-gray-600">Size: {item.size}</p>
-                                    <p className="text-sm text-gray-600">Quantity: {item.quantity}</p>
+                                    <p className="text-black font-semibold text-md">Rs. {item.price * item.quantity}</p>
                                 </div>
                             </div>
                         ))}
