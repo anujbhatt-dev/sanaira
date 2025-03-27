@@ -91,10 +91,10 @@ export default function MyBasket() {
                                         )
                                 )}
                                 <div className="flex flex-col justify-center col-span-3 self-start uppercase">
-                                    <p className="text-sm font-semibold mb-2">{item.product.title}</p>
-                                    <p className="text-sm text-gray-600 flex items-center"><IndianRupee className="w-3 h-3" /> {item.price}</p>
-                                    <p className="text-sm text-gray-600 mb-1">{item.color}</p>
-                                    <p className="text-sm text-gray-600">{item.size}</p>
+                                    <p className="text-sm font-semibold mb-2 truncate">{item.product.title}</p>
+                                    <p className="text-sm text-gray-600 flex items-center truncate"><IndianRupee className="w-3 h-3" /> {item.price}</p>
+                                    <p className="text-sm text-gray-600 mb-1 truncate">{item.color}</p>
+                                    <p className="text-sm text-gray-600 truncate">{item.size}</p>
                                 </div>
                                 <div className='flex gap-2 col-span-3'>
                                     <button onClick={() => decrementQuantity(item.product?.title || "", item.size, item.color)} className={`${item.quantity===1 ? 'opacity-50 cursor-not-allowed' : ''} border border-gray-300 text-gray-600 px-4 py-2 rounded-sm cursor-pointer transition-all duration-300 hover:text-black hover:border-gray-600`}>-</button>
@@ -106,6 +106,11 @@ export default function MyBasket() {
                                 </div>
                             </div>
                         ))}
+                    </div>
+                    <div className="flex justify-end mt-4 items-center gap-4">
+                        <p className="text-gray-600 text-sm">Total Price</p>
+                        <p className="text-black font-semibold text-md flex items-center gap-1"><IndianRupee className="w-4 h-4" /> {items.reduce((acc, item) => acc + item.price * item.quantity, 0)}</p>
+                        <button className="bg-black text-white px-4 py-2 rounded-sm hover:bg-gray-800 transition-all duration-300 cursor-pointer">Checkout</button>
                     </div>
                 </div>
             ) : (
