@@ -6,10 +6,11 @@ import Image from "next/image";
 import { imageUrl } from "@/lib/imageUrl";
 import Link from "next/link";
 import { mulish } from "@/utils/font";
+import { IndianRupee, Trash2 } from "lucide-react";
 
 export default function MyBasket() {
     const [isClient, setIsClient] = useState(false);
-    const { items, incrementQuantity, decrementQuantity } = useBasketStore();
+    const { items, incrementQuantity, decrementQuantity, removeGroupedItem } = useBasketStore();
     
     
 
@@ -69,8 +70,13 @@ export default function MyBasket() {
                         {items.map((item, i) => (
                             <div
                                 key={item.product._id + i}
-                                className="grid grid-cols-8 gap-4 transition-shadow items-start py-2 pt-4 bg-zinc-50"
+                                className="grid grid-cols-8 gap-4 transition-shadow items-start py-2 pt-4 bg-zinc-50 relative"
                             >
+                                <div className="absolute bottom-0 right-0 m-2 cursor-pointer">
+                                    <button className="text-gray-600 hover:text-black transition-colors" onClick={() => removeGroupedItem(item.product._id, item.size, item.color)}>
+                                        <Trash2 className="w-4 h-4" />
+                                    </button>
+                                </div>
                                 {item.product.variants?.map(
                                     (variant, j) =>
                                         variant.color === item.color && (
@@ -86,6 +92,7 @@ export default function MyBasket() {
                                 )}
                                 <div className="flex flex-col justify-center col-span-3 self-start uppercase">
                                     <p className="text-sm font-semibold mb-2">{item.product.title}</p>
+                                    <p className="text-sm text-gray-600 flex items-center"><IndianRupee className="w-3 h-3" /> {item.price}</p>
                                     <p className="text-sm text-gray-600 mb-1">{item.color}</p>
                                     <p className="text-sm text-gray-600">{item.size}</p>
                                 </div>
@@ -95,7 +102,7 @@ export default function MyBasket() {
                                     <button onClick={() => incrementQuantity(item.product?.title || "", item.size, item.color)} className={`${item.product.variants?.[0].sizes?.[0].stock && item.product.variants?.[0].sizes?.[0].stock <= item.quantity ? 'opacity-50 cursor-not-allowed' : ''} border border-gray-300 text-gray-600 px-4 py-2 rounded-sm cursor-pointer transition-all duration-300 hover:text-black hover:border-gray-600`}>+</button>
                                 </div>
                                 <div className="flex flex-col justify-center">
-                                    <p className="text-black font-semibold text-md">Rs. {item.price * item.quantity}</p>
+                                    <p className="text-black font-semibold text-md flex items-center gap-1"><IndianRupee className="w-4 h-4" /> {item.price * item.quantity}</p>
                                 </div>
                             </div>
                         ))}

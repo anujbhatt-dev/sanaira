@@ -7,7 +7,7 @@ import { IndianRupeeIcon, Minus, Plus } from 'lucide-react';
 import { PortableText } from 'next-sanity';
 import Image from 'next/image';
 import Link from 'next/link';
-import React, {  useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { gsap } from 'gsap';
 import ProductSkeleton from './Skeletons/ProductSkeleton';
 import useHasMounted from '@/hooks/useHasMounted';
@@ -38,14 +38,18 @@ function Product({product,v}:{product:ProductPageType,v: string}) {
 
   const handleAddToCart = () => {
     console.log('add to cart');
-    console.log(product);
-    console.log(currentVariant?.color);    
-    console.log(quantity);
-    console.log(selectedSize);
     const price = currentVariant?.sizes?.find((size)=>size.size===selectedSize)?.price || 0;
-    addItem(product,selectedSize,currentVariant?.color || '',quantity,price);
-    
+    addItem(product,selectedSize,currentVariant?.color || '',quantity,price);    
   }
+
+  useEffect(()=>{
+    setQuantity(1);
+    setSelectedSize(currentVariant?.sizes?.[0].size || '');
+  },[currentVariant]);
+
+  useEffect(()=>{
+    setQuantity(1);
+  },[selectedSize]);
   
   useGSAP(()=>{
     gsap.from(shippingPolicyRef.current, {
