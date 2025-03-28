@@ -52,6 +52,8 @@ export default function MyBasket() {
                         <Heading text="My" />
                         <Heading text="Basket" />
                     </div>
+                    <div className="flex gap-4">                    
+                    <div className="flex flex-col gap-4 mt-4 ">
                     <div className="grid grid-cols-8 gap-4 uppercase text-gray-600 text-sm mt-4">
                         <p>
                             Image
@@ -66,7 +68,6 @@ export default function MyBasket() {
                             Total Price
                         </p>
                     </div>
-                    <div className="flex flex-col gap-4 mt-4 ">
                         {items.map((item, i) => (
                             <div
                                 key={item.product._id + i}
@@ -107,10 +108,11 @@ export default function MyBasket() {
                             </div>
                         ))}
                     </div>
-                    <div className="flex justify-end mt-4 items-center gap-4">
-                        <p className="text-gray-600 text-sm">Total Price</p>
+                    <div className="flex mt-4 items-start gap-4 flex-col grow-1 bg-zinc-100 p-4 justify-start self-start">
+                        <p className="text-gray-600 text-sm uppercase">Total Price</p>
                         <p className="text-black font-semibold text-md flex items-center gap-1"><IndianRupee className="w-4 h-4" /> {items.reduce((acc, item) => acc + item.price * item.quantity, 0)}</p>
-                        <button className="bg-black text-white px-4 py-2 rounded-sm hover:bg-gray-800 transition-all duration-300 cursor-pointer">Checkout</button>
+                        <button className="bg-black text-white px-4 py-2 rounded-sm hover:bg-gray-800 transition-all duration-300 cursor-pointer w-full">Checkout</button>
+                    </div>
                     </div>
                 </div>
             ) : (
