@@ -39,6 +39,8 @@ export async function createCheckoutSession(items:IBasketItem[], metadata:Metada
       const successUrl = `${base_url}/success??session_id=(CHECKOUT_SESSION_ID)&orderNumber=${metadata.orderNumber}`
 
       const cancelUrl = `${base_url}/basket`
+
+      
       const session = await stripe.checkout.sessions.create({
         customer:customerId,
         customer_creation: customerId?undefined:"always",
@@ -50,6 +52,9 @@ export async function createCheckoutSession(items:IBasketItem[], metadata:Metada
         shipping_address_collection: {
             allowed_countries: ["IN"],
         },
+        phone_number_collection: {
+            enabled: true, // Enable phone number collection
+        },
         line_items: items.map((item)=>({
             price_data:{
                 currency:"inr",
@@ -60,9 +65,10 @@ export async function createCheckoutSession(items:IBasketItem[], metadata:Metada
                     metadata:{
                         id:item.product._id
                     },
-                    images: item.product?.variants?.filter((v)=>v.color==item.color).map((v2)=>{                                               
-                        return v2.variantImages && [imageUrl(v2?.variantImages?.[0]).url() || ""] 
-                        })[0] && undefined
+                    images: item.product?.variants
+                    ?.filter((v) => v.color === item.color)
+                    ?.flatMap((v2) => v2.variantImages?.[0] ? [imageUrl(v2.variantImages[0]).url()] : [])
+                    ?? []
                             
                             
                 }
