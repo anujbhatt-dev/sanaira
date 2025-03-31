@@ -7,6 +7,7 @@ import { imageUrl } from "@/lib/imageUrl";
 import Link from "next/link";
 import { mulish } from "@/utils/font";
 import { IndianRupee, Trash2 } from "lucide-react";
+import { SignedIn, SignedOut, SignInButton } from "@clerk/nextjs";
 
 export default function MyBasket() {
     const [isClient, setIsClient] = useState(false);
@@ -111,7 +112,14 @@ export default function MyBasket() {
                     <div className="flex mt-4 items-start gap-4 flex-col grow-1 bg-zinc-100 p-4 justify-start self-start">
                         <p className="text-gray-600 text-sm uppercase">Total Price</p>
                         <p className="text-black font-semibold text-md flex items-center gap-1"><IndianRupee className="w-4 h-4" /> {items.reduce((acc, item) => acc + item.price * item.quantity, 0)}</p>
+                        <SignedIn>
                         <button className="bg-black text-white px-4 py-2 rounded-sm hover:bg-gray-800 transition-all duration-300 cursor-pointer w-full">Checkout</button>
+                        </SignedIn>
+                        <SignedOut>
+                            <SignInButton mode="modal">
+                            <button className="bg-black text-white px-4 py-2 rounded-sm hover:bg-gray-800 transition-all duration-300 cursor-pointer w-full text-nowrap">Sign in to Checkout</button>
+                            </SignInButton>
+                        </SignedOut>
                     </div>
                     </div>
                 </div>
