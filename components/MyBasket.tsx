@@ -7,19 +7,59 @@ import { imageUrl } from "@/lib/imageUrl";
 import Link from "next/link";
 import { mulish } from "@/utils/font";
 import { IndianRupee, Trash2 } from "lucide-react";
-import { SignedIn, SignedOut, SignInButton } from "@clerk/nextjs";
+import { SignedIn, SignedOut, SignInButton, useAuth, useUser } from "@clerk/nextjs";
+import { createCheckoutSession } from "@/actions/createCheckoutSession";
+
+
+interface Metadata {
+    orderNumber:string
+    customerName: string
+    customerEmail: string
+    clerkUserId:string
+}
 
 export default function MyBasket() {
     const [isClient, setIsClient] = useState(false);
     const { items, incrementQuantity, decrementQuantity, removeGroupedItem } = useBasketStore();
+    const [loading,setLoading] = useState(false);
+    const  {user} = useUser()
+    const {isSignedIn} = useAuth()
+    console.log(user);  
+    console.log(JSON.stringify(items[0]));
     
     
+    const handleCheckout = async () => {
+        if(!isSignedIn){
+            return 
+        }
+        setLoading(true)
+        try {
+            const metadata:Metadata = {
+                orderNumber: crypto.randomUUID(),
+                customerName: user?.fullName ?? "Unknown",
+                customerEmail: user?.emailAddresses[0].emailAddress ?? "Unknown",
+                clerkUserId: user!.id
+            }       
+            
+            const checkoutUrl = await createCheckoutSession(items ,metadata)
+            console.log(checkoutUrl);
+            if(checkoutUrl){
+                window.location.href = checkoutUrl;
+            }
+            
+        } catch (error) {
+            console.log(error);
+            
+        } finally{
+            setLoading(false)
+        }
+    }
 
     useEffect(() => {
         setIsClient(true);
     }, []);
 
-    if (!isClient) {
+    if (!isClient || loading) {
         // Custom loading skeleton
         return (
             <div className={`${mulish.className} px-[0.2rem] md:px-[2rem] max-w-[1200px] mx-auto`}>
@@ -44,6 +84,7 @@ export default function MyBasket() {
             </div>
         );
     }
+
 
     return (
         <div className={`${mulish.className} px-[0.2rem] md:px-[2rem] max-w-[1200px] mx-auto tracking-wide`}>
@@ -79,19 +120,18 @@ export default function MyBasket() {
                                         <Trash2 className="w-4 h-4" />
                                     </button>
                                 </div>
-                                {item.product.variants?.map(
-                                    (variant, j) =>
-                                        variant.color === item.color && (
-                                            <Image
-                                                key={j}
-                                                src={imageUrl(variant.variantImages?.[0] || "").url()}
-                                                alt={item.product.title || ""}
-                                                width={100}
-                                                height={100}
-                                                className="w-[100px] h-auto object-contain p-2"
-                                            />
-                                        )
-                                )}
+                                {item.product.variants
+                                ?.filter((variant) => variant.color === item.color)
+                                .map((variant, j) => (
+                                    <Image
+                                    key={j}
+                                    src={imageUrl(variant.variantImages?.[0] || "").url()}
+                                    alt={item.product.title || ""}
+                                    width={100}
+                                    height={100}
+                                    className="w-[100px] h-auto object-contain p-2"
+                                    />
+                                ))}
                                 <div className="flex flex-col justify-center col-span-3 self-start uppercase">
                                     <p className="text-sm font-semibold mb-2 truncate">{item.product.title}</p>
                                     <p className="text-sm text-gray-600 flex items-center truncate"><IndianRupee className="w-3 h-3" /> {item.price}</p>
@@ -113,11 +153,11 @@ export default function MyBasket() {
                         <p className="text-gray-600 text-sm uppercase">Total Price</p>
                         <p className="text-black font-semibold text-md flex items-center gap-1"><IndianRupee className="w-4 h-4" /> {items.reduce((acc, item) => acc + item.price * item.quantity, 0)}</p>
                         <SignedIn>
-                        <button className="bg-black text-white px-4 py-2 rounded-sm hover:bg-gray-800 transition-all duration-300 cursor-pointer w-full">Checkout</button>
+                        <button onClick={handleCheckout} className="bg-black text-white px-4 py-2 rounded-sm hover:bg-gray-800 transition-all duration-300 cursor-pointer w-full">Checkout</button>
                         </SignedIn>
                         <SignedOut>
                             <SignInButton mode="modal">
-                            <button className="bg-black text-white px-4 py-2 rounded-sm hover:bg-gray-800 transition-all duration-300 cursor-pointer w-full text-nowrap">Sign in to Checkout</button>
+                            <button  className="bg-black text-white px-4 py-2 rounded-sm hover:bg-gray-800 transition-all duration-300 cursor-pointer w-full text-nowrap">Sign in to Checkout</button>
                             </SignInButton>
                         </SignedOut>
                     </div>
