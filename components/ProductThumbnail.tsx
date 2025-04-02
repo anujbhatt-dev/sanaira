@@ -17,13 +17,14 @@ export default function ProductThumbnail({ product, index }: { product: ProductP
   const handleClick = () => {
     router.push(`/${product.productPath && product.productPath[0]}/${product.productPath && product.productPath[1]}/${product.productPath && product.productPath[2]}/${product.slug?.current}`);
   }
+
+
   useEffect(()=>{
     setIsClient(true);
   },[])
 
   if(!isClient) return null;
 
-  
   return (
     <motion.div
       key={product._id}

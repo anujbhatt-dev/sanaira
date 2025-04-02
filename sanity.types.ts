@@ -68,6 +68,64 @@ export type Geopoint = {
   alt?: number;
 };
 
+export type Collection = {
+  _id: string;
+  _type: "collection";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title?: string;
+  slug?: Slug;
+  products?: Array<{
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    _key: string;
+    [internalGroqTypeReferenceTo]?: "product";
+  }>;
+  description?: Array<{
+    children?: Array<{
+      marks?: Array<string>;
+      text?: string;
+      _type: "span";
+      _key: string;
+    }>;
+    style?: "normal" | "h1" | "h2" | "h3" | "h4" | "blockquote";
+    listItem?: "bullet";
+    markDefs?: Array<{
+      href?: string;
+      _type: "link";
+      _key: string;
+    }>;
+    level?: number;
+    _type: "block";
+    _key: string;
+  } | {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt?: string;
+    _type: "image";
+    _key: string;
+  }>;
+  image?: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: "image";
+  };
+};
+
 export type Order = {
   _id: string;
   _type: "order";
@@ -396,7 +454,7 @@ export type SanityImageMetadata = {
   isOpaque?: boolean;
 };
 
-export type AllSanitySchemaTypes = SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityFileAsset | Geopoint | Order | Sale | ShippingAddress | Product | User | Category | Slug | BlockContent | SanityImageCrop | SanityImageHotspot | SanityImageAsset | SanityAssetSourceData | SanityImageMetadata;
+export type AllSanitySchemaTypes = SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityFileAsset | Geopoint | Collection | Order | Sale | ShippingAddress | Product | User | Category | Slug | BlockContent | SanityImageCrop | SanityImageHotspot | SanityImageAsset | SanityAssetSourceData | SanityImageMetadata;
 export declare const internalGroqTypeReferenceTo: unique symbol;
 // Source: ./sanity/lib/categories/getAllCategory.ts
 // Variable: ALL_CATEGORIES_QUERY
@@ -541,6 +599,126 @@ export type ALL_FEATURED_CATEGORIES_QUERYResult = Array<{
   }>;
   status?: "active" | "inactive";
 }>;
+
+// Source: ./sanity/lib/collections/getCollectionBySlug.ts
+// Variable: COLLECTION_BY_SLUG_QUERY
+// Query: *[_type == "collection" && slug.current == $slug][0]{            title,            slug,            products[]->{                ...,                "productPath": [                    category->parent->parent->slug.current,                    category->parent->slug.current,                    category->slug.current                ]            },            description,            image        }
+export type COLLECTION_BY_SLUG_QUERYResult = {
+  title: string | null;
+  slug: Slug | null;
+  products: Array<{
+    _id: string;
+    _type: "product";
+    _createdAt: string;
+    _updatedAt: string;
+    _rev: string;
+    title?: string;
+    slug?: Slug;
+    description?: Array<{
+      children?: Array<{
+        marks?: Array<string>;
+        text?: string;
+        _type: "span";
+        _key: string;
+      }>;
+      style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "normal";
+      listItem?: "bullet";
+      markDefs?: Array<{
+        href?: string;
+        _type: "link";
+        _key: string;
+      }>;
+      level?: number;
+      _type: "block";
+      _key: string;
+    } | {
+      asset?: {
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+      };
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      alt?: string;
+      _type: "image";
+      _key: string;
+    }>;
+    category?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "category";
+    };
+    video?: string;
+    variants?: Array<{
+      name?: string;
+      color?: string;
+      sizes?: Array<{
+        size?: string;
+        price?: number;
+        stock?: number;
+        _key: string;
+      }>;
+      variantImages?: Array<{
+        asset?: {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+        };
+        hotspot?: SanityImageHotspot;
+        crop?: SanityImageCrop;
+        alt?: string;
+        _type: "image";
+        _key: string;
+      }>;
+      _key: string;
+    }>;
+    productPath: Array<string | null>;
+  }> | null;
+  description: Array<{
+    children?: Array<{
+      marks?: Array<string>;
+      text?: string;
+      _type: "span";
+      _key: string;
+    }>;
+    style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "normal";
+    listItem?: "bullet";
+    markDefs?: Array<{
+      href?: string;
+      _type: "link";
+      _key: string;
+    }>;
+    level?: number;
+    _type: "block";
+    _key: string;
+  } | {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt?: string;
+    _type: "image";
+    _key: string;
+  }> | null;
+  image: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: "image";
+  } | null;
+} | null;
 
 // Source: ./sanity/lib/products/getAllProducts.ts
 // Variable: ALL_PRODUCTS_QUERY
@@ -692,7 +870,7 @@ export type PRODUCT_BY_SLUG_QUERYResult = {
   productPath: Array<string | null>;
 } | null;
 
-// Source: ./sanity/lib/products/getSearchProducts.tsx
+// Source: ./sanity/lib/products/getSearchProducts.ts
 // Variable: PRODUCTS_BY_SEARCH_QUERY
 // Query: *[          _type=="product" &&           (            title match $q ||             description[].children[].text match $q // Corrected description search          )        ] | order(title asc){            ...,            "productPath": [                category->parent->parent->slug.current,                 category->parent->slug.current,                 category->slug.current            ]        }
 export type PRODUCTS_BY_SEARCH_QUERYResult = Array<{
@@ -773,6 +951,7 @@ declare module "@sanity/client" {
   interface SanityQueries {
     "\n          *[_type==\"category\"] \n        ": ALL_CATEGORIES_QUERYResult;
     "\n          *[_type==\"category\" && isFeatured==true] \n        ": ALL_FEATURED_CATEGORIES_QUERYResult;
+    "\n        *[_type == \"collection\" && slug.current == $slug][0]{\n            title,\n            slug,\n            products[]->{\n                ...,\n                \"productPath\": [\n                    category->parent->parent->slug.current,\n                    category->parent->slug.current,\n                    category->slug.current\n                ]\n            },\n            description,\n            image\n        }\n    ": COLLECTION_BY_SLUG_QUERYResult;
     "\n        *[_type == \"product\"]{\n            ...,\n            \"productPath\": [\n                category->parent->parent->slug.current, \n                category->parent->slug.current, \n                category->slug.current\n            ]\n        }\n    ": ALL_PRODUCTS_QUERYResult;
     "\n        *[_type == \"product\" && slug.current == $slug][0]{\n            ...,\n            \"productPath\": [\n                category->parent->parent->slug.current, \n                category->parent->slug.current, \n                category->slug.current\n            ]\n        }\n    ": PRODUCT_BY_SLUG_QUERYResult;
     "\n        *[\n          _type==\"product\" && \n          (\n            title match $q || \n            description[].children[].text match $q // Corrected description search\n          )\n        ] | order(title asc){\n            ...,\n            \"productPath\": [\n                category->parent->parent->slug.current, \n                category->parent->slug.current, \n                category->slug.current\n            ]\n        }\n    ": PRODUCTS_BY_SEARCH_QUERYResult;

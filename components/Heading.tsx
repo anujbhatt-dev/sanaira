@@ -49,7 +49,7 @@ const Heading: React.FC<HeadingProps> = ({ text }) => {
           ref={(el) => {
             if (el) lettersRef.current[index] = el;
           }}
-          className="inline-block "
+          className={`inline-block ${letter === " " && "w-4"}`}
         >
           {letter}
         </span>
