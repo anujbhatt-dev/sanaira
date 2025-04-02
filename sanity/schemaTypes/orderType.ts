@@ -72,10 +72,16 @@ export const orderType = defineType({
               validation: (Rule) => Rule.required().min(1),
             }),
             defineField({
-              name: "variant",
-              title: "Variant (Size & Color)",
+              name: "sku",
+              title: "Stock Keeping Unit",
               type: "string",
-              description: "Specify the size and color of the purchased variant if applicable.",
+              description: "Specify the product sku",
+            }),            
+            defineField({
+              name: "price",
+              title: "Price",
+              type: "number",
+              description: "Specify the product price paid",
             }),
           ],
           preview: {
@@ -134,6 +140,90 @@ export const orderType = defineType({
       type: "datetime",
       validation: (Rule) => Rule.required(),
     }),
+    // Refund fields
+    defineField({
+      name: "refundStatus",
+      title: "Refund Status",
+      type: "string",
+      options: {
+        list: [
+          { title: "Not Requested", value: "not_requested" },
+          { title: "Requested", value: "requested" },
+          { title: "Refunded", value: "refunded" },
+          { title: "Denied", value: "denied" },
+        ],
+      },      
+    }),
+    defineField({
+      name: "refundAmount",
+      title: "Refund Amount",
+      type: "number",
+      validation: (Rule) => Rule.min(0),
+    }),
+    defineField({
+      name: "returnReason",
+      title: "Return Reason",
+      type: "string",      
+    }),
+    defineField({
+      name: "refundDate",
+      title: "Refund Date",
+      type: "datetime",      
+    }),
+    defineField({
+      name: "shippingDetails",
+      title: "Shipping Details",
+      type: "object",
+      fields: [
+        defineField({
+          name: "name",
+          title: "Recipient Name",
+          type: "string",
+        }),
+        defineField({
+          name: "phone",
+          title: "Phone Number",
+          type: "string",
+        }),
+        defineField({
+          name: "address",
+          title: "Address",
+          type: "object",
+          fields: [
+            defineField({
+              name: "line1",
+              title: "Address Line 1",
+              type: "string",
+            }),
+            defineField({
+              name: "line2",
+              title: "Address Line 2",
+              type: "string",
+            }),
+            defineField({
+              name: "city",
+              title: "City",
+              type: "string",
+            }),
+            defineField({
+              name: "state",
+              title: "State",
+              type: "string",
+            }),
+            defineField({
+              name: "postal_code",
+              title: "Postal Code",
+              type: "string",
+            }),
+            defineField({
+              name: "country",
+              title: "Country",
+              type: "string",
+            }),
+          ],
+        }),
+      ],
+    }),
   ],
   preview: {
     select: {
@@ -142,12 +232,13 @@ export const orderType = defineType({
       currency: "currency",
       orderId: "orderNumber",
       email: "email",
+      refundStatus: "refundStatus",
     },
-    prepare({ name, amount, currency, orderId, email }) {
+    prepare({ name, amount, currency, orderId, email, refundStatus }) {
       const orderIdSnippet = orderId ? `${orderId.slice(0, 5)}...${orderId.slice(-5)}` : "N/A";
       return {
         title: `${name} (${orderIdSnippet})`,
-        subtitle: `${amount} ${currency}, ${email}`,
+        subtitle: `${amount} ${currency}, ${email} ${refundStatus ? `- Refund Status: ${refundStatus}` : ''}`,
         media: BasketIcon,
       };
     },

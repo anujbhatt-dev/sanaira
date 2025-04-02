@@ -1,11 +1,12 @@
 "use client"
 import React, { useEffect, useState } from 'react'
-import { Plus } from 'lucide-react';
+import { IndianRupeeIcon, Plus } from 'lucide-react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { imageUrl } from '@/lib/imageUrl';
 import { ProductPageType } from '@/types';
 import { useRouter } from 'next/navigation';
+import { montserrat, mulish } from '@/utils/font';
 
 export default function ProductThumbnail({ product, index }: { product: ProductPageType, index: number }) {
   const router = useRouter();
@@ -28,7 +29,7 @@ export default function ProductThumbnail({ product, index }: { product: ProductP
   return (
     <motion.div
       key={product._id}
-      className={`relative overflow-hidden bg-white cursor-pointer`}
+      className={`relative overflow-hidden bg-white cursor-pointer ${montserrat.className}`}
       initial={{ opacity: 0, x: index % 2 === 0 ? 50 : -50 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ delay: index * 0.1, type: 'spring', stiffness: 50 }}
@@ -61,21 +62,21 @@ export default function ProductThumbnail({ product, index }: { product: ProductP
           )}
 
           
-          <div className="lg:absolute bottom-0 left-0 p-1 bg-white/80 backdrop-blur-sm text-black w-full px-2">
-          <div className='p-2 flex items-center gap-x-1 justify-center'>
-            {product.variants && product.variants[variantNumber].variantImages && product.variants[variantNumber]?.variantImages.map((image,i)=>(
+          <div className="lg:absolute bottom-0 left-0 p-1 bg-white/80 backdrop-blur-sm text-black w-full px-2 py-2 min-h-[7rem]">
+          <div className='p-2 flex items-center gap-x-1 justify-end'>
+            {product.variants && product.variants[variantNumber].variantImages && product.variants[variantNumber].variantImages.length>1 && product.variants[variantNumber]?.variantImages.map((image,i)=>(
               <div onClick={()=>setVariantImage(i)} key={image._key} className={`h-3 w-3 border border-black/50 bg-black ${variantImage!=i && "opacity-20"} relative rounded-full`}>
                     
               </div>              
             ))}
           </div>
-          <h3 className="text-md lg:text-sm  capitalize">{product.title || "Untitled Product"}</h3>
-          <div className="flex gap-4 justify-between items-baseline ">
+          <h3 className="text-md lg:text-lg uppercase truncate" title={product.title || "Untitled Product"} >{product.title || "Untitled Product"}</h3>
+          <div className={` flex gap-4 justify-between items-baseline `}>
             {
               product.variants &&
-              <p className="mt-2 text-[0.7rem] md:text-xs font-sans">
-                <span className="text-sm lg:text-lg">₹{product.variants[0].sizes?.[0].price ?? 'N/A'}</span>
-              {product.variants[0].sizes?.[0].price && <span className="line-through text-[#497D74] ml-2"> ₹{product.variants[0].sizes?.[0].price * 2}</span>}
+              <p className={`${mulish.className} mt-2 text-[0.7rem] md:text-xs flex items-end`}>
+              {product.variants[0].sizes?.[0].price && product.variants[0].sizes?.[0].discount && <span className=" text-sm lg:text-2xl font-semibold flex items-center leading-0"> <IndianRupeeIcon className='w-4 h-4'/>{product.variants[0].sizes?.[0].price - (product.variants[0].sizes?.[0].price * product.variants[0].sizes?.[0].discount / 100)}</span>}
+                <span className="ml-2 flex items-center leading-0 text-red-800"><IndianRupeeIcon className='w-4 h-4'/>{product.variants[0].sizes?.[0].price ?? 'N/A'}</span>
               </p>
             }
            <div className="lg:gap-x-2 p-2 lg:px-4 bg-[beige] text-[0.8rem] uppercase font-bold font-sans tracking-widest flex items-center cursor-pointer" title='Quick Add'>
@@ -83,6 +84,9 @@ export default function ProductThumbnail({ product, index }: { product: ProductP
            </div>
           </div>
           </div>
+      </div>
+      <div className={`${mulish.className} ${product?.variants?.[0].sizes?.[0].discount===0 && "hidden" } absolute top-0 left-0 p-1 px-2 text-sm items-center  gap-x-1 text-white bg-black m-2`}>
+              {product?.variants?.[0].sizes?.[0].discount}%
       </div>
       <div className='absolute top-0 left-0 p-2  items-center  gap-x-1 hidden'>
         {product.variants?.map((variant,i)=>(

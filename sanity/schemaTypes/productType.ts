@@ -93,6 +93,37 @@ export const productType = defineType({
                     { name: 'size', title: 'Size', type: 'string', validation: Rule => Rule.required() },
                     { name: 'price', title: 'Price', type: 'number', validation: Rule => Rule.min(0).required() },
                     { name: 'stock', title: 'Stock', type: 'number', validation: Rule => Rule.min(0) },
+                    { 
+                      name: 'sku', 
+                      title: 'SKU', 
+                      type: 'string', 
+                      validation: Rule =>
+                        Rule.required()
+                          .custom((sku, context) => {
+                            if (typeof sku !== 'string') return 'SKU must be a string';                    
+                            // Ensure SKU is uppercase
+                            if (sku !== sku.toUpperCase()) {
+                              return 'SKU must be in uppercase';
+                            }                    
+                            // Ensure SKU has no spaces
+                            if (/\s/.test(sku)) {
+                              return 'SKU must not contain spaces';
+                            }                    
+                            // Check for uniqueness within the same product
+                            const allSizes = context.parent || []; // Get all sizes in the variant
+                            if (!Array.isArray(allSizes)) return true; // Ensure it's an array
+                            const duplicateCount = allSizes.filter(size => size.sku === sku).length;
+                            return duplicateCount > 1 ? 'SKU must be unique within this product' : true;
+                          }),
+                    },
+                    {
+                      name: 'discount',
+                      title: 'Discount (%)',
+                      type: 'number',
+                      validation: Rule => Rule.required().min(0).max(100),
+                      description: 'Percentage discount applied to this size.',
+                      initialValue:0
+                    },
                   ],
                   preview: {
                     select: {
@@ -147,6 +178,18 @@ export const productType = defineType({
       type: 'array',
       of: [{ type: 'reference', to: [{ type: 'category' }] }],
       readOnly: true, // Auto-populated
+    }),
+
+    // for better seo
+    defineField({
+      name: 'seo',
+      title: 'SEO Metadata',
+      type: 'object',
+      fields: [
+        { name: 'metaTitle', title: 'Meta Title', type: 'string' },
+        { name: 'metaDescription', title: 'Meta Description', type: 'text' },
+        { name: 'keywords', title: 'Keywords', type: 'array', of: [{ type: 'string' }] },
+      ],
     }),
   ],
 });

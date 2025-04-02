@@ -1,8 +1,13 @@
-// 'use client'
-import React from 'react'
+'use client'
+import React, { useEffect } from 'react'
 import Link from 'next/link'
+import { useBasketStore } from '@/store/useBasketStore'
 // import { useRouter } from 'next/navigation'
 export default function Success() {
+  const {clearBasket} = useBasketStore()
+  useEffect(()=>{
+    clearBasket()
+  },[])
   return (
     <div>
         <div className='flex flex-col items-center justify-center h-screen'>

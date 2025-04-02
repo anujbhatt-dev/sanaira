@@ -14,13 +14,9 @@ export type Metadata = {
 
 
 export async function createCheckoutSession(items:IBasketItem[], metadata:Metadata) {
-  console.log("In the Cage");
-    
-  
     try {
       const itemsWithoutPrice = items.filter((item)=>!item.price) 
       if(itemsWithoutPrice.length>0) throw new Error("Some items do not have a price")
-
 
       const customers = await stripe.customers.list({
         email:metadata.customerEmail,
@@ -36,9 +32,9 @@ export async function createCheckoutSession(items:IBasketItem[], metadata:Metada
         `https://${process.env.VERCEL_URL}`
       : `${process.env.NEXT_PUBLIC_BASE_URL}`;
 
-      const successUrl = `${base_url}/success??session_id=(CHECKOUT_SESSION_ID)&orderNumber=${metadata.orderNumber}`
+      const successUrl = `${base_url}/success?session_id=(CHECKOUT_SESSION_ID)&orderNumber=${metadata.orderNumber}`
 
-      const cancelUrl = `${base_url}/basket`
+      const cancelUrl = `${base_url}/my-basket`
 
       
       const session = await stripe.checkout.sessions.create({
@@ -61,19 +57,18 @@ export async function createCheckoutSession(items:IBasketItem[], metadata:Metada
                 unit_amount:Math.round(item.price * 100),
                 product_data:{
                     name:item.product.title || "Unnamed Product",
-                    description:`Product ID: ${item.product._id}\nSIZE: ${item.size}`,
+                    description:`Product ID: ${item.product._id}\nSKU: ${item.sku}`,
                     metadata:{
-                        id:item.product._id
+                        id:item.product._id,
+                        sku:item.sku
                     },
                     images: item.product?.variants
                     ?.filter((v) => v.color === item.color)
                     ?.flatMap((v2) => v2.variantImages?.[0] ? [imageUrl(v2.variantImages[0]).url()] : [])
-                    ?? []
-                            
-                            
+                    ?? []                                                        
                 }
             },
-            quantity:item.quantity
+            quantity:item.quantity,          
         }))
       })
       console.log("createCheckoutSession:" + session.url);
@@ -81,7 +76,7 @@ export async function createCheckoutSession(items:IBasketItem[], metadata:Metada
       return session.url;
       
     } catch (error) {
-        console.log("Error creting checkot session", error );
-        
+        console.log("Error creting checkot session", error );   
+        return null;     
     }
 }

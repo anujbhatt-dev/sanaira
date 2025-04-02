@@ -8,6 +8,7 @@ export interface IBasketItem {
     size: string
     color: string
     price: number
+    sku:string
 }
 
 interface BasketState {
@@ -15,7 +16,7 @@ interface BasketState {
 }
 
 interface BasketActions {
-    addItem: (product: ProductPageType, size: string, color: string, quantity: number,price:number) => void
+    addItem: (product: ProductPageType, size: string, color: string, quantity: number,price:number,sku:string) => void
     removeItem: (productId: string, size: string, color: string) => void
     clearBasket: () => void
     getTotalPrice: () => number
@@ -33,13 +34,13 @@ export const useBasketStore = create<BasketState & BasketActions>()(
         (set, get) => ({
             items: [],
 
-            addItem: (product: ProductPageType, size: string, color: string, quantity: number, price: number) => {
+            addItem: (product: ProductPageType, size: string, color: string, quantity: number, price: number, sku:string) => {
                 set((state) => {
                     const existingItemIndex = state.items.findIndex(
                         (item) =>
                             item.product._id === product._id &&
                             item.size === size &&
-                            item.color === color
+                            item.color === color                            
                     );
 
                     if (existingItemIndex !== -1) {
@@ -50,7 +51,7 @@ export const useBasketStore = create<BasketState & BasketActions>()(
                         };
                         return { items: updatedItems };
                     } else {
-                        return { items: [...state.items, { product, quantity, size, color, price }] };
+                        return { items: [...state.items, { product, quantity, size, color, price, sku }] };
                     }
                 });
             },

@@ -147,7 +147,8 @@ export type Order = {
       [internalGroqTypeReferenceTo]?: "product";
     };
     quantity?: number;
-    variant?: string;
+    sku?: string;
+    price?: number;
     _key: string;
   }>;
   totalPrice?: number;
@@ -155,6 +156,22 @@ export type Order = {
   amountDiscount?: number;
   status?: "pending" | "paid" | "shipped" | "delivered" | "cancelled";
   orderDate?: string;
+  refundStatus?: "not_requested" | "requested" | "refunded" | "denied";
+  refundAmount?: number;
+  returnReason?: string;
+  refundDate?: string;
+  shippingDetails?: {
+    name?: string;
+    phone?: string;
+    address?: {
+      line1?: string;
+      line2?: string;
+      city?: string;
+      state?: string;
+      postal_code?: string;
+      country?: string;
+    };
+  };
 };
 
 export type Sale = {
@@ -255,6 +272,8 @@ export type Product = {
       size?: string;
       price?: number;
       stock?: number;
+      sku?: string;
+      discount?: number;
       _key: string;
     }>;
     variantImages?: Array<{
@@ -279,6 +298,11 @@ export type Product = {
     _key: string;
     [internalGroqTypeReferenceTo]?: "category";
   }>;
+  seo?: {
+    metaTitle?: string;
+    metaDescription?: string;
+    keywords?: Array<string>;
+  };
 };
 
 export type User = {
@@ -658,6 +682,8 @@ export type COLLECTION_BY_SLUG_QUERYResult = {
         size?: string;
         price?: number;
         stock?: number;
+        sku?: string;
+        discount?: number;
         _key: string;
       }>;
       variantImages?: Array<{
@@ -676,6 +702,11 @@ export type COLLECTION_BY_SLUG_QUERYResult = {
       _key: string;
     }>;
     productPath: Array<string | null>;
+    seo?: {
+      metaTitle?: string;
+      metaDescription?: string;
+      keywords?: Array<string>;
+    };
   }> | null;
   description: Array<{
     children?: Array<{
@@ -775,6 +806,8 @@ export type ALL_PRODUCTS_QUERYResult = Array<{
       size?: string;
       price?: number;
       stock?: number;
+      sku?: string;
+      discount?: number;
       _key: string;
     }>;
     variantImages?: Array<{
@@ -793,6 +826,11 @@ export type ALL_PRODUCTS_QUERYResult = Array<{
     _key: string;
   }>;
   productPath: Array<string | null>;
+  seo?: {
+    metaTitle?: string;
+    metaDescription?: string;
+    keywords?: Array<string>;
+  };
 }>;
 
 // Source: ./sanity/lib/products/getProductBySlug.ts
@@ -850,6 +888,8 @@ export type PRODUCT_BY_SLUG_QUERYResult = {
       size?: string;
       price?: number;
       stock?: number;
+      sku?: string;
+      discount?: number;
       _key: string;
     }>;
     variantImages?: Array<{
@@ -868,6 +908,11 @@ export type PRODUCT_BY_SLUG_QUERYResult = {
     _key: string;
   }>;
   productPath: Array<string | null>;
+  seo?: {
+    metaTitle?: string;
+    metaDescription?: string;
+    keywords?: Array<string>;
+  };
 } | null;
 
 // Source: ./sanity/lib/products/getSearchProducts.ts
@@ -925,6 +970,8 @@ export type PRODUCTS_BY_SEARCH_QUERYResult = Array<{
       size?: string;
       price?: number;
       stock?: number;
+      sku?: string;
+      discount?: number;
       _key: string;
     }>;
     variantImages?: Array<{
@@ -943,6 +990,11 @@ export type PRODUCTS_BY_SEARCH_QUERYResult = Array<{
     _key: string;
   }>;
   productPath: Array<string | null>;
+  seo?: {
+    metaTitle?: string;
+    metaDescription?: string;
+    keywords?: Array<string>;
+  };
 }>;
 
 // Query TypeMap

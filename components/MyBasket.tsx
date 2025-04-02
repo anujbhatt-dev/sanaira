@@ -8,15 +8,8 @@ import Link from "next/link";
 import { mulish } from "@/utils/font";
 import { IndianRupee, Trash2 } from "lucide-react";
 import { SignedIn, SignedOut, SignInButton, useAuth, useUser } from "@clerk/nextjs";
-import { createCheckoutSession } from "@/actions/createCheckoutSession";
+import { createCheckoutSession, Metadata } from "@/actions/createCheckoutSession";
 
-
-interface Metadata {
-    orderNumber:string
-    customerName: string
-    customerEmail: string
-    clerkUserId:string
-}
 
 export default function MyBasket() {
     const [isClient, setIsClient] = useState(false);
