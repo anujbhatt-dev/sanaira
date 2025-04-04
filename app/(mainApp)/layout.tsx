@@ -7,6 +7,7 @@ import {
 import { SanityLive } from "@/sanity/lib/live";
 import { poppins } from "@/utils/font";
 import Footer from "@/components/Footer";
+import WelcomePopup from "@/components/WelcomePopup";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -30,6 +31,7 @@ export default function RootLayout({
           {/* <QuickAddWrapper/> */}
           <Footer/>
           <SanityLive/>
+          <WelcomePopup/>
         </body>
       </html>
     </ClerkProvider>

@@ -13,6 +13,7 @@ import ProductSkeleton from './Skeletons/ProductSkeleton';
 import useHasMounted from '@/hooks/useHasMounted';
 import { useBasketStore } from '@/store/useBasketStore';
 import { motion, AnimatePresence } from 'framer-motion';
+import AddToCartPopup from './AddToCartPopup';
 
 function Product({product,v}:{product:ProductPageType,v: string}) {  
   const hasMounted = useHasMounted();
@@ -34,15 +35,40 @@ function Product({product,v}:{product:ProductPageType,v: string}) {
   const [quantity,setQuantity] = useState<number>(1);
   const [selectedSize,setSelectedSize] = useState<string>(currentVariant?.sizes?.[0].size || '');
   const [isAddingToCart, setIsAddingToCart] = useState(false);
+  const [showPopup, setShowPopup] = useState(false)
+  const [addedProduct, setAddedProduct] = useState<{
+    item: ProductPageType
+    size: string
+    color: string
+    quantity: number
+    price: number
+  } | null>(null)
+
+
+
 
   const handleAddToCart = () => {
-    setIsAddingToCart(true);
-    const price = (currentVariant?.sizes?.find((size)=>size.size===selectedSize)?.price || 0) - ((currentVariant?.sizes?.find((size)=>size.size===selectedSize)?.price || 0) * (currentVariant?.sizes?.find((size)=>size.size===selectedSize)?.discount || 0)/100);
-    addItem(product,selectedSize,currentVariant?.color || '',quantity,price,(currentVariant?.sizes?.find(size=>size.size===selectedSize)?.sku || ""));    
+    setIsAddingToCart(true)
+    const price = (currentVariant?.sizes?.find((size) => size.size === selectedSize)?.price || 0) - 
+      ((currentVariant?.sizes?.find((size) => size.size === selectedSize)?.price || 0) * 
+      (currentVariant?.sizes?.find((size) => size.size === selectedSize)?.discount || 0) / 100)
+    
+    addItem(product, selectedSize, currentVariant?.color || '', quantity, price, 
+      (currentVariant?.sizes?.find(size => size.size === selectedSize)?.sku || ""))
+    
+    // Set the added product for the popup
+    setAddedProduct({
+      item: product,
+      size: selectedSize,
+      color: currentVariant?.color || '',
+      quantity,
+      price
+    })
+    setShowPopup(true)
     
     setTimeout(() => {
-      setIsAddingToCart(false);
-    }, 500);
+      setIsAddingToCart(false)
+    }, 500)
   }
 
   useEffect(()=>{
@@ -439,6 +465,11 @@ function Product({product,v}:{product:ProductPageType,v: string}) {
             </AnimatePresence>
           </div>
         </div>
+        <AddToCartPopup
+          isOpen={showPopup} 
+          onClose={() => setShowPopup(false)} 
+          product={addedProduct} 
+        />
     </motion.div>
   )
 }
