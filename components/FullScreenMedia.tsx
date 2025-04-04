@@ -70,13 +70,14 @@ const FullScreenMedia: React.FC = () => {
           />
         ) : (
           <video
-            src={currentMedia.src}
-            autoPlay
-            loop
-            muted
-            playsInline
-            className="w-full h-full object-cover"
-          />
+              id="my-video"
+              src={currentMedia.src}
+              autoPlay={true}
+              loop={true}
+              muted={true}
+              playsInline={true}
+              className="w-full h-full object-cover"
+            />
         )}
       </motion.div>
 

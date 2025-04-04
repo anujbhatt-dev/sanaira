@@ -1,4 +1,4 @@
-import { Metadata } from "@/actions/createCheckoutSession";
+import {Metadata} from "@/types"
 import stripe from "@/lib/stripe";
 import { backendClient } from "@/sanity/lib/backendClient";
 import { headers } from "next/headers";
@@ -40,8 +40,9 @@ export async function POST(req: NextRequest) {
         console.log("Webhook received - Checkout session completed:", session);
 
         try {
-            const order = await createOrderInSanity(session);
+            const {order, sanityProducts} = await createOrderInSanity(session);
             console.log("Order created in Sanity:", order);
+            await updateProductStocks(sanityProducts);
         } catch (error) {
             console.log("Error creating order in Sanity:", error);
             return NextResponse.json(
@@ -158,5 +159,52 @@ async function createOrderInSanity(session: Stripe.Checkout.Session) {
         
     });
 
-    return order;
+    return {order, sanityProducts};
 }
+
+
+async function updateProductStocks(products: {
+    product: { _ref: string };
+    sku?: string;
+    quantity: number;
+  }[]) {
+    for (const item of products) {
+      const { _ref } = item.product;
+      const sku = item.sku;
+      const quantity = item.quantity;
+  
+      if (!sku || !quantity) continue;
+  
+      const product = await backendClient.fetch(
+        `*[_type == "product" && _id == $id][0]`,
+        { id: _ref }
+      );
+  
+      if (!product || !product.variants) continue;
+  
+      let updated = false;
+  
+      for (const [variantIndex, variant] of product.variants.entries()) {
+        for (const [sizeIndex, size] of (variant.sizes ?? []).entries()) {
+          if (size.sku === sku) {
+            const newStock = Math.max(0, (size.stock ?? 0) - quantity);
+  
+            await backendClient.patch(product._id)
+              .set({
+                [`variants[${variantIndex}].sizes[${sizeIndex}].stock`]: newStock
+              })
+              .commit();
+  
+            console.log(`Stock updated for SKU ${sku}: ${size.stock} → ${newStock}`);
+            updated = true;
+            break;
+          }
+        }
+        if (updated) break;
+      }
+  
+      if (!updated) {
+        console.warn(`SKU ${sku} not found in product ${_ref}`);
+      }
+    }
+  }

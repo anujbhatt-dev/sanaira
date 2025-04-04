@@ -9,6 +9,7 @@ export interface IBasketItem {
     color: string
     price: number
     sku:string
+    stock: number
 }
 
 interface BasketState {
@@ -34,24 +35,45 @@ export const useBasketStore = create<BasketState & BasketActions>()(
         (set, get) => ({
             items: [],
 
-            addItem: (product: ProductPageType, size: string, color: string, quantity: number, price: number, sku:string) => {
+            addItem: (product: ProductPageType, size: string, color: string, quantity: number, price: number, sku: string) => {
                 set((state) => {
+                    // Find the variant and size to get current stock
+                    const variant = product.variants?.find(v => v.color === color);
+                    const sizeStock = variant?.sizes?.find(s => s.size === size)?.stock || 0;
+                    
                     const existingItemIndex = state.items.findIndex(
                         (item) =>
                             item.product._id === product._id &&
                             item.size === size &&
                             item.color === color                            
                     );
-
+            
                     if (existingItemIndex !== -1) {
                         const updatedItems = [...state.items];
+                        // Don't allow adding more than available stock
+                        const newQuantity = Math.min(
+                            updatedItems[existingItemIndex].quantity + quantity,
+                            sizeStock
+                        );
                         updatedItems[existingItemIndex] = {
                             ...updatedItems[existingItemIndex],
-                            quantity: updatedItems[existingItemIndex].quantity + quantity,
+                            quantity: newQuantity,
                         };
                         return { items: updatedItems };
                     } else {
-                        return { items: [...state.items, { product, quantity, size, color, price, sku }] };
+                        // Don't allow adding more than available stock
+                        const actualQuantity = Math.min(quantity, sizeStock);
+                        return { 
+                            items: [...state.items, { 
+                                product, 
+                                quantity: actualQuantity, 
+                                size, 
+                                color, 
+                                price, 
+                                sku,
+                                stock: sizeStock // Store the stock at time of adding
+                            }] 
+                        };
                     }
                 });
             },
@@ -79,11 +101,19 @@ export const useBasketStore = create<BasketState & BasketActions>()(
 
             incrementQuantity: (title: string, size: string, color: string) => {
                 set((state) => ({
-                    items: state.items.map((item) =>
-                        item.product.title === title && item.size === size && item.color === color
-                            ? { ...item, quantity: item.quantity + 1 }
-                            : item
-                    ),
+                    items: state.items.map((item) => {
+                        if (item.product.title === title && item.size === size && item.color === color) {
+                            // Only increment if we have stock available
+                            const variant = item.product.variants?.find(v => v.color === color);
+                            const sizeStock = variant?.sizes?.find(s => s.size === size)?.stock || 0;
+                            
+                            return { 
+                                ...item, 
+                                quantity: item.quantity < sizeStock ? item.quantity + 1 : item.quantity 
+                            };
+                        }
+                        return item;
+                    }),
                 }));
             },
 

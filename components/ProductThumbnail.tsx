@@ -34,9 +34,9 @@ export default function ProductThumbnail({ product, index }: { product: ProductP
       animate={{ opacity: 1, x: 0 }}
       transition={{ delay: index * 0.1, type: 'spring', stiffness: 50 }}
     >
-      <div>
+      <div className=' aspect-[9/13]'>
           {product.variants && product.variants?.length>0 && product.variants[variantNumber].variantImages && product.variants[variantNumber].variantImages.length>0 &&  (
-          <div onClick={handleClick} onMouseEnter={()=>setIsVideoVisible(true)} onMouseLeave={()=>setIsVideoVisible(false)} className="relative h-[200px] lg:w-full lg:h-[500px]"> {/* Ensure defined height */}
+          <div onClick={handleClick} onMouseEnter={()=>setIsVideoVisible(true)} onMouseLeave={()=>setIsVideoVisible(false)} className="relative  aspect-[9/13]"> {/* Ensure defined height */}
             {
               !isVideovisble && product.variants && product.variants[variantNumber].variantImages &&
               <Image
@@ -49,7 +49,7 @@ export default function ProductThumbnail({ product, index }: { product: ProductP
             }
             {
               isVideovisble && product.video && 
-              <video className='' src={product.video} autoPlay loop playsInline muted/>
+              <video className='aspect-[9/13] object-cover' src={product.video} autoPlay loop playsInline muted/>
             }
               {/* <div className="absolute top-0 right-0 p-2 hidden lg:flex items-center bg-black/10 backdrop-blur-sm ">
                 {Array(5).fill(0).map((_, i) => (
@@ -64,8 +64,8 @@ export default function ProductThumbnail({ product, index }: { product: ProductP
           
           <div className="lg:absolute bottom-0 left-0 p-1 bg-white/80 backdrop-blur-sm text-black w-full px-2 py-2 min-h-[7rem]">
           <div className='p-2 flex items-center gap-x-1 justify-end'>
-            {product.variants && product.variants[variantNumber].variantImages && product.variants[variantNumber].variantImages.length>1 && product.variants[variantNumber]?.variantImages.map((image,i)=>(
-              <div onClick={()=>setVariantImage(i)} key={image._key} className={`h-3 w-3 border border-black/50 bg-black ${variantImage!=i && "opacity-20"} relative rounded-full`}>
+            {product.variants && product.variants[variantNumber].variantImages && product.variants[variantNumber]?.variantImages.map((image,i)=>(
+              <div onClick={()=>setVariantImage(i)} key={image._key} className={`h-3 w-3 border border-black/50 bg-black ${variantImage!=i && "opacity-20"} relative`}>
                     
               </div>              
             ))}

@@ -2,48 +2,71 @@ import Link from "next/link";
 import { SignedIn, SignedOut, SignInButton, SignUpButton, UserButton } from "@clerk/nextjs";
 import { getAllFeaturedCategories } from "@/sanity/lib/categories/getAllFeaturedCategories";
 import SearchBar from "./SearchBar";
-import {  mulish } from "@/utils/font";
+import { mulish } from "@/utils/font";
 import { ShoppingCart } from "lucide-react";
 import TotalItemCount from "./TotalItemsCount";
 
-
 const Header = async () => {
   const ALL_FEATURED_CATEGORY = await getAllFeaturedCategories();
+  
   return (
-    <>
-      <div
-        className={`px-4 lg:px-[5rem] mx-auto border-b border-white/0 flex justify-between h-[4rem] fixed top-0 right-0 left-0 gap-x-4 z-20 transition-all duration-150 items-center bg-black/100  md:bg-black/80 hover:bg-black/100 backdrop-blur-sm text-white ${mulish.className}`}
+    <header className={`px-6 lg:px-20 mx-auto flex justify-between h-16 fixed top-0 w-full z-50 items-center bg-black/90 backdrop-blur-md text-white ${mulish.className}`}>
+      {/* Logo */}
+      <Link 
+        href="/" 
+        className="text-2xl font-medium tracking-widest uppercase hover:text-gray-300 transition-colors"
       >
-        <div className="flex justify-cneter items-center gap-x-10">
-            <Link href={"/"} className={`lg:text-[2rem] font-semibold tracking-wider uppercase `}>
-              Sanaira
-            </Link>    
+        Sanaira
+      </Link>
+      
+      {/* Navigation */}
+      <nav className="hidden lg:flex justify-center space-x-8">
+        {ALL_FEATURED_CATEGORY.map((category) => (
+          <Link 
+            href={`/category/${category.slug?.current}`} 
+            key={category._id}
+            className="text-sm uppercase tracking-wider hover:text-gray-300 transition-colors"
+          >
+            {category.name}
+          </Link>
+        ))}
+      </nav>
+      
+      {/* User Actions */}
+      <div className="flex items-center space-x-4">
+        <SearchBar />
+        
+        <SignedOut>
+          <div className="hidden sm:flex space-x-3">
+            <SignUpButton mode="modal">
+              <button className="text-sm uppercase tracking-wider px-3 py-1 hover:text-gray-300 transition-colors">
+                Sign Up
+              </button>
+            </SignUpButton>
+            <SignInButton mode="modal">
+              <button className="text-sm uppercase tracking-wider border border-white px-3 py-1 hover:bg-white hover:text-black transition-colors">
+                Sign In
+              </button>
+            </SignInButton>
           </div>
-          <div className="lg:flex justify-center space-x-4 capitalize tracking-wider hidden">
-            {ALL_FEATURED_CATEGORY.map((category,i)=>{
-              return <div className="cursor-pointer hover:underline" key={category._id+i}>{category.name}</div>
-            })}
+        </SignedOut>
+        
+        <SignedIn>
+          <div className="flex items-center space-x-4">
+            <UserButton appearance={{
+              elements: {
+                userButtonAvatarBox: "w-8 h-8",
+              }
+            }} />
           </div>
-          <div className="flex justify-cneter items-center gap-x-2 text-[0.8rem]">            
-            <SignedOut>
-                <div className="p-2 md:px-4 md:py-2 rounded font-thin cursor-pointer">
-                  <SignUpButton mode="modal" />
-                </div>
-                <div className="bg-teal-700 p-2 md:px-4 md:py-2 rounded font-thin cursor-pointer">
-                  <SignInButton mode="modal" />
-                </div>
-            </SignedOut>
-            <SearchBar/>     
-            <SignedIn>
-                <UserButton />
-            </SignedIn>
-            <Link className="relative w-8 h-8" href={"/my-basket"}>
-              <ShoppingCart className="w-8 h-8 cursor-pointer"/>
-              <TotalItemCount/>
-            </Link>
-          </div>
-        </div>
-    </>
+        </SignedIn>
+        
+        <Link href="/my-basket" className="relative flex items-center">
+          <ShoppingCart className="w-6 h-6 hover:text-gray-300 transition-colors" />
+          <TotalItemCount />
+        </Link>
+      </div>
+    </header>
   );
 };
 

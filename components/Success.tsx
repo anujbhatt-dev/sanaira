@@ -7,7 +7,7 @@ export default function Success() {
   const {clearBasket} = useBasketStore()
   useEffect(()=>{
     clearBasket()
-  },[])
+  },[clearBasket])
   return (
     <div>
         <div className='flex flex-col items-center justify-center h-screen'>
