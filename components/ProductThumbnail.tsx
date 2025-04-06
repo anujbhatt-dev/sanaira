@@ -1,101 +1,334 @@
-"use client"
-import React, { useEffect, useState } from 'react'
+'use client';
+
+import React, { useEffect, useState } from 'react';
 import { IndianRupeeIcon, Plus } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import { imageUrl } from '@/lib/imageUrl';
 import { ProductPageType } from '@/types';
 import { useRouter } from 'next/navigation';
-import { montserrat, mulish } from '@/utils/font';
+import { ws } from '@/utils/font';
+import Head from 'next/head';
+import { useAuth, useUser, SignInButton } from '@clerk/nextjs';
+import axios from 'axios';
 
-export default function ProductThumbnail({ product, index }: { product: ProductPageType, index: number }) {
+export default function ProductThumbnail({ product, index }: { product: ProductPageType; index: number }) {
   const router = useRouter();
   const [isClient, setIsClient] = useState(false);
-  const [variantNumber,setVariantNumber] = useState<number>(0)
-  const [variantImage,setVariantImage] = useState<number>(0) 
-  const [isVideovisble, setIsVideoVisible] = useState(false) 
+  const [variantNumber, setVariantNumber] = useState<number>(0);
+  const [variantImage, setVariantImage] = useState<number>(0);
+  const [isVideovisble, setIsVideoVisible] = useState(false);
+  const [showQuickBuy, setShowQuickBuy] = useState(false);
+  const [quickBuySize, setQuickBuySize] = useState<string | null>(null);
+  const [quantity, setQuantity] = useState<number>(1);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const { isSignedIn } = useAuth();
+  const { user } = useUser();
+
+  const currentVariant = product.variants?.[variantNumber];
+  const currentSize = currentVariant?.sizes?.[0];
+  const selectedImage = currentVariant?.variantImages?.[variantImage];
 
   const handleClick = () => {
-    router.push(`/${product.productPath && product.productPath[0]}/${product.productPath && product.productPath[1]}/${product.productPath && product.productPath[2]}/${product.slug?.current}`);
-  }
+    const path = product.productPath?.slice(0, 3).join('/');
+    if (path && product.slug?.current && currentVariant?._key) {
+      router.push(`/${path}/${product.slug.current}?v=${currentVariant._key}`);
+    }
+  };
 
+  const handleQuickBuyCheckout = async () => {
+    if (!user || !isSignedIn || !quickBuySize || !currentVariant) return;
+    const selectedSize = currentVariant.sizes?.find(s => s.size === quickBuySize);
+    if (!selectedSize) return;
 
-  useEffect(()=>{
+    setIsLoading(true);
+
+    const price = (selectedSize.price ?? 0) - ((selectedSize.price ?? 0) * (selectedSize.discount ?? 0)) / 100;
+
+    const payload = {
+      items: [
+        {
+          product,
+          size: selectedSize.size ?? '',
+          color: currentVariant.color ?? '',
+          quantity,
+          price,
+          sku: selectedSize.sku ?? '',
+        },
+      ],
+      metadata: {
+        orderNumber: crypto.randomUUID(),
+        customerName: user.fullName ?? 'Unknown',
+        customerEmail: user.emailAddresses[0].emailAddress ?? 'Unknown',
+        clerkUserId: user.id,
+      },
+    };
+
+    try {
+      const res = await axios.post('/stripe-checkout', payload);
+      const checkoutUrl = res.data;
+      if (checkoutUrl) window.location.href = checkoutUrl;
+    } catch (err) {
+      console.error('Quick Buy error:', err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
     setIsClient(true);
-  },[])
+  }, []);
 
-  if(!isClient) return null;
+  if (!isClient || !currentVariant || !currentVariant.sizes || currentVariant.sizes.length === 0) return null;
 
   return (
     <motion.div
       key={product._id}
-      className={`relative overflow-hidden bg-white cursor-pointer ${montserrat.className}`}
+      className={`relative overflow-hidden bg-white cursor-pointer ${ws.className}`}
       initial={{ opacity: 0, x: index % 2 === 0 ? 50 : -50 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ delay: index * 0.1, type: 'spring', stiffness: 50 }}
     >
-      <div className=' aspect-[9/13]'>
-          {product.variants && product.variants?.length>0 && product.variants[variantNumber].variantImages && product.variants[variantNumber].variantImages.length>0 &&  (
-          <div onClick={handleClick} onMouseEnter={()=>setIsVideoVisible(true)} onMouseLeave={()=>setIsVideoVisible(false)} className="relative  aspect-[9/13]"> {/* Ensure defined height */}
-            {
-              !isVideovisble && product.variants && product.variants[variantNumber].variantImages &&
-              <Image
-                className="object-cover transition-transform duration-300 ease-in-out hover:scale-105"
-                src={imageUrl(product.variants[variantNumber].variantImages[variantImage]).url()}
-                fill
-                sizes="(max-width:760px) 100vw, (max-width:1200px) 50vw, 33vw"
-                alt={product.variants![variantNumber].variantImages![variantImage].alt|| 'Product Image'}
-                />
-            }
-            {
-              isVideovisble && product.video && 
-              <video className='aspect-[9/13] object-cover' src={product.video} autoPlay loop playsInline muted/>
-            }
-              {/* <div className="absolute top-0 right-0 p-2 hidden lg:flex items-center bg-black/10 backdrop-blur-sm ">
-                {Array(5).fill(0).map((_, i) => (
-                  <Star key={i} className="fill-[#B9B28A] text-[#B9B28A] h-3 w-3" />
-                ))}
-                <span className="ml-2 text-xs font-sans font-semibold">(10)</span>
-              </div> */}
-              
-          </div>
-          )}
+      {product.video && (
+        <Head>
+          <link rel="preload" as="video" href={product.video} type="video/mp4" />
+        </Head>
+      )}
 
-          
-          <div className="lg:absolute bottom-0 left-0 p-1 bg-white/80 backdrop-blur-sm text-black w-full px-2 py-2 min-h-[7rem]">
-          <div className='p-2 flex items-center gap-x-1 justify-end'>
-            {product.variants && product.variants[variantNumber].variantImages && product.variants[variantNumber]?.variantImages.map((image,i)=>(
-              <div onClick={()=>setVariantImage(i)} key={image._key} className={`h-3 w-3 border border-black/50 bg-black ${variantImage!=i && "opacity-20"} relative`}>
-                    
-              </div>              
+      <div
+        className="relative aspect-[9/13] w-full overflow-hidden"
+        onClick={handleClick}
+        onMouseEnter={() => setIsVideoVisible(true)}
+        onMouseLeave={() => setIsVideoVisible(false)}
+      >
+        <div className="absolute inset-0">
+          {!isVideovisble && selectedImage ? (
+            <Image
+              className="object-cover"
+              src={imageUrl(selectedImage).url()}
+              alt={selectedImage.alt || 'Product Image'}
+              fill
+              sizes="(max-width:760px) 100vw, (max-width:1200px) 50vw, 33vw"
+            />
+          ) : (
+            product.video && (
+              <video
+                className="w-full h-full object-cover"
+                src={product.video}
+                autoPlay
+                loop
+                muted
+                playsInline
+                preload="auto"
+              />
+            )
+          )}
+        </div>
+      </div>
+
+      <div className="lg:absolute bottom-0 left-0 p-1 bg-white/80 backdrop-blur-sm text-black w-full px-2 py-2 min-h-[7rem]">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-x-1">
+            {product.variants?.map((variant, i) => (
+              <div
+                key={variant._key}
+                title={variant.name}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setVariantNumber(i);
+                  setVariantImage(0);
+                }}
+                className="h-4 w-4 border-2 border-black/60 hover:border-black transition-all duration-150 rounded-full -mr-3"
+                style={{ backgroundColor: variant.color ?? '#ccc' }}
+              />
             ))}
           </div>
-          <h3 className="text-md lg:text-lg uppercase truncate" title={product.title || "Untitled Product"} >{product.title || "Untitled Product"}</h3>
-          <div className={` flex gap-4 justify-between items-baseline `}>
-            {
-              product.variants &&
-              <p className={`${mulish.className} mt-2 text-[0.7rem] md:text-xs flex items-end`}>
-              {product.variants[0].sizes?.[0].price && product.variants[0].sizes?.[0].discount && <span className=" text-sm lg:text-2xl font-semibold flex items-center leading-0"> <IndianRupeeIcon className='w-4 h-4'/>{product.variants[0].sizes?.[0].price - (product.variants[0].sizes?.[0].price * product.variants[0].sizes?.[0].discount / 100)}</span>}
-                <span className="ml-2 flex items-center leading-0 text-red-800"><IndianRupeeIcon className='w-4 h-4'/>{product.variants[0].sizes?.[0].price ?? 'N/A'}</span>
-              </p>
-            }
-           <div className="lg:gap-x-2 p-2 lg:px-4 bg-[beige] text-[0.8rem] uppercase font-bold font-sans tracking-widest flex items-center cursor-pointer" title='Quick Add'>
-             <Plus className="font-semibold h-3 w-3 lg:h-5 lg:w-5 "  /> <span className='hidden lg:flex'>quick add</span>
-           </div>
+
+          <div className="p-2 flex items-center gap-x-1 justify-end">
+            {currentVariant.variantImages?.map((image, i) => (
+              <div
+                key={image._key}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setVariantImage(i);
+                }}
+                className={`h-3 w-3 border border-black/50 bg-black ${variantImage !== i ? 'opacity-20' : ''}`}
+              />
+            ))}
           </div>
-          </div>
+        </div>
+
+        <h3 className="text-md lg:text-[18px] uppercase truncate font-medium tracking-[0.3px]" title={product.title || 'Untitled Product'}>
+          CINDY {product.title || 'Untitled Product'}
+        </h3>
+
+        <div className="flex gap-4 justify-between items-baseline">
+          <p className={`${ws.className} mt-2 text-[0.7rem] md:text-xs flex items-end`}>
+            <span className="text-sm lg:text-2xl font-semibold flex items-center leading-0">
+              <IndianRupeeIcon className="w-4 h-4" />
+              {(currentSize?.price ?? 0) - ((currentSize?.price ?? 0) * (currentSize?.discount ?? 0)) / 100}
+            </span>
+            <span className="ml-2 flex items-center leading-0 text-red-800 line-through">
+              <IndianRupeeIcon className="w-4 h-4" />
+              {currentSize?.price ?? 0}
+            </span>
+          </p>
+
+          {isSignedIn ? (
+            <button
+              onClick={() => setShowQuickBuy(true)}
+              className="lg:gap-x-2 p-2 lg:px-4 bg-[beige] text-[0.8rem] uppercase font-bold font-sans tracking-widest flex items-center cursor-pointer hover:bg-beige/90 transition-all duration-200"
+              title="Quick Buy"
+            >
+              <Plus className="font-semibold h-3 w-3 lg:h-5 lg:w-5" /> <span className="hidden lg:flex">Quick Buy</span>
+            </button>
+          ) : (
+            <SignInButton mode="modal">
+              <button className="lg:gap-x-2 p-2 lg:px-4 bg-[beige] text-[0.8rem] uppercase font-bold font-sans tracking-widest flex items-center cursor-pointer hover:bg-beige/90 transition-all duration-200">
+                <Plus className="font-semibold h-3 w-3 lg:h-5 lg:w-5" /> <span className="hidden lg:flex">Quick Buy</span>
+              </button>
+            </SignInButton>
+          )}
+        </div>
       </div>
-      <div className={`${mulish.className} ${product?.variants?.[0].sizes?.[0].discount===0 && "hidden" } absolute top-0 left-0 p-1 px-2 text-sm items-center  gap-x-1 text-white bg-black m-2`}>
-              {product?.variants?.[0].sizes?.[0].discount}%
-      </div>
-      <div className='absolute top-0 left-0 p-2  items-center  gap-x-1 hidden'>
-        {product.variants?.map((variant,i)=>(
-          <div onClick={()=>{setVariantNumber(i); setVariantImage(0);}} title={variant.name} key={variant._key} className='h-4 w-4 border border-black/20 hover:border-black transition-all duration-150 relative backdrop-blur-sm rounded-full ' style={{backgroundColor:variant.color}}>
-                
-          </div>              
-        ))}
-      </div>
-      
+
+      {currentSize?.discount && currentSize.discount > 0 && (
+        <div className={`${ws.className} absolute top-0 left-0 p-1 px-2 text-sm text-white bg-black m-2`}>
+          {currentSize.discount}%
+        </div>
+      )}
+      <AnimatePresence>
+        {showQuickBuy && selectedImage && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 bg-black/30 flex items-center justify-end"
+          >
+            <motion.div
+              initial={{ x: '100%', opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              exit={{ x: '100%', opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="bg-white rounded-l-xl shadow-lg w-full sm:w-[24rem] h-full overflow-y-auto"
+            >
+              <div className="flex flex-col h-full">
+                <div className="relative aspect-[9/13] w-full h-auto overflow-hidden">
+                  <Image
+                    src={imageUrl(selectedImage).url()}
+                    alt={selectedImage.alt || product.title || 'Product Image'}
+                    fill
+                    className="object-cover"
+                  />
+                </div>
+
+                <div className="flex flex-col justify-between gap-4 p-4 flex-1">
+                  <div>
+                    <h2 className="text-sm font-bold uppercase mb-1">{product.title}</h2>
+                    <p className="text-xs text-gray-600 mb-2">Color: {currentVariant?.color}</p>
+
+                    {quickBuySize && (() => {
+                      const size = currentVariant?.sizes?.find(s => s.size === quickBuySize);
+                      const original = size?.price ?? 0;
+                      const discount = size?.discount ?? 0;
+                      const final = original - (original * discount) / 100;
+                      return (
+                        <div className="text-xs mb-2">
+                          <p className="text-black font-semibold">
+                            ₹{final.toFixed(0)}{' '}
+                            {discount > 0 && (
+                              <span className="line-through text-red-600 ml-2">₹{original}</span>
+                            )}
+                          </p>
+                          {discount > 0 && (
+                            <p className="text-[10px] text-green-600 font-semibold">({discount}% OFF)</p>
+                          )}
+                        </div>
+                      );
+                    })()}
+
+                    <div className='flex gap-2 uppercase flex-wrap text-[0.7rem] mb-3'>
+                      {currentVariant?.sizes?.map((item) => {
+                        const isOutOfStock = item.stock === 0;
+                        return (
+                          <motion.div
+                            key={item._key}
+                            whileHover={{ scale: isOutOfStock ? 1 : 1.05 }}
+                            whileTap={{ scale: isOutOfStock ? 1 : 0.95 }}
+                          >
+                            <div
+                              className={`${item.size === quickBuySize ? 'border-black border-2' : 'border-gray-300'} text-gray-600 flex gap-x-2 border p-3 px-6 w-[4rem] justify-center items-center transition-all duration-200 hover:border-gray-500 ${isOutOfStock ? 'opacity-40 cursor-not-allowed' : 'cursor-pointer'}`}
+                              onClick={() => !isOutOfStock && setQuickBuySize(item?.size || '')}
+                            >
+                              {item.size}
+                            </div>
+                          </motion.div>
+                        );
+                      })}
+                    </div>
+
+                    <div className='flex gap-2'>
+                      <motion.button 
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        className={`${quantity === 1 ? 'opacity-50 cursor-not-allowed' : ''} border border-gray-300 text-gray-600 px-4 py-2 rounded-sm cursor-pointer transition-all duration-200 hover:text-black hover:border-gray-600`} 
+                        onClick={() => setQuantity(q => Math.max(1, q - 1))}
+                      >
+                        -
+                      </motion.button>
+
+                      <motion.span 
+                        whileTap={{ scale: 0.95 }}
+                        className='border border-gray-300 px-4 py-2 rounded-sm transition-colors duration-200 hover:border-gray-400'
+                      >
+                        {quantity}
+                      </motion.span>
+
+                      <motion.button 
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        className={`${(() => {
+                          const selected = currentVariant?.sizes?.find(s => s.size === quickBuySize);
+                          return selected && selected.stock !== undefined && quantity >= selected.stock ? 'opacity-50 cursor-not-allowed' : ''
+                        })()} border border-gray-300 text-gray-600 px-4 py-2 rounded-sm cursor-pointer transition-all duration-200 hover:text-black hover:border-gray-600`}                
+                        onClick={() => {
+                          const selected = currentVariant?.sizes?.find(s => s.size === quickBuySize);
+                          if (selected && quantity < (selected.stock ?? 0)) {
+                            setQuantity(q => q + 1);
+                          }
+                        }}
+                      >
+                        +
+                      </motion.button>
+                    </div>
+                  </div>
+
+                  <div className="flex justify-end gap-2 mt-6">
+                    <button onClick={() => setShowQuickBuy(false)} className="text-xs text-gray-500 hover:underline">
+                      Cancel
+                    </button>
+                    <button
+                      disabled={!quickBuySize || isLoading || (() => {
+                        const selected = currentVariant?.sizes?.find(s => s.size === quickBuySize);
+                        return selected && quantity > (selected.stock ?? 0);
+                      })()}
+                      onClick={handleQuickBuyCheckout}
+                      className="bg-black text-white text-xs px-4 py-2 rounded disabled:opacity-50 flex items-center gap-2"
+                    >
+                      {isLoading && <span className="inline-block h-3 w-3 rounded-full border-2 border-white border-t-transparent animate-spin" />}
+                      {isLoading ? 'Processing' : 'Checkout'}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+
+
     </motion.div>
   );
 }

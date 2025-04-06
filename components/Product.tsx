@@ -1,6 +1,6 @@
 "use client"
 import { imageUrl } from '@/lib/imageUrl';
-import { ProductPageType } from '@/types'
+import { Metadata, ProductPageType } from '@/types'
 import { montserrat, mulish} from '@/utils/font';
 import { useGSAP } from '@gsap/react';
 import { IndianRupeeIcon, Minus, Plus } from 'lucide-react';
@@ -14,6 +14,9 @@ import useHasMounted from '@/hooks/useHasMounted';
 import { useBasketStore } from '@/store/useBasketStore';
 import { motion, AnimatePresence } from 'framer-motion';
 import AddToCartPopup from './AddToCartPopup';
+import { useUser } from '@clerk/nextjs';
+import axios from 'axios';
+
 
 function Product({product,v}:{product:ProductPageType,v: string}) {  
   const hasMounted = useHasMounted();
@@ -36,6 +39,8 @@ function Product({product,v}:{product:ProductPageType,v: string}) {
   const [selectedSize,setSelectedSize] = useState<string>(currentVariant?.sizes?.[0].size || '');
   const [isAddingToCart, setIsAddingToCart] = useState(false);
   const [showPopup, setShowPopup] = useState(false)
+  const {user, isSignedIn} = useUser()
+
   const [addedProduct, setAddedProduct] = useState<{
     item: ProductPageType
     size: string
@@ -70,6 +75,47 @@ function Product({product,v}:{product:ProductPageType,v: string}) {
       setIsAddingToCart(false)
     }, 500)
   }
+
+
+  const handleBuyNow = async () => {
+    if (!user || !isSignedIn) return;
+  
+    const selectedVariant = currentVariant;
+    const sizeData = selectedVariant?.sizes?.find((size) => size.size === selectedSize);
+    if (!sizeData) return;
+    if(!sizeData.price) return;
+    const price = sizeData.price - (sizeData.price * (sizeData.discount || 0) / 100);
+    const buyNowItem = [{
+      product,
+      size: selectedSize,
+      color: selectedVariant?.color,
+      quantity,
+      price,
+      sku: sizeData.sku
+    }];
+  
+    const metadata: Metadata = {
+      orderNumber: crypto.randomUUID(),
+      customerName: user.fullName ?? "Unknown",
+      customerEmail: user.emailAddresses[0].emailAddress ?? "Unknown",
+      clerkUserId: user.id
+    };
+  
+    try {
+      const res = await axios.post("/stripe-checkout", {
+        items: buyNowItem,
+        metadata
+      });
+  
+      const checkoutUrl = res.data;
+      if (checkoutUrl) {
+        window.location.href = checkoutUrl;
+      }
+    } catch (err) {
+      console.error("Error in Buy Now:", err);
+    }
+  };
+  
 
   useEffect(()=>{
     setQuantity(1);
@@ -333,6 +379,7 @@ function Product({product,v}:{product:ProductPageType,v: string}) {
               disabled={!currentVariant?.sizes?.find(size => size.size === selectedSize)?.stock || 
                         (currentVariant?.sizes?.find(size => size.size === selectedSize)?.stock ?? 0) <= 0} 
               className={`border border-gray-300 text-gray-600 px-4 py-4 rounded-sm cursor-pointer transition-all duration-200 hover:text-black hover:border-gray-600 disabled:opacity-50 disabled:cursor-not-allowed`}
+              onClick={handleBuyNow}
             >
               Buy Now
             </motion.button>
