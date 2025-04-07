@@ -866,6 +866,13 @@
                 },
                 "optional": true
               },
+              "color": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "string"
+                },
+                "optional": true
+              },
               "price": {
                 "type": "objectAttribute",
                 "value": {
@@ -1984,6 +1991,23 @@
               "optional": true
             }
           }
+        },
+        "optional": true
+      },
+      "accessControl": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "union",
+          "of": [
+            {
+              "type": "string",
+              "value": "public"
+            },
+            {
+              "type": "string",
+              "value": "private"
+            }
+          ]
         },
         "optional": true
       }

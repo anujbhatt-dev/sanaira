@@ -100,6 +100,7 @@ async function createOrderInSanity(session: Stripe.Checkout.Session) {
     const sanityProducts = lineItemsWithProduct.data.map((item) => {
         const productRef = (item.price?.product as Stripe.Product)?.metadata?.id;
         const sku = (item.price?.product as Stripe.Product)?.metadata?.sku;
+        const color = (item.price?.product as Stripe.Product)?.metadata?.color;
 
         if (!productRef) {
             throw new Error(
@@ -114,6 +115,7 @@ async function createOrderInSanity(session: Stripe.Checkout.Session) {
                 _ref: productRef,
             },
             sku,
+            color,
             quantity: item.quantity || 0,
             price: item.amount_total ? item.amount_total / 100 : 0,
         };

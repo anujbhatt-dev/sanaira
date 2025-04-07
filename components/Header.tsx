@@ -5,9 +5,19 @@ import SearchBar from "./SearchBar";
 import { mulish } from "@/utils/font";
 import { ShoppingCart } from "lucide-react";
 import TotalItemCount from "./TotalItemsCount";
+import { currentUser } from "@clerk/nextjs/server";
+
+
+export const getUserAccessLevel = async () => {
+  const user = await currentUser()
+  return user?.publicMetadata?.accessLevel || 'public'
+}
 
 const Header = async () => {
   const ALL_FEATURED_CATEGORY = await getAllFeaturedCategories();
+  const user = await currentUser()
+  const isPro = user?.publicMetadata?.type === "pro"
+  
   
   return (
     <header className={`px-6 lg:px-20 mx-auto flex justify-between h-16 fixed top-0 w-full z-50 items-center bg-black/90 backdrop-blur-md text-white ${mulish.className}`}>
@@ -33,7 +43,7 @@ const Header = async () => {
       </nav>
       
       {/* User Actions */}
-      <div className="flex items-center space-x-4">
+      <div className="flex items-center space-x-8">
         <SearchBar />
         
         <SignedOut>
@@ -50,16 +60,24 @@ const Header = async () => {
             </SignInButton>
           </div>
         </SignedOut>
-        
+        <div className="relative">
+
         <SignedIn>
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-4 reletive">
             <UserButton appearance={{
               elements: {
-                userButtonAvatarBox: "w-8 h-8",
+                userButtonAvatarBox: "w-4 h-4",
               }
-            }} />
+            }}/>
           </div>
         </SignedIn>
+            {
+              isPro &&
+              <span className="bg-white absolute -bottom-1 right-0 px-1 text-blue-600 font-semibold rounded-full text-[0.5rem] translate-x-[50%]">
+                PRO  
+              </span>
+            }
+            </div>
         
         <Link href="/my-basket" className="relative flex items-center">
           <ShoppingCart className="w-6 h-6 hover:text-gray-300 transition-colors" />

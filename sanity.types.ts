@@ -148,6 +148,7 @@ export type Order = {
     };
     quantity?: number;
     sku?: string;
+    color?: string;
     price?: number;
     _key: string;
   }>;
@@ -303,6 +304,7 @@ export type Product = {
     metaDescription?: string;
     keywords?: Array<string>;
   };
+  accessControl?: "public" | "private";
 };
 
 export type User = {
@@ -707,6 +709,7 @@ export type COLLECTION_BY_SLUG_QUERYResult = {
       metaDescription?: string;
       keywords?: Array<string>;
     };
+    accessControl?: "private" | "public";
   }> | null;
   description: Array<{
     children?: Array<{
@@ -750,6 +753,60 @@ export type COLLECTION_BY_SLUG_QUERYResult = {
     _type: "image";
   } | null;
 } | null;
+
+// Source: ./sanity/lib/orders/getMyOrders.ts
+// Variable: MY_ORDERS_QUERY
+// Query: *[_type == "order" && clerkUserId == $clerkUserId] | order(orderDate desc) {          _id,          orderNumber,          stripeCheckoutSessionId,          stripeCustomerId,          clerkUserId,          customerName,          email,          stripePaymentIntentId,          products[] {            product-> {              _id,              title,              "slug": slug.current,              variants[]{                variantImages[]{                    asset->{                        url                    }                },                color                },            },            quantity,            sku,            color,            price          },          totalPrice,          currency,          amountDiscount,          status,          orderDate,          refundStatus,          refundAmount,          returnReason,          refundDate,          shippingDetails {            name,            phone,            address {              line1,              line2,              city,              state,              postal_code,              country            }          }        }
+export type MY_ORDERS_QUERYResult = Array<{
+  _id: string;
+  orderNumber: string | null;
+  stripeCheckoutSessionId: string | null;
+  stripeCustomerId: string | null;
+  clerkUserId: string | null;
+  customerName: string | null;
+  email: string | null;
+  stripePaymentIntentId: string | null;
+  products: Array<{
+    product: {
+      _id: string;
+      title: string | null;
+      slug: string | null;
+      variants: Array<{
+        variantImages: Array<{
+          asset: {
+            url: string | null;
+          } | null;
+        }> | null;
+        color: string | null;
+      }> | null;
+    } | null;
+    quantity: number | null;
+    sku: string | null;
+    color: string | null;
+    price: number | null;
+  }> | null;
+  totalPrice: number | null;
+  currency: string | null;
+  amountDiscount: number | null;
+  status: "cancelled" | "delivered" | "paid" | "pending" | "shipped" | null;
+  orderDate: string | null;
+  refundStatus: "denied" | "not_requested" | "refunded" | "requested" | null;
+  refundAmount: number | null;
+  returnReason: string | null;
+  refundDate: string | null;
+  shippingDetails: {
+    name: string | null;
+    phone: string | null;
+    address: {
+      line1: string | null;
+      line2: string | null;
+      city: string | null;
+      state: string | null;
+      postal_code: string | null;
+      country: string | null;
+    } | null;
+  } | null;
+}>;
 
 // Source: ./sanity/lib/products/getAllProducts.ts
 // Variable: ALL_PRODUCTS_QUERY
@@ -831,6 +888,7 @@ export type ALL_PRODUCTS_QUERYResult = Array<{
     metaDescription?: string;
     keywords?: Array<string>;
   };
+  accessControl?: "private" | "public";
 }>;
 
 // Source: ./sanity/lib/products/getProductBySlug.ts
@@ -913,6 +971,7 @@ export type PRODUCT_BY_SLUG_QUERYResult = {
     metaDescription?: string;
     keywords?: Array<string>;
   };
+  accessControl?: "private" | "public";
 } | null;
 
 // Source: ./sanity/lib/products/getSearchProducts.ts
@@ -995,6 +1054,7 @@ export type PRODUCTS_BY_SEARCH_QUERYResult = Array<{
     metaDescription?: string;
     keywords?: Array<string>;
   };
+  accessControl?: "private" | "public";
 }>;
 
 // Query TypeMap
@@ -1004,6 +1064,7 @@ declare module "@sanity/client" {
     "\n          *[_type==\"category\"] \n        ": ALL_CATEGORIES_QUERYResult;
     "\n          *[_type==\"category\" && isFeatured==true] \n        ": ALL_FEATURED_CATEGORIES_QUERYResult;
     "\n        *[_type == \"collection\" && slug.current == $slug][0]{\n            title,\n            slug,\n            products[]->{\n                ...,\n                \"productPath\": [\n                    category->parent->parent->slug.current,\n                    category->parent->slug.current,\n                    category->slug.current\n                ]\n            },\n            description,\n            image\n        }\n    ": COLLECTION_BY_SLUG_QUERYResult;
+    "\n        *[_type == \"order\" && clerkUserId == $clerkUserId] | order(orderDate desc) {\n          _id,\n          orderNumber,\n          stripeCheckoutSessionId,\n          stripeCustomerId,\n          clerkUserId,\n          customerName,\n          email,\n          stripePaymentIntentId,\n          products[] {\n            product-> {\n              _id,\n              title,\n              \"slug\": slug.current,\n              variants[]{\n                variantImages[]{\n                    asset->{\n                        url\n                    }\n                },\n                color  \n              },\n            },\n            quantity,\n            sku,\n            color,\n            price\n          },\n          totalPrice,\n          currency,\n          amountDiscount,\n          status,\n          orderDate,\n          refundStatus,\n          refundAmount,\n          returnReason,\n          refundDate,\n          shippingDetails {\n            name,\n            phone,\n            address {\n              line1,\n              line2,\n              city,\n              state,\n              postal_code,\n              country\n            }\n          }\n        }\n      ": MY_ORDERS_QUERYResult;
     "\n        *[_type == \"product\"]{\n            ...,\n            \"productPath\": [\n                category->parent->parent->slug.current, \n                category->parent->slug.current, \n                category->slug.current\n            ]\n        }\n    ": ALL_PRODUCTS_QUERYResult;
     "\n        *[_type == \"product\" && slug.current == $slug][0]{\n            ...,\n            \"productPath\": [\n                category->parent->parent->slug.current, \n                category->parent->slug.current, \n                category->slug.current\n            ]\n        }\n    ": PRODUCT_BY_SLUG_QUERYResult;
     "\n        *[\n          _type==\"product\" && \n          (\n            title match $q || \n            description[].children[].text match $q // Corrected description search\n          )\n        ] | order(title asc){\n            ...,\n            \"productPath\": [\n                category->parent->parent->slug.current, \n                category->parent->slug.current, \n                category->slug.current\n            ]\n        }\n    ": PRODUCTS_BY_SEARCH_QUERYResult;

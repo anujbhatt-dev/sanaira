@@ -76,6 +76,12 @@ export const orderType = defineType({
               title: "Stock Keeping Unit",
               type: "string",
               description: "Specify the product sku",
+            }),
+            defineField({
+              name: "color",
+              title: "Color",
+              type: "string",
+              description: "Specify the product color",
             }),            
             defineField({
               name: "price",

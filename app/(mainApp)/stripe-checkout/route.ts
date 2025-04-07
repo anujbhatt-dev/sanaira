@@ -62,7 +62,8 @@ async function createCheckoutSession(items:IBasketItem[], metadata:Metadata) {
                     description:`Product ID: ${item.product._id}\nSKU: ${item.sku}`,
                     metadata:{
                         id:item.product._id,
-                        sku:item.sku
+                        sku:item.sku,
+                        color:item.color
                     },
                     images: item.product?.variants
                     ?.filter((v) => v.color === item.color)

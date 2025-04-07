@@ -191,5 +191,20 @@ export const productType = defineType({
         { name: 'keywords', title: 'Keywords', type: 'array', of: [{ type: 'string' }] },
       ],
     }),
+
+    defineField({
+      name: 'accessControl',
+      title: 'Access Control',
+      type: 'string',
+      options: {
+        list: [
+          { title: 'Public', value: 'public' },
+          { title: 'Private', value: 'private' },
+        ],
+        layout: 'radio', // or 'dropdown'
+      },
+      initialValue: 'public',
+      validation: Rule => Rule.required(),
+    })
   ],
 });

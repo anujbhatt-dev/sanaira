@@ -14,13 +14,14 @@ import useHasMounted from '@/hooks/useHasMounted';
 import { useBasketStore } from '@/store/useBasketStore';
 import { motion, AnimatePresence } from 'framer-motion';
 import AddToCartPopup from './AddToCartPopup';
-import { useUser } from '@clerk/nextjs';
+import { SignIn, useClerk, useUser } from '@clerk/nextjs';
 import axios from 'axios';
 
 
 function Product({product,v}:{product:ProductPageType,v: string}) {  
   const hasMounted = useHasMounted();
   const {addItem} = useBasketStore();
+  const { openSignIn } = useClerk()
   let currentVariant = product.variants?.find((variant)=>variant._key===v);
   if(!currentVariant){
     currentVariant = product.variants && product.variants[0];
@@ -40,6 +41,25 @@ function Product({product,v}:{product:ProductPageType,v: string}) {
   const [isAddingToCart, setIsAddingToCart] = useState(false);
   const [showPopup, setShowPopup] = useState(false)
   const {user, isSignedIn} = useUser()
+  const isPro = user?.publicMetadata?.type === "pro";
+  const accessControl = product.accessControl;
+  const isPrivateProduct = accessControl === "private";
+
+  // Determine what to show based on access control and user status
+  const showAddToCart = 
+    accessControl === "public" || 
+    (accessControl === "private" && isPro);
+
+  const showSignInPrompt = 
+    !isSignedIn && accessControl === "private";
+
+  const showWaitingListButton = 
+    isSignedIn && accessControl === "private" && !isPro;
+
+
+  console.log( "prod ", isPro, accessControl);
+
+  
 
   const [addedProduct, setAddedProduct] = useState<{
     item: ProductPageType
@@ -362,27 +382,54 @@ function Product({product,v}:{product:ProductPageType,v: string}) {
           </div>
           
           <div className='flex flex-col gap-2 my-8'>
-            <motion.button 
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              disabled={!currentVariant?.sizes?.find(size => size.size === selectedSize)?.stock || 
-                        (currentVariant?.sizes?.find(size => size.size === selectedSize)?.stock ?? 0) <= 0 || isAddingToCart} 
-              className={`border border-gray-300 bg-black/80 text-white px-4 py-4 rounded-sm cursor-pointer transition-all duration-300 hover:bg-black hover:border-gray-600 disabled:opacity-50 disabled:cursor-not-allowed ${isAddingToCart ? 'animate-pulse' : ''}`} 
-              onClick={handleAddToCart}
-            >
-              {isAddingToCart ? 'Adding...' : 'Add to Cart'}
-            </motion.button>
-            
-            <motion.button 
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              disabled={!currentVariant?.sizes?.find(size => size.size === selectedSize)?.stock || 
-                        (currentVariant?.sizes?.find(size => size.size === selectedSize)?.stock ?? 0) <= 0} 
-              className={`border border-gray-300 text-gray-600 px-4 py-4 rounded-sm cursor-pointer transition-all duration-200 hover:text-black hover:border-gray-600 disabled:opacity-50 disabled:cursor-not-allowed`}
-              onClick={handleBuyNow}
-            >
-              Buy Now
-            </motion.button>
+            {showAddToCart && (
+              <motion.button 
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                disabled={!currentVariant?.sizes?.find(size => size.size === selectedSize)?.stock || 
+                          (currentVariant?.sizes?.find(size => size.size === selectedSize)?.stock ?? 0) <= 0 || isAddingToCart} 
+                className={`border border-gray-300 bg-black/80 text-white px-4 py-4 rounded-sm cursor-pointer transition-all duration-300 hover:bg-black hover:border-gray-600 disabled:opacity-50 disabled:cursor-not-allowed ${isAddingToCart ? 'animate-pulse' : ''}`} 
+                onClick={handleAddToCart}
+              >
+                {isAddingToCart ? 'Adding...' : 'Add to Cart'}
+              </motion.button>
+            )}
+
+            {showSignInPrompt && (              
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="border border-gray-300 bg-black/80 text-white px-4 py-4 rounded-sm cursor-pointer transition-all duration-300 hover:bg-black hover:border-gray-600"
+                  onClick={()=> openSignIn()}
+                >
+                  Sign in to check eligibility
+                </motion.button>
+            )}
+
+            {showWaitingListButton && (
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className="border border-gray-300 bg-amber-600 text-white px-4 py-4 rounded-sm cursor-pointer transition-all duration-300 hover:bg-amber-700 hover:border-gray-600"
+                // onClick={() => /* Add to waiting list function */}
+              >
+                Join Waiting List
+              </motion.button>
+            )}
+
+            {/* Buy Now button should follow similar logic */}
+            {showAddToCart && (
+              <motion.button 
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                disabled={!currentVariant?.sizes?.find(size => size.size === selectedSize)?.stock || 
+                          (currentVariant?.sizes?.find(size => size.size === selectedSize)?.stock ?? 0) <= 0} 
+                className={`border border-gray-300 text-gray-600 px-4 py-4 rounded-sm cursor-pointer transition-all duration-200 hover:text-black hover:border-gray-600 disabled:opacity-50 disabled:cursor-not-allowed`}
+                onClick={handleBuyNow}
+              >
+                Buy Now
+              </motion.button>
+            )}
           </div>
           
           <div>
