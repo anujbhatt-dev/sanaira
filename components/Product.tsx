@@ -14,7 +14,7 @@ import useHasMounted from '@/hooks/useHasMounted';
 import { useBasketStore } from '@/store/useBasketStore';
 import { motion, AnimatePresence } from 'framer-motion';
 import AddToCartPopup from './AddToCartPopup';
-import { SignIn, useClerk, useUser } from '@clerk/nextjs';
+import { useClerk, useUser } from '@clerk/nextjs';
 import axios from 'axios';
 
 
@@ -43,7 +43,6 @@ function Product({product,v}:{product:ProductPageType,v: string}) {
   const {user, isSignedIn} = useUser()
   const isPro = user?.publicMetadata?.type === "pro";
   const accessControl = product.accessControl;
-  const isPrivateProduct = accessControl === "private";
 
   // Determine what to show based on access control and user status
   const showAddToCart = 
