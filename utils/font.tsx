@@ -1,4 +1,4 @@
-import { Mulish, Gruppo, Poppins, Montserrat, Work_Sans } from 'next/font/google'
+import { Mulish, Gruppo, Poppins, Montserrat, Work_Sans, Playfair_Display } from 'next/font/google'
  
 export const mulish = Mulish({
   subsets: ['latin'],
@@ -24,6 +24,12 @@ export const montserrat = Montserrat({
 })
 
 export const ws = Work_Sans({
+    subsets: ["latin"],
+    weight: ["400", "500", "600", "700"],
+    display: "swap",
+})
+
+export const plfd = Playfair_Display({
     subsets: ["latin"],
     weight: ["400", "500", "600", "700"],
     display: "swap",

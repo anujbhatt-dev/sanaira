@@ -7,7 +7,7 @@ import Image from 'next/image';
 import { imageUrl } from '@/lib/imageUrl';
 import { ProductPageType } from '@/types';
 import { useRouter } from 'next/navigation';
-import { ws } from '@/utils/font';
+import { poppins, mulish, ws } from '@/utils/font';
 import Head from 'next/head';
 import { useAuth, useUser, SignInButton } from '@clerk/nextjs';
 import axios from 'axios';
@@ -85,7 +85,7 @@ export default function ProductThumbnail({ product, index }: { product: ProductP
   return (
     <motion.div
       key={product._id}
-      className={`relative overflow-hidden bg-white cursor-pointer ${ws.className}`}
+      className={`relative overflow-hidden bg-white cursor-pointer ${poppins.className}`}
       initial={{ opacity: 0, x: index % 2 === 0 ? 50 : -50 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ delay: index * 0.1, type: 'spring', stiffness: 50 }}
@@ -127,49 +127,52 @@ export default function ProductThumbnail({ product, index }: { product: ProductP
         </div>
       </div>
 
-      <div className="lg:absolute bottom-0 left-0 p-1 bg-white/80 backdrop-blur-sm text-black w-full px-2 py-2 min-h-[7rem]">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-x-1">
-            {product.variants?.map((variant, i) => (
-              <div
-                key={variant._key}
-                title={variant.name}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setVariantNumber(i);
-                  setVariantImage(0);
-                }}
-                className="h-4 w-4 border-2 border-black/60 hover:border-black transition-all duration-150 rounded-full -mr-3"
-                style={{ backgroundColor: variant.color ?? '#ccc' }}
-              />
-            ))}
-          </div>
-
-          <div className="p-2 flex items-center gap-x-1 justify-end">
-            {currentVariant.variantImages?.map((image, i) => (
-              <div
-                key={image._key}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setVariantImage(i);
-                }}
-                className={`h-3 w-3 border border-black/50 bg-black ${variantImage !== i ? 'opacity-20' : ''}`}
-              />
-            ))}
-          </div>
-        </div>
-
-        <h3 className="text-md lg:text-[18px] uppercase truncate font-medium tracking-[0.3px]" title={product.title || 'Untitled Product'}>
-          CINDY {product.title || 'Untitled Product'}
+      <div className="p-1 bg-white backdrop-blur-sm text-black w-full ">        
+        <h3 className="text-[14px] lg:text-[20px] uppercase truncate mt-2" title={product.title || 'Untitled Product'}>
+          {product.title || 'Untitled Product'}
         </h3>
 
+        {/* hidden for now */}
+        <div className="items-center justify-between hidden">
+            <div className="flex items-center gap-x-1">
+              {product.variants?.map((variant, i) => (
+                <div
+                  key={variant._key}
+                  title={variant.name}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setVariantNumber(i);
+                    setVariantImage(0);
+                  }}
+                  className="h-3 w-3 border border-white/60 hover:border-white transition-all duration-150 rounded-full "
+                  style={{ backgroundColor: variant.color ?? '#ccc' }}
+                />
+              ))}
+            </div>
+
+            <div className="flex items-center gap-x-1 justify-end mt-1">
+              {currentVariant.variantImages?.map((image, i) => (
+                <div
+                  key={image._key}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setVariantImage(i);
+                  }}
+                  className={`h-3 w-3 border border-black/50 bg-black ${variantImage !== i ? 'opacity-20' : ''}`}
+                />
+              ))}
+            </div>
+          </div>
+
         <div className="flex gap-4 justify-between items-baseline">
-          <p className={`${ws.className} mt-2 text-[0.7rem] md:text-xs flex items-end`}>
-            <span className="text-sm lg:text-2xl font-semibold flex items-center leading-0">
+          <p className={`${mulish.className} mt-2 text-[0.7rem] md:text-xs flex items-end `}>
+            <span className="text-sm lg:text-lg flex items-center leading-0">
               <IndianRupeeIcon className="w-4 h-4" />
               {(currentSize?.price ?? 0) - ((currentSize?.price ?? 0) * (currentSize?.discount ?? 0)) / 100}
             </span>
-            <span className="ml-2 flex items-center leading-0 text-red-800 line-through">
+
+            {/* hidden */}
+            <span className="ml-2 items-center leading-0 text-red-800 line-through hidden">
               <IndianRupeeIcon className="w-4 h-4" />
               {currentSize?.price ?? 0}
             </span>
@@ -178,23 +181,25 @@ export default function ProductThumbnail({ product, index }: { product: ProductP
           {isSignedIn ? (
             <button
               onClick={() => setShowQuickBuy(true)}
-              className="lg:gap-x-2 p-2 lg:px-4 bg-[beige] text-[0.8rem] uppercase font-bold font-sans tracking-widest flex items-center cursor-pointer hover:bg-beige/90 transition-all duration-200"
+              className={`${ws.className} lg:gap-x-2 p-2 lg:px-4 bg-[#fcfcf1] hover:bg-[#ffffa2] text-[0.8rem] uppercase  tracking-widest flex items-center cursor-pointer hover:bg-beige/90 transition-all duration-200`}
               title="Quick Buy"
             >
-              <Plus className="font-semibold h-3 w-3 lg:h-5 lg:w-5" /> <span className="hidden lg:flex">Quick Buy</span>
+              <Plus className="font-semibold h-3 w-3 lg:hidden" /> <span className="hidden lg:flex">Quick Buy</span>
             </button>
           ) : (
             <SignInButton mode="modal">
-              <button className="lg:gap-x-2 p-2 lg:px-4 bg-[beige] text-[0.8rem] uppercase font-bold font-sans tracking-widest flex items-center cursor-pointer hover:bg-beige/90 transition-all duration-200">
-                <Plus className="font-semibold h-3 w-3 lg:h-5 lg:w-5" /> <span className="hidden lg:flex">Quick Buy</span>
+              <button className={`${ws.className} lg:gap-x-2 p-2 lg:px-4 bg-[#fcfcf1] hover:bg-[#ffffa2] text-[0.8rem] uppercase  tracking-widest flex items-center cursor-pointer hover:bg-beige/90 transition-all duration-200`}>
+                <Plus className="font-semibold h-3 w-3 lg:hidden" /> <span className="hidden lg:flex">Quick Buy</span>
               </button>
             </SignInButton>
           )}
         </div>
+        
       </div>
 
+
       {currentSize?.discount && currentSize.discount > 0 && (
-        <div className={`${ws.className} absolute top-0 left-0 p-1 px-2 text-sm text-white bg-black m-2`}>
+        <div className={`${poppins.className} absolute top-0 left-0 p-1 px-2 text-sm text-white bg-black m-2`}>
           {currentSize.discount}%
         </div>
       )}
