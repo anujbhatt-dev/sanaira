@@ -1,5 +1,4 @@
 'use client';
-
 import React, { useEffect, useState } from 'react';
 import { IndianRupeeIcon, Plus } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -36,6 +35,7 @@ export default function ProductThumbnail({ product, index }: { product: ProductP
       router.push(`/${path}/${product.slug.current}?v=${currentVariant._key}`);
     }
   };
+  
 
   const handleQuickBuyCheckout = async () => {
     if (!user || !isSignedIn || !quickBuySize || !currentVariant) return;
