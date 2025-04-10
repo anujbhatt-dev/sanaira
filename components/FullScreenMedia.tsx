@@ -107,7 +107,7 @@ const FullScreenMedia: React.FC = () => {
 
         <div className="h-full w-full flex justify-center items-center text-2xl md:text-5xl lg:text-6xl xl:text-7xl z-10 font-bold md:font-thin gap-2 lg:gap-4">
         <div >
-          {currentIndex!=0 && <Heading text="TIMELESS PRICELESS"/>}
+          {currentIndex==1 && <Heading text="TIMELESS PRICELESS"/>}
         </div>
       </div>
       

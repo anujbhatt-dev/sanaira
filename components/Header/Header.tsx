@@ -1,10 +1,10 @@
 import Link from "next/link";
 import { SignedIn, SignedOut, SignInButton, SignUpButton, UserButton } from "@clerk/nextjs";
 import { getAllFeaturedCategories } from "@/sanity/lib/categories/getAllFeaturedCategories";
-import SearchBar from "./SearchBar";
+import SearchBar from "../SearchBar";
 import { mulish } from "@/utils/font";
 import { ShoppingCart } from "lucide-react";
-import TotalItemCount from "./TotalItemsCount";
+import TotalItemCount from "../TotalItemsCount";
 import { currentUser } from "@clerk/nextjs/server";
 
 
