@@ -5,7 +5,6 @@ import SearchBar from "../SearchBar";
 import { cinzel } from "@/utils/font";
 import { ShoppingCart } from "lucide-react";
 import TotalItemCount from "../TotalItemsCount";
-import { User } from "@clerk/nextjs/server";
 import { ALL_FEATURED_CATEGORIES_QUERYResult } from "@/sanity.types";
 import { useEffect, useState } from "react";
 
