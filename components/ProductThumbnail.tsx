@@ -7,7 +7,7 @@ import Image from 'next/image';
 import { imageUrl } from '@/lib/imageUrl';
 import { ProductPageType } from '@/types';
 import { useRouter } from 'next/navigation';
-import { poppins, mulish, ws, cinzel, montserrat } from '@/utils/font';
+import { poppins, ws, cinzel } from '@/utils/font';
 import Head from 'next/head';
 import { useAuth, useUser, SignInButton } from '@clerk/nextjs';
 import axios from 'axios';

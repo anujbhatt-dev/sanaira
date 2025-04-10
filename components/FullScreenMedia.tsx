@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import { Pause, Play } from "lucide-react";
 import Heading from "./Heading";
-import { cbnskt, cinzel } from "@/utils/font";
+import { cinzel } from "@/utils/font";
 // import { useCursorStore } from "@/store/useCursorStore";
 
 

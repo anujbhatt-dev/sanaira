@@ -12,10 +12,10 @@ import { useEffect, useState } from "react";
 interface IHeader {
   categories: ALL_FEATURED_CATEGORIES_QUERYResult;
   isPro: boolean;
-  user: User | null;
+  user?: User | null;
 }
 
-const Header = ({ categories, isPro, user }: IHeader) => {
+const Header = ({ categories, isPro }: IHeader) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
 
