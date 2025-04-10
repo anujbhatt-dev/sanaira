@@ -4,7 +4,9 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import { Pause, Play } from "lucide-react";
 import Heading from "./Heading";
+import { cbnskt, cinzel } from "@/utils/font";
 // import { useCursorStore } from "@/store/useCursorStore";
+
 
 const mediaArray = [
   {
@@ -106,7 +108,7 @@ const FullScreenMedia: React.FC = () => {
       </button>
 
         <div className="h-full w-full flex justify-center items-center text-2xl md:text-5xl lg:text-6xl xl:text-7xl z-10 font-bold md:font-thin gap-2 lg:gap-4">
-        <div >
+        <div className={`${cinzel.className}`}>
           {currentIndex==1 && <Heading text="TIMELESS PRICELESS"/>}
         </div>
       </div>

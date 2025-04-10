@@ -1,86 +1,108 @@
+"use client";
 import Link from "next/link";
 import { SignedIn, SignedOut, SignInButton, SignUpButton, UserButton } from "@clerk/nextjs";
-import { getAllFeaturedCategories } from "@/sanity/lib/categories/getAllFeaturedCategories";
 import SearchBar from "../SearchBar";
-import { mulish } from "@/utils/font";
+import { cinzel } from "@/utils/font";
 import { ShoppingCart } from "lucide-react";
 import TotalItemCount from "../TotalItemsCount";
-import { currentUser } from "@clerk/nextjs/server";
+import { User } from "@clerk/nextjs/server";
+import { ALL_FEATURED_CATEGORIES_QUERYResult } from "@/sanity.types";
+import { useEffect, useState } from "react";
 
-
-export const getUserAccessLevel = async () => {
-  const user = await currentUser()
-  return user?.publicMetadata?.accessLevel || 'public'
+interface IHeader {
+  categories: ALL_FEATURED_CATEGORIES_QUERYResult;
+  isPro: boolean;
+  user: User | null;
 }
 
-const Header = async () => {
-  const ALL_FEATURED_CATEGORY = await getAllFeaturedCategories();
-  const user = await currentUser()
-  const isPro = user?.publicMetadata?.type === "pro"
-  
-  
+const Header = ({ categories, isPro, user }: IHeader) => {
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrolledPast = window.scrollY > window.innerHeight;
+      setIsScrolled(scrolledPast);
+    };
+
+    handleScroll(); // run on mount
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const solid = isScrolled || isHovered;
+
   return (
-    <header className={`px-6 lg:px-20 mx-auto flex justify-between h-16 fixed top-0 w-full z-50 items-center bg-black/90 backdrop-blur-md text-white ${mulish.className}`}>
+    <header
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      className={`px-6 lg:px-20 mx-auto flex justify-between h-16 fixed top-0 w-full z-50 items-center text-black transition-colors duration-300 ${cinzel.className}
+        ${solid ? "bg-[#f5f5dc]/90 backdrop-blur-md" : "lg:bg-transparent lg:backdrop-blur-none bg-[#f5f5dc]/90 backdrop-blur-md"}
+      `}
+    >
       {/* Logo */}
-      <Link 
-        href="/" 
-        className="text-2xl font-medium tracking-widest uppercase hover:text-gray-300 transition-colors"
+      <Link
+        href="/"
+        className="text-2xl font-medium tracking-widest uppercase hover:text-gray-600 transition-colors"
       >
-        Sanaira
+        Anaira
       </Link>
-      
+
       {/* Navigation */}
       <nav className="hidden lg:flex justify-center space-x-8">
-        {ALL_FEATURED_CATEGORY.map((category) => (
-          <Link 
-            href={`/category/${category.slug?.current}`} 
+        {categories.map((category) => (
+          <Link
+            href={`/category/${category.slug?.current}`}
             key={category._id}
-            className="text-sm uppercase tracking-wider hover:text-gray-300 transition-colors"
+            className="text-sm uppercase tracking-wider hover:text-gray-600 transition-colors"
           >
             {category.name}
           </Link>
         ))}
       </nav>
-      
+
       {/* User Actions */}
       <div className="flex items-center space-x-8">
         <SearchBar />
-        
+
         <SignedOut>
           <div className="hidden sm:flex space-x-3">
             <SignUpButton mode="modal">
-              <button className="text-sm uppercase tracking-wider px-3 py-1 hover:text-gray-300 transition-colors">
+              <button className="text-sm uppercase tracking-wider px-3 py-1 hover:text-gray-600 transition-colors">
                 Sign Up
               </button>
             </SignUpButton>
             <SignInButton mode="modal">
-              <button className="text-sm uppercase tracking-wider border border-white px-3 py-1 hover:bg-white hover:text-black transition-colors">
+              <button className="text-sm uppercase tracking-wider border border-black px-3 py-1 hover:bg-black hover:text-white transition-colors">
                 Sign In
               </button>
             </SignInButton>
           </div>
         </SignedOut>
-        <div className="relative">
 
-        <SignedIn>
-          <div className="flex items-center space-x-4 reletive">
-            <UserButton appearance={{
-              elements: {
-                userButtonAvatarBox: "w-4 h-4",
-              }
-            }}/>
-          </div>
-        </SignedIn>
-            {
-              isPro &&
-              <span className="bg-white absolute -bottom-1 right-0 px-1 text-blue-600 font-semibold rounded-full text-[0.5rem] translate-x-[50%]">
-                PRO  
-              </span>
-            }
+        <div className="relative">
+          <SignedIn>
+            <div className="flex items-center space-x-4">
+              <UserButton
+                appearance={{
+                  elements: {
+                    userButtonAvatarBox: "w-4 h-4",
+                  },
+                }}
+              />
             </div>
-        
+          </SignedIn>
+
+          {isPro && (
+            <span className="bg-black absolute -bottom-1 right-0 px-1 text-white font-semibold rounded-full text-[0.5rem] translate-x-[50%]">
+              PRO
+            </span>
+          )}
+        </div>
+
         <Link href="/my-basket" className="relative flex items-center">
-          <ShoppingCart className="w-6 h-6 hover:text-gray-300 transition-colors" />
+          <ShoppingCart className="w-6 h-6 hover:text-gray-600 transition-colors" />
           <TotalItemCount />
         </Link>
       </div>

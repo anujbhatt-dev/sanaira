@@ -7,7 +7,7 @@ import Image from 'next/image';
 import { imageUrl } from '@/lib/imageUrl';
 import { ProductPageType } from '@/types';
 import { useRouter } from 'next/navigation';
-import { poppins, mulish, ws } from '@/utils/font';
+import { poppins, mulish, ws, cinzel, montserrat } from '@/utils/font';
 import Head from 'next/head';
 import { useAuth, useUser, SignInButton } from '@clerk/nextjs';
 import axios from 'axios';
@@ -85,7 +85,7 @@ export default function ProductThumbnail({ product, index }: { product: ProductP
   return (
     <motion.div
       key={product._id}
-      className={`relative overflow-hidden bg-white cursor-pointer ${poppins.className}`}
+      className={`relative overflow-hidden bg-white cursor-pointer ${cinzel.className}`}
       initial={{ opacity: 0, x: index % 2 === 0 ? 50 : -50 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ delay: index * 0.1, type: 'spring', stiffness: 50 }}
@@ -128,7 +128,7 @@ export default function ProductThumbnail({ product, index }: { product: ProductP
       </div>
 
       <div className="p-1 bg-white backdrop-blur-sm text-black w-full ">        
-        <h3 className="text-[14px] lg:text-[20px] uppercase truncate mt-2" title={product.title || 'Untitled Product'}>
+        <h3 className="text-[12px] lg:text-[14px] uppercase truncate mt-2" title={product.title || 'Untitled Product'}>
           {product.title || 'Untitled Product'}
         </h3>
 
@@ -165,10 +165,10 @@ export default function ProductThumbnail({ product, index }: { product: ProductP
           </div>
 
         <div className="flex gap-4 justify-between items-baseline">
-          <p className={`${mulish.className} mt-2 text-[0.7rem] md:text-xs flex items-end `}>
-            <span className="text-sm lg:text-lg flex items-center leading-0">
-              <IndianRupeeIcon className="w-4 h-4" />
-              {(currentSize?.price ?? 0) - ((currentSize?.price ?? 0) * (currentSize?.discount ?? 0)) / 100}
+          <p className={`text-[0.7rem] md:text-xs flex items-end `}>
+            <span className="text-sm lg:text-[14px] flex items-center leading-0 tracking-widest">
+              {/* <IndianRupeeIcon className="w-4 h-4 " /> */}
+              Rs. {(currentSize?.price ?? 0) - ((currentSize?.price ?? 0) * (currentSize?.discount ?? 0)) / 100}
             </span>
 
             {/* hidden */}
