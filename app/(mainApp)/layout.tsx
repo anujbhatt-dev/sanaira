@@ -38,7 +38,7 @@ export default async function RootLayout({
         <body
           className={`${poppins.className} antialiased bg-[white] overflow-x-hidden`}
         >
-          <Header categories={ALL_FEATURED_CATEGORY} user={user} isPro={isPro}/>
+          <Header categories={ALL_FEATURED_CATEGORY} isPro={isPro}/>
           <div className="h-[4rem]"></div>
           {children}
           {/* <QuickAddWrapper/> */}
