@@ -10,7 +10,7 @@ import { cinzel } from '@/utils/font';
 export default function Collection({collection}:{collection:COLLECTION_BY_SLUG_QUERYResult}) {  
   const products = collection?.products;
   return (
-        <div className='px-[0.2rem] md:px-[2rem] py-[1rem]'>
+        <div className='px-[0.2rem] md:px-[2rem] '>
         {
             collection && (
                 <div>

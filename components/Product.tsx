@@ -1,7 +1,7 @@
 "use client"
 import { imageUrl } from '@/lib/imageUrl';
 import { Metadata, ProductPageType } from '@/types'
-import { montserrat, mulish} from '@/utils/font';
+import { poppins, cinzel} from '@/utils/font';
 import { useGSAP } from '@gsap/react';
 import { IndianRupeeIcon, Minus, Plus } from 'lucide-react';
 import { PortableText } from 'next-sanity';
@@ -264,7 +264,7 @@ function Product({product,v}:{product:ProductPageType,v: string}) {
         </div>
 
         {/* Product Details */}
-        <div className={`${mulish.className} flex flex-col gap-2 tracking-widest mx-auto md:mx-0`}>
+        <div className={`${cinzel.className} flex flex-col gap-2 tracking-widest mx-auto md:mx-0`}>
           <motion.p 
             whileHover={{ x: 2 }}
             className='text-sm text-gray-600 uppercase text-[0.8rem] hover:text-gray-800 transition-colors duration-200'
@@ -274,7 +274,7 @@ function Product({product,v}:{product:ProductPageType,v: string}) {
           
           <motion.h1 
             whileHover={{ x: 2 }}
-            className={`text-xl font-[400] uppercase ${montserrat.className} hover:text-gray-700 transition-colors duration-200`}
+            className={`text-xl font-[400] uppercase ${poppins.className} hover:text-gray-700 transition-colors duration-200`}
           >
             {product.title}
           </motion.h1>  
@@ -293,7 +293,7 @@ function Product({product,v}:{product:ProductPageType,v: string}) {
             className='border-t border-gray-300 my-4'
           />
           
-          <h4 className={`${montserrat.className} text-[0.8rem] font-[500] uppercase`}>Color</h4>
+          <h4 className={`${poppins.className} text-[0.8rem] font-[500] uppercase`}>Color</h4>
           <div className='flex gap-2 uppercase flex-wrap text-[0.7rem]'>
             {product.variants && product.variants.map((variant)=>(
               <motion.div
@@ -311,7 +311,7 @@ function Product({product,v}:{product:ProductPageType,v: string}) {
             ))}
           </div>
           
-          <h4 className={`${montserrat.className} text-[0.8rem] font-[500] uppercase mt-4`}>Size</h4>
+          <h4 className={`${poppins.className} text-[0.8rem] font-[500] uppercase mt-4`}>Size</h4>
           <div className='flex gap-2 uppercase flex-wrap text-[0.7rem]'>
             {currentVariant?.sizes?.map((item)=>(
               <motion.div
@@ -347,7 +347,7 @@ function Product({product,v}:{product:ProductPageType,v: string}) {
             })()}
           </motion.div>
           
-          <h4 className={`${montserrat.className} text-[0.8rem] font-[500] uppercase`}>Quantity</h4>
+          <h4 className={`${poppins.className} text-[0.8rem] font-[500] uppercase`}>Quantity</h4>
           <div className='flex gap-2'>
             <motion.button 
               whileHover={{ scale: 1.05 }}
@@ -434,7 +434,7 @@ function Product({product,v}:{product:ProductPageType,v: string}) {
           <div>
             <motion.div 
               whileHover={{ x: 2 }}
-              className={`${montserrat.className} text-[0.8rem] font-[500] my-2 uppercase flex justify-between cursor-pointer hover:text-gray-700 transition-colors duration-200`} 
+              className={`${poppins.className} text-[0.8rem] font-[500] my-2 uppercase flex justify-between cursor-pointer hover:text-gray-700 transition-colors duration-200`} 
               onClick={()=>setShowProductDetails(!showProductDetails)}
             >
               <span>Product Details</span>
@@ -448,7 +448,7 @@ function Product({product,v}:{product:ProductPageType,v: string}) {
                   animate={{ opacity: 1, height: 'auto' }}
                   exit={{ opacity: 0, height: 0 }}
                   transition={{ duration: 0.3 }}
-                  className={`${montserrat.className} prose max-w-none mb-6 mt-4 overflow-hidden`}
+                  className={`${poppins.className} prose max-w-none mb-6 mt-4 overflow-hidden`}
                   ref={productDetailsRef}
                 >
                   {Array.isArray(product.description) && product.description.length > 0 && (
@@ -469,7 +469,7 @@ function Product({product,v}:{product:ProductPageType,v: string}) {
           <div>
             <motion.div 
               whileHover={{ x: 2 }}
-              className={`${montserrat.className} text-[0.8rem] font-[500] my-2 uppercase flex justify-between cursor-pointer hover:text-gray-700 transition-colors duration-200`} 
+              className={`${poppins.className} text-[0.8rem] font-[500] my-2 uppercase flex justify-between cursor-pointer hover:text-gray-700 transition-colors duration-200`} 
               onClick={()=>setShowShippingPolicy(!showShippingPolicy)}
             >
               <span>Shipping Policy</span>
@@ -483,7 +483,7 @@ function Product({product,v}:{product:ProductPageType,v: string}) {
                   animate={{ opacity: 1, height: 'auto' }}
                   exit={{ opacity: 0, height: 0 }}
                   transition={{ duration: 0.3 }}
-                  className={`${montserrat.className} text-[0.8rem] text-gray-600 font-thin overflow-hidden`}
+                  className={`${poppins.className} text-[0.8rem] text-gray-600 font-thin overflow-hidden`}
                   ref={shippingPolicyRef}
                 >
                   We offer free <Link href='/shipping-policy' className='text-blue-600 underline hover:text-blue-700 transition-colors duration-200'>shipping</Link> on all orders over ₹1500. For orders under ₹1500, shipping is a flat rate of ₹100.
@@ -502,7 +502,7 @@ function Product({product,v}:{product:ProductPageType,v: string}) {
           <div>
             <motion.div 
               whileHover={{ x: 2 }}
-              className={`${montserrat.className} text-[0.8rem] font-[500] my-2 uppercase flex justify-between cursor-pointer hover:text-gray-700 transition-colors duration-200`} 
+              className={`${poppins.className} text-[0.8rem] font-[500] my-2 uppercase flex justify-between cursor-pointer hover:text-gray-700 transition-colors duration-200`} 
               onClick={()=>setShowExchangeReturnPolicy(!showExchangeReturnPolicy)}
             >
               <span>Exchange and Return Policy</span>
@@ -516,7 +516,7 @@ function Product({product,v}:{product:ProductPageType,v: string}) {
                   animate={{ opacity: 1, height: 'auto' }}
                   exit={{ opacity: 0, height: 0 }}
                   transition={{ duration: 0.3 }}
-                  className={`${montserrat.className} text-[0.8rem] text-gray-600 font-thin overflow-hidden`}
+                  className={`${poppins.className} text-[0.8rem] text-gray-600 font-thin overflow-hidden`}
                   ref={exchangeReturnPolicyRef}
                 >
                   We offer free exchange and return on all orders.
@@ -535,7 +535,7 @@ function Product({product,v}:{product:ProductPageType,v: string}) {
           <div>
             <motion.div 
               whileHover={{ x: 2 }}
-              className={`${montserrat.className} text-[0.8rem] font-[500] my-2 uppercase flex justify-between cursor-pointer hover:text-gray-700 transition-colors duration-200`} 
+              className={`${poppins.className} text-[0.8rem] font-[500] my-2 uppercase flex justify-between cursor-pointer hover:text-gray-700 transition-colors duration-200`} 
               onClick={()=>setShowCustomization(!showCustomization)}
             >
               <span>Customization</span>
@@ -549,7 +549,7 @@ function Product({product,v}:{product:ProductPageType,v: string}) {
                   animate={{ opacity: 1, height: 'auto' }}
                   exit={{ opacity: 0, height: 0 }}
                   transition={{ duration: 0.3 }}
-                  className={`${montserrat.className} text-[0.8rem] text-gray-600 font-thin overflow-hidden`}
+                  className={`${poppins.className} text-[0.8rem] text-gray-600 font-thin overflow-hidden`}
                   ref={customizationRef}
                 >
                   email us at <Link href='mailto:customization@gmail.com' className='hover:text-blue-600 transition-colors duration-200'>customize@anira.shop</Link> to customize your product.

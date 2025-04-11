@@ -2,6 +2,7 @@ import Product from '@/components/Product'
 import Reviews from '@/components/Reviews'
 import SimilarProduct from '@/components/SimilarProduct'
 import { getProductBySlug } from '@/sanity/lib/products/getProductBySlug'
+import { cinzel } from '@/utils/font'
 import {  ChevronRight } from 'lucide-react'
 import React from 'react'
 
@@ -18,18 +19,20 @@ export default async function ProductPage({params,searchParams}:{params:Promise<
     const product = await getProductBySlug(productSlug);
     
   return (
-    <div className='px-4 lg:px-[5rem]'>
+    <div className='px-4 lg:px-[5rem] pt-4'>
         
         {/* {topCategory+"/"+subCategory+"/"+baseCategory+"/"+productSlug}  */}
-        <div className='flex items-center gap-2 text-[0.6rem] md:text-[0.8rem] font-thin text-zinc-500 mt-6 md:uppercase'>
+        <div className='flex items-center gap-2 text-[0.7rem] md:text-[0.8rem] font-thin text-black mt-6 uppercase'>
             <span className='cursor-pointer'>{topCategory.replaceAll("-"," ")}</span> 
-            <span><ChevronRight className='w-3 h-3'/></span>
+            <span>{">"}</span>
             <span className='cursor-pointer'>{subCategory.replaceAll("-"," ")}</span>
-            <span><ChevronRight className='w-3 h-3'/></span>
+            <span>{">"}</span>
             <span className='cursor-pointer'>{baseCategory.replaceAll("-"," ")}</span>
-            <span><ChevronRight className='w-3 h-3'/></span>
-            <span className='cursor-pointer'>{productSlug.replaceAll("-"," ")}</span>
+            <span>{">"}</span>
         </div>
+          <h1 className={`${cinzel.className} uppercase text-xl lg:text-2xl text-accent mt-6`}>
+            <span className='cursor-pointer'>{productSlug.replaceAll("-"," ")}</span>
+          </h1>
         {product &&
            <Product product={product} v={v}/>
         }        

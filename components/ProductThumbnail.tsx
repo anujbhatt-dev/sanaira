@@ -166,7 +166,7 @@ export default function ProductThumbnail({ product, index }: { product: ProductP
 
         <div className="flex gap-4 justify-between items-center">
           <p onClick={handleClick} className={`text-[0.7rem] md:text-xs flex items-end `}>
-            <span className="text-sm lg:text-[14px] flex items-center leading-0 tracking-widest">
+            <span className="text-[10px] lg:text-[14px] flex items-center leading-0 tracking-widest">
               {/* <IndianRupeeIcon className="w-4 h-4 " /> */}
               Rs. {(currentSize?.price ?? 0) - ((currentSize?.price ?? 0) * (currentSize?.discount ?? 0)) / 100}
             </span>
@@ -209,14 +209,14 @@ export default function ProductThumbnail({ product, index }: { product: ProductP
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 bg-black/30 flex items-center justify-end"
+            className={`${cinzel.className} fixed inset-0 z-50 bg-black/30 flex items-center justify-end ` }
           >
             <motion.div
               initial={{ x: '100%', opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
               exit={{ x: '100%', opacity: 0 }}
               transition={{ duration: 0.2 }}
-              className="bg-white rounded-l-xl shadow-lg w-full sm:w-[24rem] h-full overflow-y-auto"
+              className="bg-white shadow-lg w-full sm:w-[24rem] h-full overflow-y-auto relative"
             >
               <div className="flex flex-col h-full">
                 <div className="relative aspect-[9/13] w-full h-auto overflow-hidden">
@@ -229,9 +229,9 @@ export default function ProductThumbnail({ product, index }: { product: ProductP
                 </div>
 
                 <div className="flex flex-col justify-between gap-4 p-4 flex-1">
-                  <div>
-                    <h2 className="text-sm font-bold uppercase mb-1">{product.title}</h2>
-                    <p className="text-xs text-gray-600 mb-2">Color: {currentVariant?.color}</p>
+                  <div className='flex flex-col gap-y-1'>
+                    <h2 className="text-lg font-semibold uppercase mb-1 ">{product.title}</h2>
+                    <p className="text-xs text-gray-600 mb-2">{currentVariant?.color}</p>
 
                     {quickBuySize && (() => {
                       const size = currentVariant?.sizes?.find(s => s.size === quickBuySize);
@@ -239,15 +239,15 @@ export default function ProductThumbnail({ product, index }: { product: ProductP
                       const discount = size?.discount ?? 0;
                       const final = original - (original * discount) / 100;
                       return (
-                        <div className="text-xs mb-2">
-                          <p className="text-black font-semibold">
-                            ₹{final.toFixed(0)}{' '}
+                        <div className={`text-xl mb-2 ${poppins.className}`}>
+                          <p className="text-black">
+                            Rs. {final.toFixed(0)}{' '}
                             {discount > 0 && (
-                              <span className="line-through text-red-600 ml-2">₹{original}</span>
+                              <span className="line-through text-red-600 ml-2 text-xs">Rs. {original}</span>
                             )}
                           </p>
                           {discount > 0 && (
-                            <p className="text-[10px] text-green-600 font-semibold">({discount}% OFF)</p>
+                            <p className={`${cinzel.className} absolute top-0 left-0 pt-1 px-2 text-sm text-white bg-black m-2 `}>{discount}% OFF</p>
                           )}
                         </div>
                       );
@@ -310,7 +310,7 @@ export default function ProductThumbnail({ product, index }: { product: ProductP
                   </div>
 
                   <div className="flex justify-end gap-2 mt-6">
-                    <button onClick={() => setShowQuickBuy(false)} className="text-xs text-gray-500 hover:underline">
+                    <button onClick={() => setShowQuickBuy(false)} className="text-xs text-gray-500 hover:underline mr-4 ">
                       Cancel
                     </button>
                     <button
@@ -319,7 +319,7 @@ export default function ProductThumbnail({ product, index }: { product: ProductP
                         return selected && quantity > (selected.stock ?? 0);
                       })()}
                       onClick={handleQuickBuyCheckout}
-                      className="bg-black text-white text-xs px-4 py-2 rounded disabled:opacity-50 flex items-center gap-2"
+                      className="bg-accent text-white text-xs px-4 py-2 rounded disabled:opacity-50 flex items-center gap-2"
                     >
                       {isLoading && <span className="inline-block h-3 w-3 rounded-full border-2 border-white border-t-transparent animate-spin" />}
                       {isLoading ? 'Processing' : 'Checkout'}

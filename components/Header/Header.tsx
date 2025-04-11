@@ -19,14 +19,14 @@ const Header = ({  isPro }: IHeader) => {
 
   useEffect(() => {
     const handleScroll = () => {
-      const scrolledPast = window.scrollY > window.innerHeight;
+      const scrolledPast = window.scrollY > (window.innerHeight*0.9);
       setIsScrolled(scrolledPast);
     };
 
     handleScroll(); // run on mount
 
     window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll); 
   }, []);
 
   const solid = isScrolled || isHovered;
@@ -84,7 +84,7 @@ const Header = ({  isPro }: IHeader) => {
 
         <SignedIn>
         <div className="relative">
-            <div className="flex items-center space-x-4">
+            <div className="">
               <UserButton
                 appearance={{
                   elements: {
@@ -95,7 +95,7 @@ const Header = ({  isPro }: IHeader) => {
             </div>
 
           {isPro && (
-            <span className={`${poppins.className} bg-white absolute -bottom-1 right-0 px-1 text-blue-600 font-semibold rounded-lg text-[0.6rem] translate-x-[50%]`}>
+            <span className={`${poppins.className} bg-white absolute bottom-0 right-0 px-1 text-blue-600 font-semibold rounded-lg text-[0.6rem] translate-x-[50%]`}>
               Plus
             </span>
           )}
@@ -103,7 +103,7 @@ const Header = ({  isPro }: IHeader) => {
         </SignedIn>
 
         <Link href="/my-basket" className="relative flex items-center">
-          <ShoppingBag className="w-6 h-6 hover:text-gray-600 transition-colors" />
+          <ShoppingBag className="w-8 h-8 hover:text-accent transition-colors" />
           <TotalItemCount />
         </Link>
       </div>

@@ -4,7 +4,7 @@ import { useClerk, useUser } from "@clerk/nextjs"
 import { useEffect, useState } from "react"
 import { X } from "lucide-react"
 import Image from "next/image"
-import { mulish } from "@/utils/font"
+import { cinzel } from "@/utils/font"
 
 export default function ElegantWelcomePopup() {
   const { isSignedIn } = useUser()
@@ -37,7 +37,7 @@ export default function ElegantWelcomePopup() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className={`${mulish.className} fixed inset-0 z-50 bg-black/40 backdrop-blur-md`}
+            className={`${cinzel.className} fixed inset-0 z-50 bg-black/40 backdrop-blur-md`}
           />
           
           {/* Main popup - now larger */}
@@ -50,7 +50,7 @@ export default function ElegantWelcomePopup() {
               damping: 25,
               stiffness: 300
             }}
-            className={`${mulish.className} fixed inset-0 z-50 flex items-center justify-center p-4`}
+            className={`${cinzel.className} fixed inset-0 z-50 flex items-center justify-center p-4`}
           >
             <div className="relative w-full max-w-4xl h-[70vh] max-h-[700px] bg-white rounded-xl shadow-xl overflow-hidden border border-gray-200">
               {/* Close button */}
@@ -79,14 +79,14 @@ export default function ElegantWelcomePopup() {
                         openSignUp()
                         handleClose()
                       }}
-                      className="w-full bg-gray-900 text-white py-4 px-8 rounded-md hover:bg-gray-800 transition text-base font-medium tracking-wide"
+                      className="w-full bg-accent text-white py-4 px-8 rounded-md hover:bg-gray-800 transition text-base font-medium tracking-wide"
                     >
                       Join Now
                     </button>
                     
                     <button
                       onClick={handleClose}
-                      className="w-full border border-gray-300 py-4 px-8 rounded-md hover:bg-gray-50 transition text-base"
+                      className="w-full border border-accent py-4 px-8 rounded-md hover:bg-gray-50 transition text-base"
                     >
                       Continue Browsing
                     </button>
