@@ -10,24 +10,44 @@ import { cinzel } from "@/utils/font";
 const mediaArray = [
   {
     type: "image",
-    src: "/hero.png",
-  },
-  {
-    type: "video",
-    src: "https://anaira-assets.s3.ap-south-1.amazonaws.com/anaira-v1.mp4",
-  },  
-  {
-    type: "video",
-    src: "https://anaira-assets.s3.ap-south-1.amazonaws.com/anaira-v2.mp4",
-  },
-  {
-    type: "video",
-    src: "https://anaira-assets.s3.ap-south-1.amazonaws.com/anaira-v3.mp4",
+    src: "/hero8.png",
   },
   {
     type: "image",
-    src: "https://images.pexels.com/photos/1937336/pexels-photo-1937336.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+    src: "/hero.png",
   },
+  {
+    type: "image",
+    src: "/hero7.png",
+  },
+  {
+    type: "image",
+    src: "/her6.png",
+  },
+  {
+    type: "image",
+    src: "/her5.png",
+  },
+  {
+    type: "image",
+    src: "/hero4.png",
+  },
+  // {
+  //   type: "video",
+  //   src: "https://anaira-assets.s3.ap-south-1.amazonaws.com/anaira-v1.mp4",
+  // },  
+  // {
+  //   type: "video",
+  //   src: "https://anaira-assets.s3.ap-south-1.amazonaws.com/anaira-v2.mp4",
+  // },
+  // {
+  //   type: "video",
+  //   src: "https://anaira-assets.s3.ap-south-1.amazonaws.com/anaira-v3.mp4",
+  // },
+  // {
+  //   type: "image",
+  //   src: "https://images.pexels.com/photos/1937336/pexels-photo-1937336.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+  // },
 ];
 
 
@@ -38,7 +58,7 @@ const FullScreenMedia: React.FC = () => {
     if (isPaused) return;
     const interval = setInterval(() => {
       setCurrentIndex((prevIndex) => (prevIndex + 1) % mediaArray.length);
-    }, 10000);
+    }, 4000);
     return () => clearInterval(interval);
   }, [isPaused]);
 
