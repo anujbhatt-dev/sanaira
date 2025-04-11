@@ -3,7 +3,6 @@ import Reviews from '@/components/Reviews'
 import SimilarProduct from '@/components/SimilarProduct'
 import { getProductBySlug } from '@/sanity/lib/products/getProductBySlug'
 import { cinzel } from '@/utils/font'
-import {  ChevronRight } from 'lucide-react'
 import React from 'react'
 
 type ProductPageParamsType = {
