@@ -63,6 +63,7 @@ export const productType = defineType({
       name: 'video',
       title: 'Product Video (AWS S3 URL)',
       type: 'url',
+      initialValue:"https://anaira-assets.s3.ap-south-1.amazonaws.com/Download+(1).mp4",
       validation: Rule => Rule.uri({
         scheme: ['http', 'https'],
         allowRelative: false,

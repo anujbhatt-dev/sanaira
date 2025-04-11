@@ -8,7 +8,7 @@ import { ws } from '@/utils/font'
 
 
 export default function ProductGrid({products}:{products:ALL_PRODUCTS_QUERYResult}) {
-  const {productGridCols,setProductGridCols, productGridCols2, setProductGridCols2} = usePreferenceStore()
+  const {productGridCols,setProductGridCols} = usePreferenceStore()
   const gridStyle = {
     gridTemplateColumns: `repeat(${productGridCols}, minmax(0, 1fr))`
   };

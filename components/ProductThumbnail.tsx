@@ -28,6 +28,7 @@ export default function ProductThumbnail({ product, index }: { product: ProductP
   const currentVariant = product.variants?.[variantNumber];
   const currentSize = currentVariant?.sizes?.[0];
   const selectedImage = currentVariant?.variantImages?.[variantImage];
+  const selectedImage2 = currentVariant?.variantImages?.[1];
 
   const handleClick = () => {
     const path = product.productPath?.slice(0, 3).join('/');
@@ -112,17 +113,24 @@ export default function ProductThumbnail({ product, index }: { product: ProductP
               sizes="(max-width:760px) 100vw, (max-width:1200px) 50vw, 33vw"
             />
           ) : (
-            product.video && (
-              <video
-                className="w-full h-full object-cover"
-                src={product.video}
-                autoPlay
-                loop
-                muted
-                playsInline
-                preload="auto"
-              />
-            )
+            selectedImage2 && <Image
+              className="object-cover"
+              src={imageUrl(selectedImage2).url()}
+              alt={selectedImage2.alt || 'Product Image'}
+              fill
+              sizes="(max-width:760px) 100vw, (max-width:1200px) 50vw, 33vw"
+            />
+            // product.video && (
+            //   <video
+            //     className="w-full h-full object-cover"
+            //     src={product.video}
+            //     autoPlay
+            //     loop
+            //     muted
+            //     playsInline
+            //     preload="auto"
+            //   />
+            // )
           )}
         </div>
       </div>
@@ -198,11 +206,11 @@ export default function ProductThumbnail({ product, index }: { product: ProductP
       </div>
 
 
-      {currentSize?.discount && currentSize.discount > 0 && (
+      {/* {currentSize?.discount && currentSize.discount > 0 && (
         <div onClick={handleClick} className={`${cinzel.className} absolute top-0 left-0 pt-1 px-2 text-sm text-white bg-black m-2 `}>
           {currentSize.discount}%
         </div>
-      )}
+      )} */}
       <AnimatePresence>
         {showQuickBuy && selectedImage && (
           <motion.div
