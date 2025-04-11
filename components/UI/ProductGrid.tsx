@@ -23,7 +23,7 @@ export default function ProductGrid({products}:{products:ALL_PRODUCTS_QUERYResul
                 <span className='text-black/50'>VIEW</span>
                 <span>|</span>
                 <div className='hidden lg:flex gap-3'>
-                {[3,4,5,6].map((val)=>(
+                {[2,3,4,5,6].map((val)=>(
                   <span className={`${val==productGridCols?"text-black":"text-black/50"} cursor-pointer hover:scale-105 transition-all duration-75 font-semibold ${ws.className}`} key={"ProdctGridKey"+val} onClick={()=>setProductGridCols(val || 4)}>{val}</span>
                 ))}
                 </div>
