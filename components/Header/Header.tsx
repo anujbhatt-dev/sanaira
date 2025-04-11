@@ -35,14 +35,14 @@ const Header = ({ categories, isPro }: IHeader) => {
     <header
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      className={`px-6 lg:px-20 mx-auto flex justify-between h-16 fixed top-0 w-full z-50 items-center text-black transition-colors duration-300 ${cinzel.className}
-        ${solid ? "bg-[#f5f5dc]/90 backdrop-blur-md" : "lg:bg-transparent lg:backdrop-blur-none bg-[#f5f5dc]/90 backdrop-blur-md"}
+      className={`px-6 lg:px-20 mx-auto flex justify-between h-16 fixed top-0 w-full z-50 items-center transition-colors duration-300 ${cinzel.className}
+        ${solid ? "bg-zinc-900 backdrop-blur-md text-white" : "lg:bg-transparent lg:backdrop-blur-none bg-zinc-900 backdrop-blur-md text-black"}
       `}
     >
       {/* Logo */}
       <Link
         href="/"
-        className="text-2xl font-medium tracking-widest uppercase hover:text-gray-600 transition-colors"
+        className="text-2xl font-medium tracking-widest uppercase transition-colors"
       >
         Anaira
       </Link>
@@ -53,7 +53,7 @@ const Header = ({ categories, isPro }: IHeader) => {
           <Link
             href={`/category/${category.slug?.current}`}
             key={category._id}
-            className="text-sm uppercase tracking-wider hover:text-gray-600 transition-colors"
+            className="text-sm uppercase tracking-wider hover:text-accent hover:scale-105 transition-colors"
           >
             {category.name}
           </Link>
@@ -67,12 +67,12 @@ const Header = ({ categories, isPro }: IHeader) => {
         <SignedOut>
           <div className="hidden sm:flex space-x-3">
             <SignUpButton mode="modal">
-              <button className="text-sm uppercase tracking-wider px-3 py-1 hover:text-gray-600 transition-colors">
+              <button className="text-sm uppercase tracking-wider px-3 py-1 hover:text-accent hover:scale-105 transition-colors">
                 Sign Up
               </button>
             </SignUpButton>
             <SignInButton mode="modal">
-              <button className="text-sm uppercase tracking-wider border border-black px-3 py-1 hover:bg-black hover:text-white transition-colors">
+              <button className="text-sm uppercase tracking-wider border border-black px-3 py-1 hover:bg-black hover:text-accent transition-colors">
                 Sign In
               </button>
             </SignInButton>
@@ -93,7 +93,7 @@ const Header = ({ categories, isPro }: IHeader) => {
           </SignedIn>
 
           {isPro && (
-            <span className="bg-black absolute -bottom-1 right-0 px-1 text-white font-semibold rounded-full text-[0.5rem] translate-x-[50%]">
+            <span className="bg-accent absolute -bottom-1 right-0 px-1 text-white font-semibold rounded-full text-[0.5rem] translate-x-[50%]">
               PRO
             </span>
           )}

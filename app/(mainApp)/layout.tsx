@@ -36,7 +36,7 @@ export default async function RootLayout({
     <ClerkProvider dynamic>
       <html lang="en">
         <body
-          className={`${poppins.className} antialiased bg-[white] overflow-x-hidden`}
+          className={`${poppins.className} antialiased bg-[#e6dfc5]/10 overflow-x-hidden`}
         >
           <Header categories={ALL_FEATURED_CATEGORY} isPro={isPro}/>
           <div className="h-[4rem]"></div>

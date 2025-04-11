@@ -6,7 +6,7 @@ import Image from 'next/image';
 import { imageUrl } from '@/lib/imageUrl';
 import { ProductPageType } from '@/types';
 import { useRouter } from 'next/navigation';
-import { poppins, ws, cinzel } from '@/utils/font';
+import { poppins, ws, cinzel, montserrat, plfd } from '@/utils/font';
 import Head from 'next/head';
 import { useAuth, useUser, SignInButton } from '@clerk/nextjs';
 import axios from 'axios';
@@ -85,7 +85,7 @@ export default function ProductThumbnail({ product, index }: { product: ProductP
   return (
     <motion.div
       key={product._id}
-      className={`relative overflow-hidden bg-white cursor-pointer ${cinzel.className}`}
+      className={`relative overflow-hidden cursor-pointer ${poppins.className}`}
       initial={{ opacity: 0, x: index % 2 === 0 ? 50 : -50 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ delay: index * 0.1, type: 'spring', stiffness: 50 }}
@@ -127,8 +127,8 @@ export default function ProductThumbnail({ product, index }: { product: ProductP
         </div>
       </div>
 
-      <div className="p-1 bg-white backdrop-blur-sm text-black w-full ">        
-        <h3 className="text-[12px] lg:text-[14px] uppercase truncate mt-2" title={product.title || 'Untitled Product'}>
+      <div className="p-1 backdrop-blur-sm text-black w-full ">        
+        <h3 className="text-[12px] lg:text-[12px] uppercase truncate mt-2 tracking-wide font-medium" title={product.title || 'Untitled Product'}>
           {product.title || 'Untitled Product'}
         </h3>
 
@@ -164,7 +164,7 @@ export default function ProductThumbnail({ product, index }: { product: ProductP
             </div>
           </div>
 
-        <div className="flex gap-4 justify-between items-baseline">
+        <div className="flex gap-4 justify-between items-center">
           <p className={`text-[0.7rem] md:text-xs flex items-end `}>
             <span className="text-sm lg:text-[14px] flex items-center leading-0 tracking-widest">
               {/* <IndianRupeeIcon className="w-4 h-4 " /> */}
@@ -181,14 +181,14 @@ export default function ProductThumbnail({ product, index }: { product: ProductP
           {isSignedIn ? (
             <button
               onClick={() => setShowQuickBuy(true)}
-              className={`${ws.className} lg:gap-x-2 p-2 lg:px-4 bg-[#fcfcf1] hover:bg-[#ffffa2] text-[0.8rem] uppercase  tracking-widest flex items-center cursor-pointer hover:bg-beige/90 transition-all duration-200`}
+              className={` lg:gap-x-2 p-2  bg-accent hover:bg-zinc-900 hover:text-white text-white text-[0.5rem] uppercase  tracking-widest flex items-center cursor-pointer hover:bg-beige/90 transition-all duration-200 font-semibold mr-1`}
               title="Quick Buy"
             >
               <Plus className="font-semibold h-3 w-3 lg:hidden" /> <span className="hidden lg:flex">Quick Buy</span>
             </button>
           ) : (
             <SignInButton mode="modal">
-              <button className={`${ws.className} lg:gap-x-2 p-2 lg:px-4 bg-[#fcfcf1] hover:bg-[#ffffa2] text-[0.8rem] uppercase  tracking-widest flex items-center cursor-pointer hover:bg-beige/90 transition-all duration-200`}>
+              <button className={`${ws.className} lg:gap-x-2 p-2  bg-accent hover:bg-zinc-900 hover:text-white text-white text-[0.8rem] uppercase  tracking-widest flex items-center cursor-pointer hover:bg-beige/90 transition-all duration-200  mr-1`}>
                 <Plus className="font-semibold h-3 w-3 lg:hidden" /> <span className="hidden lg:flex">Quick Buy</span>
               </button>
             </SignInButton>
@@ -199,7 +199,7 @@ export default function ProductThumbnail({ product, index }: { product: ProductP
 
 
       {currentSize?.discount && currentSize.discount > 0 && (
-        <div className={`${poppins.className} absolute top-0 left-0 p-1 px-2 text-sm text-white bg-black m-2`}>
+        <div className={`${cinzel.className} absolute top-0 left-0 pt-1 px-2 text-sm text-white bg-black m-2 `}>
           {currentSize.discount}%
         </div>
       )}
