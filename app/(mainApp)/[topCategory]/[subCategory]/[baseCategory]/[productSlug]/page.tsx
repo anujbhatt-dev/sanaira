@@ -18,7 +18,7 @@ export default async function ProductPage({params,searchParams}:{params:Promise<
     const product = await getProductBySlug(productSlug);
     
   return (
-    <div className='px-4 lg:px-[5rem] pt-4'>
+    <div className='px-4 lg:px-[5rem]'>
         
         {/* {topCategory+"/"+subCategory+"/"+baseCategory+"/"+productSlug}  */}
         <div className='flex items-center gap-2 text-[0.7rem] md:text-[0.8rem] font-thin text-black mt-6 uppercase'>

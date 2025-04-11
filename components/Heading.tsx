@@ -1,24 +1,40 @@
 "use client";
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import gsap from "gsap"
+import gsap from "gsap";
 
-// Register ScrollTrigger
-gsap.registerPlugin(ScrollTrigger);
+// Register plugins once
+if (typeof window !== "undefined") {
+  gsap.registerPlugin(ScrollTrigger);
+}
 
 interface HeadingProps {
   text: string;
+  className?: string;
 }
 
-const Heading: React.FC<HeadingProps> = ({ text }) => {
+const Heading: React.FC<HeadingProps> = ({ text, className = "" }) => {
   const lettersRef = useRef<HTMLSpanElement[]>([]);
   const containerRef = useRef<HTMLHeadingElement>(null);
+  const animationRef = useRef<gsap.core.Tween | null>(null);
 
   useGSAP(() => {
-    if (!containerRef.current) return;
+    if (!containerRef.current || lettersRef.current.length === 0) return;
 
-    const animation = gsap.from(lettersRef.current, {
+    // Clear any existing animations
+    if (animationRef.current) {
+      animationRef.current.kill();
+    }
+
+    // Reset initial state
+    gsap.set(lettersRef.current, {
+      y: 0,
+      opacity: 1,
+    });
+
+    // Create new animation
+    animationRef.current = gsap.from(lettersRef.current, {
       y: 100,
       opacity: 0,
       stagger: 0.05,
@@ -26,30 +42,52 @@ const Heading: React.FC<HeadingProps> = ({ text }) => {
       ease: "power3.out",
       scrollTrigger: {
         trigger: containerRef.current,
-        start: "top 80%", // Starts animation when 80% of the element is visible
-        toggleActions: "play none none reverse", // Play on enter, reverse on leave        
+        start: "top 80%",
+        end: "bottom 20%",
+        toggleActions: "play none none none",
+        markers: false, // Set to true for debugging
+        invalidateOnRefresh: true, // Important for responsive changes
       },
     });
 
-    // Cleanup the animation and scroll trigger
+    // Refresh ScrollTrigger after a short delay to ensure proper calculation
+    const refreshTimer = setTimeout(() => {
+      ScrollTrigger.refresh();
+    }, 100);
+
     return () => {
-      animation.kill(); // Kill the GSAP animation
-      ScrollTrigger.getAll().forEach(trigger => trigger.kill()); // Kill all active scroll triggers
+      clearTimeout(refreshTimer);
+      if (animationRef.current) {
+        animationRef.current.kill();
+      }
+      ScrollTrigger.getAll().forEach(trigger => {
+        if (trigger.trigger === containerRef.current) {
+          trigger.kill();
+        }
+      });
     };
+  }, [text]); // Re-run effect when text changes
+
+  // Additional refresh on mount
+  useEffect(() => {
+    const handle = setTimeout(() => ScrollTrigger.refresh(), 500);
+    return () => clearTimeout(handle);
   }, []);
 
   return (
     <h1
       ref={containerRef}
-      className=" uppercase tracking-widest flex overflow-hidden my-4 lg:my-8"
+      className={`uppercase tracking-widest flex flex-wrap overflow-hidden my-4 lg:my-8 ${className}`}
+      aria-label={text}
     >
       {text.split("").map((letter, index) => (
         <span
-          key={index}
+          key={`${letter}-${index}`}
           ref={(el) => {
             if (el) lettersRef.current[index] = el;
           }}
-          className={`inline-block ${letter === " " && "w-4"}`}
+          className={`inline-block ${letter === " " ? "w-4" : ""}`}
+          aria-hidden="true"
         >
           {letter}
         </span>
@@ -59,6 +97,3 @@ const Heading: React.FC<HeadingProps> = ({ text }) => {
 };
 
 export default Heading;
-
-
-// md:text-[3rem] text-[1rem]

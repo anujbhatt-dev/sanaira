@@ -7,7 +7,6 @@ import { imageUrl } from '@/lib/imageUrl';
 import { ProductPageType } from '@/types';
 import { useRouter } from 'next/navigation';
 import { poppins, ws, cinzel } from '@/utils/font';
-import Head from 'next/head';
 import { useAuth, useUser, SignInButton } from '@clerk/nextjs';
 import axios from 'axios';
 
@@ -16,7 +15,6 @@ export default function ProductThumbnail({ product, index }: { product: ProductP
   const [isClient, setIsClient] = useState(false);
   const [variantNumber, setVariantNumber] = useState<number>(0);
   const [variantImage, setVariantImage] = useState<number>(0);
-  const [isVideovisble, setIsVideoVisible] = useState(false);
   const [showQuickBuy, setShowQuickBuy] = useState(false);
   const [quickBuySize, setQuickBuySize] = useState<string | null>(null);
   const [quantity, setQuantity] = useState<number>(1);
@@ -28,7 +26,6 @@ export default function ProductThumbnail({ product, index }: { product: ProductP
   const currentVariant = product.variants?.[variantNumber];
   const currentSize = currentVariant?.sizes?.[0];
   const selectedImage = currentVariant?.variantImages?.[variantImage];
-  const selectedImage2 = currentVariant?.variantImages?.[1];
 
   const handleClick = () => {
     const path = product.productPath?.slice(0, 3).join('/');
@@ -91,46 +88,21 @@ export default function ProductThumbnail({ product, index }: { product: ProductP
       animate={{ opacity: 1, x: 0 }}
       transition={{ delay: index * 0.1, type: 'spring', stiffness: 50 }}
     >
-      {product.video && (
-        <Head>
-          <link rel="preload" as="video" href={product.video} type="video/mp4" />
-        </Head>
-      )}
-
       <div
         className="relative aspect-[9/13] w-full overflow-hidden"
         onClick={handleClick}
-        onMouseEnter={() => setIsVideoVisible(true)}
-        onMouseLeave={() => setIsVideoVisible(false)}
       >
         <div className="absolute inset-0">
-          {!isVideovisble && selectedImage ? (
+          {selectedImage && (
             <Image
+              onMouseOver={()=>setVariantImage(1)}
+              onMouseLeave={()=>setVariantImage(0)}
               className="object-cover"
               src={imageUrl(selectedImage).url()}
               alt={selectedImage.alt || 'Product Image'}
               fill
               sizes="(max-width:760px) 100vw, (max-width:1200px) 50vw, 33vw"
             />
-          ) : (
-            selectedImage2 && <Image
-              className="object-cover"
-              src={imageUrl(selectedImage2).url()}
-              alt={selectedImage2.alt || 'Product Image'}
-              fill
-              sizes="(max-width:760px) 100vw, (max-width:1200px) 50vw, 33vw"
-            />
-            // product.video && (
-            //   <video
-            //     className="w-full h-full object-cover"
-            //     src={product.video}
-            //     autoPlay
-            //     loop
-            //     muted
-            //     playsInline
-            //     preload="auto"
-            //   />
-            // )
           )}
         </div>
       </div>
@@ -205,12 +177,6 @@ export default function ProductThumbnail({ product, index }: { product: ProductP
         
       </div>
 
-
-      {/* {currentSize?.discount && currentSize.discount > 0 && (
-        <div onClick={handleClick} className={`${cinzel.className} absolute top-0 left-0 pt-1 px-2 text-sm text-white bg-black m-2 `}>
-          {currentSize.discount}%
-        </div>
-      )} */}
       <AnimatePresence>
         {showQuickBuy && selectedImage && (
           <motion.div
@@ -339,9 +305,6 @@ export default function ProductThumbnail({ product, index }: { product: ProductP
           </motion.div>
         )}
       </AnimatePresence>
-
-
-
     </motion.div>
   );
 }

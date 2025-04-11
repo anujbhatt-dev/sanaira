@@ -36,7 +36,7 @@ const Header = ({  isPro }: IHeader) => {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       className={`px-8 py-4 mx-auto flex justify-between fixed top-0 w-full z-50 items-center transition-all duration-200 ${cinzel.className}
-        ${solid ? "bg-[#7E6B5E] text-white" : "bg-transparent lg:text-black text-white"}
+        ${solid ? "bg-[#7E6B5E] text-white" : "bg-transparent text-black"}
       `}
     >
       {/* Logo */}

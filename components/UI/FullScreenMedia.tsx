@@ -58,10 +58,10 @@ const FullScreenMedia: React.FC = () => {
         <motion.div
           className="absolute top-0 left-0 w-full h-full"
           key={currentIndex}
-          initial={{ opacity: 0 }}
+          initial={{ opacity: 0.9 }}
           animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: TRANSITION_DURATION, ease: "easeInOut" }}
+          exit={{ opacity: 0.9 }}
+          transition={{ duration: TRANSITION_DURATION, ease: "linear" }}
         >
           {currentMedia.type === "image" ? (
             <Image
@@ -96,7 +96,7 @@ const FullScreenMedia: React.FC = () => {
 
       <button
         onClick={togglePause}
-        className="absolute left-2 bottom-2 bg-opacity-50 rounded-full hover:bg-opacity-75 transition-all z-10 h-[2rem] w-[2rem] flex justify-center items-center text-[1rem]"
+        className="absolute left-2 bottom-2 bg-opacity-50 rounded-full hover:bg-opacity-75 transition-all z-20 h-[2rem] w-[2rem] flex justify-center items-center text-[1rem]"
       >
         {isPaused ? <Play /> : <Pause />}
       </button>
