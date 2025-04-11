@@ -11,8 +11,8 @@ type Store = {
 export const usePreferenceStore = create<Store>()(
   persist(
     (set) => ({
-      productGridCols: 4, // Default value
-      productGridCols2: 3, // Default value
+      productGridCols: 3, // Default value
+      productGridCols2: 2, // Default value
       setProductGridCols: (cols) => set({ productGridCols: cols }),
       setProductGridCols2: (cols) => set({ productGridCols: cols }),
     }),

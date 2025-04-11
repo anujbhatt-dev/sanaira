@@ -8,10 +8,11 @@ import { ws } from '@/utils/font'
 
 
 export default function ProductGrid({products}:{products:ALL_PRODUCTS_QUERYResult}) {
-  const {productGridCols,setProductGridCols} = usePreferenceStore()
+  const {productGridCols,setProductGridCols, productGridCols2, setProductGridCols2} = usePreferenceStore()
   const gridStyle = {
     gridTemplateColumns: `repeat(${productGridCols}, minmax(0, 1fr))`
   };
+  
   return (
     <div >
       <div className='flex items-center justify-end text-[0.8rem] md:text-lg'>

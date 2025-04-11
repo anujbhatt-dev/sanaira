@@ -35,8 +35,8 @@ const Header = ({  isPro }: IHeader) => {
     <header
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      className={`px-8 py-4 mx-auto flex justify-between fixed top-0 w-full z-50 items-center transition-all duration-200 border-b-4 border-[#574235] lg:border-b-0 ${cinzel.className}
-        ${solid ? "bg-[#7E6B5E] text-white" : "lg:bg-transparent bg-[#7E6B5E] lg:text-black text-white"}
+      className={`px-8 py-4 mx-auto flex justify-between fixed top-0 w-full z-50 items-center transition-all duration-200 ${cinzel.className}
+        ${solid ? "bg-[#7E6B5E] text-white" : "bg-transparent lg:text-black text-white"}
       `}
     >
       {/* Logo */}
@@ -84,7 +84,7 @@ const Header = ({  isPro }: IHeader) => {
 
         <SignedIn>
         <div className="relative">
-            <div className="">
+            <div className="flex justify-center items-center">
               <UserButton
                 appearance={{
                   elements: {
@@ -95,7 +95,7 @@ const Header = ({  isPro }: IHeader) => {
             </div>
 
           {isPro && (
-            <span className={`${poppins.className} bg-white absolute bottom-0 right-0 px-1 text-blue-600 font-semibold rounded-lg text-[0.6rem] translate-x-[50%]`}>
+            <span className={`${poppins.className} bg-white absolute -bottom-2 right-0 px-1 text-blue-600 font-semibold rounded-lg text-[0.6rem] translate-x-[50%]`}>
               Plus
             </span>
           )}
