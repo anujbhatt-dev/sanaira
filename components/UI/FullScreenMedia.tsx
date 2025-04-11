@@ -12,7 +12,6 @@ const mediaArray = [
   { type: "image", src: "/hero7.png" },
   { type: "image", src: "/hero6.png" },
   { type: "image", src: "/hero9.png" },
-  { type: "image", src: "/hero4.png" },
 ];
 
 const FullScreenMedia: React.FC = () => {
