@@ -1,7 +1,7 @@
 import React from 'react'
 import Heading from './Heading'
 import { getAllProducts } from '@/sanity/lib/products/getAllProducts';
-import ProductGrid from './ProductGrid';
+import ProductGrid from './UI/ProductGrid';
 
 
 export default async function SimilarProduct() {

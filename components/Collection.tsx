@@ -1,11 +1,13 @@
-import { getCollectionBySlug } from '@/sanity/lib/collections/getCollectionBySlug';
+
+"use client"
 import Heading from './Heading'
 import React from 'react'
-import ProductGrid from './ProductGrid';
-import { ALL_PRODUCTS_QUERYResult } from '@/sanity.types';
+import ProductGrid from './UI/ProductGrid';
+import { ALL_PRODUCTS_QUERYResult, COLLECTION_BY_SLUG_QUERYResult } from '@/sanity.types';
 import { cinzel } from '@/utils/font';
-export default async function Collection({slug}:{slug:string}) {
-  const collection = await getCollectionBySlug(slug);
+
+
+export default function Collection({collection}:{collection:COLLECTION_BY_SLUG_QUERYResult}) {  
   const products = collection?.products;
   return (
         <div className='px-[0.2rem] md:px-[2rem] py-[1rem]'>
@@ -17,7 +19,7 @@ export default async function Collection({slug}:{slug:string}) {
                     <Heading text={collection?.title || ""}/>
                     </div>
                 </div>
-                <ProductGrid products={products as ALL_PRODUCTS_QUERYResult}/>            
+                    <ProductGrid products={products as ALL_PRODUCTS_QUERYResult}/>            
                 </div>
             )
         }        

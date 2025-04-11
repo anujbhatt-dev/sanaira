@@ -1,6 +1,6 @@
 import { getAllProducts } from '@/sanity/lib/products/getAllProducts';
 import React from 'react'
-import ProductGrid from './ProductGrid';
+import ProductGrid from './UI/ProductGrid';
 import Heading from './Heading';
 import { cinzel } from '@/utils/font';
 

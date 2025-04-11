@@ -1,5 +1,5 @@
 import Heading from '@/components/Heading';
-import ProductGrid from '@/components/ProductGrid';
+import ProductGrid from '@/components/UI/ProductGrid';
 import { getSearchedProducts } from '@/sanity/lib/products/getSearchProducts';
 import React from 'react'
 

@@ -3,9 +3,8 @@ import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { Pause, Play } from "lucide-react";
-import Heading from "./Heading";
+import Heading from "../Heading";
 import { cinzel } from "@/utils/font";
-// import { useCursorStore } from "@/store/useCursorStore";
 
 
 const mediaArray = [
@@ -52,7 +51,7 @@ const FullScreenMedia: React.FC = () => {
   return (
     <div
     
-    className="h-[calc(100vh)] relative overflow-hidden flex items-start justify-end  text-white text-right -mt-[4rem]" >
+    className="h-[calc(70vh)] lg:h-[calc(100vh)] relative overflow-hidden flex items-start justify-end  text-white text-right -mt-[4rem]" >
       {/* Background Media */}
       <motion.div
         className="absolute top-0 left-0 w-full h-full"
