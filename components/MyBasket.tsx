@@ -10,15 +10,34 @@ import { IndianRupee, Trash2 } from "lucide-react";
 import { SignedIn, SignedOut, SignInButton, useAuth, useUser } from "@clerk/nextjs";
 import axios from 'axios'
 import {Metadata} from "@/types"
+import {load} from "@cashfreepayments/cashfree-js"
 
 export default function MyBasket() {
     const [isClient, setIsClient] = useState(false);
     const { items, incrementQuantity, decrementQuantity, removeGroupedItem } = useBasketStore();
     const [loading,setLoading] = useState(false);
-    const  {user} = useUser()
+    // const [orderId,setOrderId] = useState("")
+    const {user} = useUser()
     const {isSignedIn} = useAuth()
+
+    let cashfree: {
+        checkout: (options: {
+          paymentSessionId: string;
+          redirectTarget: string;
+          returnUrl?: string;
+        }) => void;
+      };
+
+    const initializeSDK = async () => {
+        cashfree = await load({
+            mode:"production"
+        })
+    }
     
-    const handleCheckout = async () => {
+    initializeSDK();
+
+
+    const handleStripeCheckout = async () => {
         if(!isSignedIn){
             return 
         }
@@ -45,6 +64,40 @@ export default function MyBasket() {
         } finally{
             setLoading(false)
         }
+    }
+
+    if(0) handleStripeCheckout()
+
+    const getSessionId = async () =>{
+        try {
+            const res = await axios.post("/cashfree-checkout/payment");
+            if(res.data) return res.data
+        } catch (error) {
+            console.log("getSessionId "+error);            
+        }
+        
+    }
+
+    const handleCashfreeCheckout = async () =>{
+        setLoading(true);
+        try {
+            const sessionId = await getSessionId();
+            const checkoutOptions = {
+                paymentSessionId:sessionId as string,
+                redirectTarget:"_modal" as string
+            }
+
+            const paymentInitialize = await cashfree.checkout(checkoutOptions)
+            console.log("payment initialize" , paymentInitialize);
+            
+            
+        } catch (error) {
+            console.log(error);
+            
+        } finally{
+            setLoading(false);
+        }
+
     }
 
     useEffect(() => {
@@ -181,7 +234,7 @@ export default function MyBasket() {
                                     </p>
                                     <SignedIn>
                                         <button 
-                                            onClick={handleCheckout} 
+                                            onClick={handleCashfreeCheckout} 
                                             className="bg-black text-white px-4 py-3 md:py-2 rounded-sm hover:bg-gray-800 transition-all duration-300 cursor-pointer w-full"
                                         >
                                             Checkout
