@@ -8,6 +8,67 @@ export const orderType = defineType({
   icon: BasketIcon,
   fields: [
     defineField({
+      name: "paymentProvider",
+      title: "Payment Provider",
+      type: "string",
+      options: {
+        list: [
+          { title: "Stripe", value: "stripe" },
+          { title: "Cashfree", value: "cashfree" },
+          { title: "COD", value: "cod" },
+        ],
+      },
+      validation: (Rule) => Rule.required(),
+    }),
+    defineField({
+      name: "cashfreeOrderId",
+      title: "Cashfree Order ID",
+      type: "string",
+    }),
+    defineField({
+      name: "shiprocketShipmentId",
+      title: "Shiprocket Shipment ID",
+      type: "string",
+    }),
+    defineField({
+      name: "trackingLink",
+      title: "Tracking Link",
+      type: "url",
+    }),  
+    defineField({
+      name: "paymentStatus",
+      title: "Payment Status",
+      type: "string",
+      options: {
+        list: [
+          { title: "Pending", value: "pending" },
+          { title: "Paid", value: "paid" },
+          { title: "Failed", value: "failed" },
+        ],
+      },
+    }),
+    defineField({
+      name: "notes",
+      title: "Internal Notes",
+      type: "text",
+    }),
+    defineField({
+      name: "shipmentStatus",
+      title: "Shipment Status",
+      type: "string",
+      options: {
+        list: [
+          { title: "Pending", value: "pending" },
+          { title: "Processing", value: "processing" },
+          { title: "In Transit", value: "in_transit" },
+          { title: "Delivered", value: "delivered" },
+          { title: "Cancelled", value: "cancelled" },
+          { title: "RTO Initiated", value: "rto_initiated" },
+          { title: "Returned", value: "returned" },
+        ],
+      },
+    }),         
+    defineField({
       name: "orderNumber",
       title: "Order Number",
       type: "string",
@@ -126,27 +187,11 @@ export const orderType = defineType({
       validation: (Rule) => Rule.min(0),
     }),
     defineField({
-      name: "status",
-      title: "Order Status",
-      type: "string",
-      options: {
-        list: [
-          { title: "Pending", value: "pending" },
-          { title: "Paid", value: "paid" },
-          { title: "Shipped", value: "shipped" },
-          { title: "Delivered", value: "delivered" },
-          { title: "Cancelled", value: "cancelled" },
-        ],
-      },
-      validation: (Rule) => Rule.required(),
-    }),
-    defineField({
       name: "orderDate",
       title: "Order Date",
       type: "datetime",
       validation: (Rule) => Rule.required(),
-    }),
-    // Refund fields
+    }),    
     defineField({
       name: "refundStatus",
       title: "Refund Status",

@@ -5,7 +5,7 @@ import { useBasketStore } from "@/store/useBasketStore";
 import Image from "next/image";
 import { imageUrl } from "@/lib/imageUrl";
 import Link from "next/link";
-import { mulish } from "@/utils/font";
+import { cinzel, mulish } from "@/utils/font";
 import { IndianRupee, Trash2 } from "lucide-react";
 import { SignedIn, SignedOut, SignInButton, useAuth, useUser } from "@clerk/nextjs";
 import axios from 'axios'
@@ -135,23 +135,23 @@ export default function MyBasket() {
         <div className={`${mulish.className} px-[0.5rem] md:px-[2rem] max-w-[1400px] mx-auto tracking-wide pb-24 md:pb-0`}>
             {items.length > 0 ? (
                 <div className="mt-6 min-h-[calc(100vh-4rem)]">
-                    <div className="flex items-center justify-center gap-2 text-2xl">                        
-                        <Heading text="My Basket" />
+                    <div className={`${cinzel.className} text-xl md:text-4xl flex items-center justify-center gap-x-4`}>
+                        <Heading text="My Basket"/>
                     </div>
-                    
-                    <div className="flex flex-col md:flex-row gap-4 mt-4">
+                                
+                    <div className="flex flex-col md:flex-row gap-4 mt-4 ">
                         <div className="flex-1">
-                            <div className="hidden md:grid grid-cols-8 gap-4 uppercase text-gray-600 text-sm mt-4 px-2 mb-4">
+                            <div className={`${cinzel.className} hidden md:grid grid-cols-8 gap-4 uppercase text-gray-600 text-sm mt-4 px-2 mb-4`}>
                                 <p>Image</p>
                                 <p className="col-span-3">Details</p>
                                 <p className="col-span-3">Quantity</p>
-                                <p className="col-span-1">Total Price</p>
+                                <p className="col-span-1">Price</p>
                             </div>
                             
                             {items.map((item, i) => (
                                 <div
                                     key={item.product._id + i}
-                                    className="grid grid-cols-8 gap-4 transition-shadow items-start py-2 pt-4 bg-zinc-50 relative mb-4"
+                                    className="grid grid-cols-8 gap-4 transition-shadow items-start py-2 pt-4 bg-white relative mb-4 shadow-sm border border-gray-200"
                                 >
                                     <div className="absolute bottom-0 right-0 m-2 cursor-pointer">
                                         <button className="text-gray-600 hover:text-black transition-colors" onClick={() => removeGroupedItem(item.product._id, item.size, item.color)}>
@@ -225,12 +225,15 @@ export default function MyBasket() {
                         </div>
                         
                         {/* Checkout section - fixed at bottom on mobile, normal position on desktop */}
-                        <div className="fixed bottom-0 left-0 right-0 md:static md:w-80 bg-white shadow-lg md:shadow-none z-10 p-2 md:p-0">
-                            <div className="max-w-[1200px] mx-auto md:mx-0 md:sticky md:top-[5rem]">
-                                <div className="flex flex-col gap-4 bg-zinc-100 p-4">
-                                    <p className="text-gray-600 text-sm uppercase">Total Price</p>
+                        <div className="fixed bottom-0 left-0 right-0 md:static md:w-80 z-10 md:p-0">
+                            <div className={`${cinzel.className} hidden md:grid grid-cols-8 gap-4 uppercase text-gray-600 text-sm mt-4 px-2 mb-4`}>
+                                <p className="text-gray-600 text-sm uppercase text-nowrap">Total Amount</p>
+                            </div>
+                            <div className="max-w-[1200px] mx-auto md:mx-0 md:sticky md:top-[5rem] shadow-sm border border-gray-200">
+                                <div className="flex flex-col gap-4 bg-white p-4">                          
                                     <p className="text-black font-semibold text-md flex items-center gap-1">
-                                        <IndianRupee className="w-4 h-4" /> {totalPrice}
+                                        <span className="font-thin mr-2 md:hidden">Total Amount: </span>          
+                                        Rs. {totalPrice}
                                     </p>
                                     <SignedIn>
                                         <button 
