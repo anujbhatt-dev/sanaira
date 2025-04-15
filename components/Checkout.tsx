@@ -112,6 +112,14 @@ export default function Checkout() {
         setIsSubmitting(false)
     }, 1000)
     try {
+      const cart_items = items.map((item)=>{
+        return {
+          item_id:item.product._id,
+          item_name:item.product.title,
+          item_discounted_unit_price: item.price ,
+          item_quantity:item.quantity
+        }
+      })
       const orderData = {
         paymentProvider: paymentMethod,
         paymentStatus: paymentMethod === "cod" ? "pending" : "pending", // Will update after payment
@@ -133,7 +141,11 @@ export default function Checkout() {
         currency: "INR",
         orderDate: new Date().toISOString(),
         shippingDetails: shippingAddress,
-        shipmentStatus: "pending"
+        shipmentStatus: "pending",
+        cart_details:{
+          cart_name:"My Cart",
+          cart_items
+        }
       };
 
       if (paymentMethod === "cod") {

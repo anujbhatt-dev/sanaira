@@ -107,7 +107,107 @@ export const userType = defineType({
         }),
       ],
     }),
+    // Wishlist
+    defineField({
+      name: "wishlist",
+      title: "Wishlist",
+      type: "array",
+      of: [
+        {
+          type: "object",
+          fields: [
+            {
+              name: "product",
+              title: "Product",
+              type: "reference",
+              to: [{ type: "product" }],
+              validation: (Rule) => Rule.required(),
+            },
+            {
+              name: "addedAt",
+              title: "Added At",
+              type: "datetime",
+              initialValue: (new Date()).toISOString(),
+            },
+            {
+              name: "variant",
+              title: "Variant",
+              type: "object",
+              fields: [
+                {
+                  name: "color",
+                  title: "Color",
+                  type: "string",
+                },
+                {
+                  name: "size",
+                  title: "Size",
+                  type: "string",
+                },
+              ],
+            },
+          ],
+          preview: {
+            select: {
+              title: "product.title",
+              subtitle: "variant.color",
+              media: "product.variants.0.variantImages.0",
+            },
+            prepare(selection) {
+              const { title, subtitle, media } = selection;
+              return {
+                title: title || "Unnamed Product",
+                subtitle: subtitle ? `Color: ${subtitle}` : "No variant selected",
+                media,
+              };
+            },
+          },
+        },
+      ],
+    }),
 
+    // Recently Viewed
+    defineField({
+      name: "recentlyViewed",
+      title: "Recently Viewed Products",
+      type: "array",
+      of: [
+        {
+          type: "object",
+          fields: [
+            {
+              name: "product",
+              title: "Product",
+              type: "reference",
+              to: [{ type: "product" }],
+              validation: (Rule) => Rule.required(),
+            },
+            {
+              name: "viewedAt",
+              title: "Viewed At",
+              type: "datetime",
+              initialValue: (new Date()).toISOString(),
+            },
+          ],
+          preview: {
+            select: {
+              title: "product.title",
+              subtitle: "viewedAt",
+              media: "product.variants.0.variantImages.0",
+            },
+            prepare(selection) {
+              const { title, subtitle, media } = selection;
+              return {
+                title: title || "Unnamed Product",
+                subtitle: `Viewed: ${new Date(subtitle).toLocaleDateString()}`,
+                media,
+              };
+            },
+          },
+        },
+      ],
+      validation: (Rule) => Rule.max(20),      
+    }),
     // Future: Orders and address reference (optional for later use)
     defineField({
       name: "orders",

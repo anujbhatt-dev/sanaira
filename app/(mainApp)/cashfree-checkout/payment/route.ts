@@ -1,4 +1,6 @@
+import { backendClient } from "@/sanity/lib/backendClient";
 import { Cashfree } from "cashfree-pg"; 
+
 
 Cashfree.XClientId = process.env.PROD_CASHFREE_CLIENT_ID
 Cashfree.XClientSecret = process.env.PROD_CASHFREE_CLIENT_SECRET
@@ -6,7 +8,7 @@ Cashfree.XEnvironment = Cashfree.Environment.PRODUCTION;
 
 export async function POST(req:Request) {
     const body = await req.json()
-    console.log(body);    
+    console.log(body.cart_details.cart_items);    
     // try {
     //     const request = {
     //         "order_amount": 1,
