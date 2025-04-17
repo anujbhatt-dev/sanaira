@@ -132,6 +132,13 @@ export type Order = {
   _createdAt: string;
   _updatedAt: string;
   _rev: string;
+  paymentProvider?: "stripe" | "cashfree" | "cod";
+  cashfreeOrderId?: string;
+  shiprocketShipmentId?: string;
+  trackingLink?: string;
+  paymentStatus?: "pending" | "paid" | "failed";
+  notes?: string;
+  shipmentStatus?: "pending" | "processing" | "in_transit" | "delivered" | "cancelled" | "rto_initiated" | "returned";
   orderNumber?: string;
   stripeCheckoutSessionId?: string;
   stripeCustomerId?: string;
@@ -155,7 +162,6 @@ export type Order = {
   totalPrice?: number;
   currency?: string;
   amountDiscount?: number;
-  status?: "pending" | "paid" | "shipped" | "delivered" | "cancelled";
   orderDate?: string;
   refundStatus?: "not_requested" | "requested" | "refunded" | "denied";
   refundAmount?: number;
@@ -219,6 +225,65 @@ export type ShippingAddress = {
   provinceOrRegion?: string;
   postalCode?: string;
   country?: "IN" | "US" | "UK" | "CA" | "AU" | "DE" | "FR" | "AE";
+};
+
+export type User = {
+  _id: string;
+  _type: "user";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  clerkUserId?: string;
+  createdAt?: string;
+  lastActiveAt?: string;
+  imageUrl?: string;
+  firstName?: string;
+  lastName?: string;
+  primaryEmail?: string;
+  phone?: string;
+  shippingDetails?: {
+    name?: string;
+    phone?: string;
+    address?: {
+      line1?: string;
+      line2?: string;
+      city?: string;
+      state?: string;
+      postal_code?: string;
+      country?: string;
+    };
+  };
+  wishlist?: Array<{
+    product?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "product";
+    };
+    addedAt?: string;
+    variant?: {
+      color?: string;
+      size?: string;
+    };
+    _key: string;
+  }>;
+  recentlyViewed?: Array<{
+    product?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "product";
+    };
+    viewedAt?: string;
+    _key: string;
+  }>;
+  orders?: Array<{
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    _key: string;
+    [internalGroqTypeReferenceTo]?: "order";
+  }>;
 };
 
 export type Product = {
@@ -305,16 +370,6 @@ export type Product = {
     keywords?: Array<string>;
   };
   accessControl?: "public" | "private";
-};
-
-export type User = {
-  _id: string;
-  _type: "user";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  email?: string;
-  phone?: string;
 };
 
 export type Category = {
@@ -480,7 +535,7 @@ export type SanityImageMetadata = {
   isOpaque?: boolean;
 };
 
-export type AllSanitySchemaTypes = SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityFileAsset | Geopoint | Collection | Order | Sale | ShippingAddress | Product | User | Category | Slug | BlockContent | SanityImageCrop | SanityImageHotspot | SanityImageAsset | SanityAssetSourceData | SanityImageMetadata;
+export type AllSanitySchemaTypes = SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityFileAsset | Geopoint | Collection | Order | Sale | ShippingAddress | User | Product | Category | Slug | BlockContent | SanityImageCrop | SanityImageHotspot | SanityImageAsset | SanityAssetSourceData | SanityImageMetadata;
 export declare const internalGroqTypeReferenceTo: unique symbol;
 // Source: ./sanity/lib/categories/getAllCategory.ts
 // Variable: ALL_CATEGORIES_QUERY
@@ -788,7 +843,7 @@ export type MY_ORDERS_QUERYResult = Array<{
   totalPrice: number | null;
   currency: string | null;
   amountDiscount: number | null;
-  status: "cancelled" | "delivered" | "paid" | "pending" | "shipped" | null;
+  status: null;
   orderDate: string | null;
   refundStatus: "denied" | "not_requested" | "refunded" | "requested" | null;
   refundAmount: number | null;
