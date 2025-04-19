@@ -10,6 +10,7 @@ import Footer from "@/components/Footer";
 import WelcomePopup from "@/components/WelcomePopup";
 import { currentUser } from "@clerk/nextjs/server";
 import { getAllFeaturedCategories } from "@/sanity/lib/categories/getAllFeaturedCategories";
+import { UserProvider } from "@/components/Providers/UserProvider";
 
 
 export const metadata: Metadata = {
@@ -38,6 +39,7 @@ export default async function RootLayout({
         <body
           className={`${poppins.className} antialiased bg-[#f7f2e9] overflow-x-hidden`}
         >
+          <UserProvider/>
           <Header categories={ALL_FEATURED_CATEGORY} isPro={isPro}/>
           <div className="h-[4rem]"></div>
           {children}

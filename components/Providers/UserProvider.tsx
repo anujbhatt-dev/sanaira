@@ -2,57 +2,31 @@
 
 import { useEffect } from "react";
 import { useUser as useClerkUser } from "@clerk/nextjs";
-import { useUserStore } from "@/store/useUserStore";
 import axios from "axios";
 
-export const UserProvider = ({ children }: { children: React.ReactNode }) => {
+
+
+export const UserProvider = () => {
   const { isLoaded, isSignedIn, user } = useClerkUser();
 
-  const setUser = useUserStore((state) => state.setUser);
-  const clearUser = useUserStore((state) => state.clearUser);
-
   useEffect(() => {
-    const syncUser = async () => {
-      if (!isSignedIn || !user) {
-        clearUser();
-        return;
-      }
-
+    const fetchUser = async () => {
       try {
-        const res = await axios.get("/api/user", {
-          params: {
-            clerkUserId: user.id,
-          },
-        });
-
-        if (res.data?.user) {
-          setUser(res.data.user);
-        } else {
-          // fallback to base user format if not found
-          setUser({
-            clerkUserId: user.id,
-            createdAt: user.createdAt?.toISOString?.(),
-            lastActiveAt: user.lastActiveAt?.toISOString?.(),
-            imageUrl: user.imageUrl,
-            firstName: user.firstName,
-            lastName: user.lastName,
-            primaryEmail: user.primaryEmailAddress?.emailAddress,
-            phone: user.phoneNumbers?.[0]?.phoneNumber,
-            shippingDetails: {},
-            wishlist: [],
-            recentlyViewed: [],
-            orders: [],
+        if (isSignedIn && user) {
+          const res = await axios.post("/api/user/user-details", {
+            user
           });
+          console.log("User details response:", res.data);
         }
-      } catch (err) {
-        console.error("Failed to fetch user from Sanity:", err);
+      } catch (error) {
+        console.error("Error fetching user details:", error);
       }
     };
 
     if (isLoaded) {
-      syncUser();
+      fetchUser();
     }
-  }, [isLoaded, isSignedIn, user, setUser, clearUser]);
+  }, [isLoaded, isSignedIn, user]);
 
-  return <>{children}</>;
+  return null;
 };
