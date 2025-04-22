@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 import { toast } from "sonner";
 import Heading from "./Heading";
+import {load} from "@cashfreepayments/cashfree-js"
 
 type PaymentMethod = "cod" | "cashfree";
 
@@ -29,6 +30,22 @@ export default function Checkout() {
   const { user } = useUser();
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  let cashfree: {
+        checkout: (options: {
+          paymentSessionId: string;
+          redirectTarget: string;
+          returnUrl?: string;
+        }) => void;
+      };
+
+    const initializeSDK = async () => {
+        cashfree = await load({
+            mode:"production"
+        })
+    }
+
+    initializeSDK();
   
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("cod");
   const [shippingAddress, setShippingAddress] = useState<ShippingAddress>({
@@ -161,35 +178,52 @@ export default function Checkout() {
           toast.success("COD order placed successfully!");
           console.log(response.data);
           
-          clearBasket();
-          router.push(`/order-confirmation/${response.data.order._id}`);
+          // clearBasket();
+          // router.push(`/order-confirmation/${response.data.order._id}`);
         } else {
           toast.error("Failed to place COD order. Please try again.");
         }
       } else {
         // Create temporary order for Cashfree payment
-        const tempOrderResponse = await axios.post("/api/orders/temp", {
-          ...orderData,
-          paymentStatus: "pending"
-        });
+        // const tempOrderResponse = await axios.post("/api/orders/temp", {
+        //   ...orderData,
+        //   paymentStatus: "pending"
+        // });
         
-        if (tempOrderResponse.data.success) {
-          // Initiate Cashfree payment
-          const paymentResponse = await axios.post("/api/cashfree/payment", {
-            orderId: tempOrderResponse.data.order._id,
-            amount: grandTotal,
-            customerDetails: {
-              name: shippingAddress.name,
-              phone: shippingAddress.phone,
-              email: user?.emailAddresses[0].emailAddress
-            }
-          });
+        // if (tempOrderResponse.data.success) {
+        //   // Initiate Cashfree payment
+        //   const paymentResponse = await axios.post("/api/cashfree/payment", {
+        //     orderId: tempOrderResponse.data.order._id,
+        //     amount: grandTotal,
+        //     customerDetails: {
+        //       name: shippingAddress.name,
+        //       phone: shippingAddress.phone,
+        //       email: user?.emailAddresses[0].emailAddress
+        //     }
+        //   });
           
-          if (paymentResponse.data.paymentLink) {
-            window.location.href = paymentResponse.data.paymentLink;
-          } else {
-            toast.error("Failed to initiate payment. Please try again.");
-          }
+        //   if (paymentResponse.data.paymentLink) {
+        //     window.location.href = paymentResponse.data.paymentLink;
+        //   } else {
+        //     toast.error("Failed to initiate payment. Please try again.");
+        //   }
+        // }
+
+        // setLoading(true);
+        try {
+            const res = await axios.post("/cashfree-checkout/payment", orderData);
+            const sessionId = res.data
+            const checkoutOptions = {
+                paymentSessionId:sessionId as string,
+                redirectTarget:"_modal" as string
+            }
+            const paymentInitialize = await cashfree.checkout(checkoutOptions)
+            console.log("payment initialize" , paymentInitialize);
+        } catch (error) {
+            console.log(error);
+            
+        } finally{
+            // setLoading(false);
         }
       }
     } catch (error) {
