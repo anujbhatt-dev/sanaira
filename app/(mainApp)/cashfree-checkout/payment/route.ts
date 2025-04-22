@@ -9,7 +9,7 @@ Cashfree.XEnvironment = Cashfree.Environment.PRODUCTION;
 export async function POST(req: Request) {
   const body = await req.json();
   const cartItems = body.cart_details.cart_items as CartItem[]
-  const shippingDetails = body.shippingDetails
+//   const shippingDetails = body.shippingDetails
   
   console.log(body.cart_details.cart_items);
 
@@ -97,16 +97,16 @@ export async function POST(req: Request) {
      await updateProductStocks(sanityProducts)
      return Response.json({ success: true, order });
   }else{
-    const cashfreeCartItems = cartItems.map((item)=>{
-        return {
-            "item_id":item.item_id,
-            "item_name":item.item_name,
-            "item_original_unit_price":item.item_discounted_unit_price,
-            "item_discounted_unit_price":item.item_original_unit_price,
-            "item_quantity":item.item_quantity,
-            "item_tags":item.item_tags as string[]
-        }
-    })
+    // const cashfreeCartItems = cartItems.map((item)=>{
+    //     return {
+    //         "item_id":item.item_id,
+    //         "item_name":item.item_name,
+    //         "item_original_unit_price":item.item_discounted_unit_price,
+    //         "item_discounted_unit_price":item.item_original_unit_price,
+    //         "item_quantity":item.item_quantity,
+    //         "item_tags":item.item_tags as string[]
+    //     }
+    // })
 
     try {
             const request = {
