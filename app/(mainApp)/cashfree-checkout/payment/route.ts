@@ -9,7 +9,8 @@ Cashfree.XEnvironment = Cashfree.Environment.PRODUCTION;
 export async function POST(req: Request) {
   const body = await req.json();
   const cartItems = body.cart_details.cart_items as CartItem[]
-//   const shippingDetails = body.shippingDetails
+  const shippingDetails = body.shippingDetails
+  
   console.log(body.cart_details.cart_items);
 
   if(cartItems.length===0){
@@ -96,6 +97,16 @@ export async function POST(req: Request) {
      await updateProductStocks(sanityProducts)
      return Response.json({ success: true, order });
   }else{
+    const cashfreeCartItems = cartItems.map((item)=>{
+        return {
+            "item_id":item.item_id,
+            "item_name":item.item_name,
+            "item_original_unit_price":item.item_discounted_unit_price,
+            "item_discounted_unit_price":item.item_original_unit_price,
+            "item_quantity":item.item_quantity,
+            "item_tags":item.item_tags as string[]
+        }
+    })
 
     try {
             const request = {
@@ -104,29 +115,21 @@ export async function POST(req: Request) {
                 "order_id": orderData.orderNumber, // ✅ Unique with crypto
                 "customer_details": {
                     "customer_id": orderData.customerName,
-                    "customer_phone": orderData.shippingDetails.phone
+                    "customer_phone": orderData.shippingDetails.phone,
+                    "customer_shipping_address":{
+                        "full_name":shippingDetails.name,
+                        "country":shippingDetails.address.country,
+                        "city":shippingDetails.address.city,
+                        "state":shippingDetails.address.state,
+                        "pincode":shippingDetails.address.postal_code,
+                        "address_1":shippingDetails.address.line1,
+                        "address_2":shippingDetails.address.line_2
+                    }
                 },
-                // "cart_details":{
-                //     "cart_items":cartItems.map((item)=>{
-                //         return {
-                //             "item_id":item.item_id,
-                //             "item_name":item.item_name,
-                //             "item_original_unit_price":item.item_discounted_unit_price,
-                //             "item_discounted_unit_price":item.item_original_unit_price,
-                //             "item_quantity":item.item_quantity,
-                //             "item_tags":item.item_tags as string[]
-                //         }
-                //     }),
-                //     "customer_shipping_address":{
-                //         "full_name":shippingDetails.name,
-                //         "country":shippingDetails.address.country,
-                //         "city":shippingDetails.address.city,
-                //         "state":shippingDetails.address.state,
-                //         "pincode":shippingDetails.address.postal_code,
-                //         "address_1":shippingDetails.address.line1,
-                //         "address_2":shippingDetails.address.line_2
-                //     }
-                // }
+                "cart_details":{
+                    "cart_items":cashfreeCartItems
+                    
+                }
             };
 
             const orderCashfree = await Cashfree.PGCreateOrder("2023-08-01", request)
