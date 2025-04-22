@@ -134,7 +134,7 @@ export async function POST(req: Request) {
         }catch (error) {
             if(error instanceof Error){
                 console.log("cashfree error", error);
-                return new Response("Cashfree order error", { status: 500 });
+                return new Response("Cashfree order error " + error , { status: 500 });
             }
         } 
   }
