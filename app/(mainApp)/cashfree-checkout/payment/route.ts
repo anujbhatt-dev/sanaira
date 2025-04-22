@@ -96,32 +96,47 @@ export async function POST(req: Request) {
      return Response.json({ success: true, order });
   }else{
 
-    // try {
-    //         const request = {
-    //             "order_amount": orderData.totalPrice,
-    //             "order_currency": "INR",
-    //             "order_id": orderData.orderNumber, // ✅ Unique with crypto
-    //             "customer_details": {
-    //                 "customer_id": orderData.customerName,
-    //                 "customer_phone": orderData.shippingDetails.phone
-    //             }
-    //         };
+    try {
+            const request = {
+                "order_amount": orderData.totalPrice,
+                "order_currency": "INR",
+                "order_id": orderData.orderNumber, // ✅ Unique with crypto
+                "customer_details": {
+                    "customer_id": orderData.customerName,
+                    "customer_phone": orderData.shippingDetails.phone
+                },
+                "cart_details":{
+                    "cart_items":cartItems.map((item)=>{
+                        return {
+                            "item_id":item.item_id,
+                            "item_name":item.item_name,
+                            "item_original_unit_price":item.item_discounted_unit_price,
+                            "item_discounted_unit_price":item.item_original_unit_price,
+                            "item_quantity":item.item_quantity,
+                            "item_tags":item.item_tags as string[]
+                        }
+                    }),
+                    "customer_shipping_address":{
 
-    //         const order = await Cashfree.PGCreateOrder("2023-08-01", request)
+                    }
+                }
+            };
 
-    //         if(order){
-    //             console.log('Order Created successfully:',order.data)
-    //             console.log("session id ", order.data.payment_session_id);            
-    //             return new Response(order.data.payment_session_id,{status:201,headers:{'Content-Type':"application/json"}})
-    //         }  
-    //         return new Response("Not successs", {status:400})   
+            const orderCashfree = await Cashfree.PGCreateOrder("2023-08-01", request)
 
-    //     }catch (error) {
-    //         if(error instanceof Error){
-    //             console.log("cashfree error", error);
-    //             return new Response("Cashfree order error", { status: 500 });
-    //         }
-    //     } 
+            if(orderCashfree){
+                console.log('Order Created successfully:',orderCashfree.data)
+                console.log("session id ", orderCashfree.data.payment_session_id);            
+                return new Response(orderCashfree.data.payment_session_id,{status:201,headers:{'Content-Type':"application/json"}})
+            }  
+            return new Response("Not successs", {status:400})   
+
+        }catch (error) {
+            if(error instanceof Error){
+                console.log("cashfree error", error);
+                return new Response("Cashfree order error", { status: 500 });
+            }
+        } 
   }
 
   return Response.json({ success: true, updatedUser: patchResponse });
