@@ -177,9 +177,10 @@ export default function Checkout() {
         if (response.data.success) {
           toast.success("COD order placed successfully!");
           console.log(response.data);
-          
-          // clearBasket();
-          // router.push(`/order-confirmation/${response.data.order._id}`);
+          if(0){
+            clearBasket();
+            router.push(`/order-confirmation/${response.data.order._id}`);
+          }
         } else {
           toast.error("Failed to place COD order. Please try again.");
         }
