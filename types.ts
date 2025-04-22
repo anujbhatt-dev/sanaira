@@ -2,6 +2,15 @@ import { Product } from "./sanity.types";
 
 export  type ProductPageType = Omit<Product, "productPath"> & {productPath: (string | null)[];}
 
+export interface CartItem {
+  item_id: string;
+  item_name: string;
+  item_discounted_unit_price: number;
+  item_original_unit_price: number;
+  item_quantity: number;
+  item_tags: (string | number)[];
+}
+
 export interface UserI {
     _id: string;
     _type: "user";

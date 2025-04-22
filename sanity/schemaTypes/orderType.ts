@@ -78,13 +78,11 @@ export const orderType = defineType({
       name: "stripeCheckoutSessionId",
       title: "Stripe Checkout Session ID",
       type: "string",
-      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: "stripeCustomerId",
       title: "Stripe Customer ID",
       type: "string",
-      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: "clerkUserId",
@@ -108,7 +106,6 @@ export const orderType = defineType({
       name: "stripePaymentIntentId",
       title: "Stripe Payment Intent ID",
       type: "string",
-      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: "products",

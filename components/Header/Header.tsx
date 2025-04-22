@@ -35,7 +35,7 @@ const Header = ({  isPro }: IHeader) => {
     <header
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      className={`px-8 py-4 mx-auto flex justify-between fixed top-0 w-full z-50 items-center transition-all duration-200 ${cinzel.className}
+      className={`px-4 pr-6 lg:px-8 py-4 mx-auto flex justify-between fixed top-0 w-full z-50 items-center transition-all duration-200 ${cinzel.className}
         ${solid ? "bg-[#7E6B5E] text-white" : "bg-transparent text-black"}
       `}
     >
@@ -83,6 +83,7 @@ const Header = ({  isPro }: IHeader) => {
         </SignedOut>
 
         <SignedIn>
+        <Link className="text-xs font-semibold" href={"/my-orders"}>My Orders</Link>
         <div className="relative">
             <div className="flex justify-center items-center">
               <UserButton

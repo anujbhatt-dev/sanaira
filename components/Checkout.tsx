@@ -24,6 +24,14 @@ interface ShippingAddress {
   };
 }
 
+interface CART_ITEM_I {
+  item_id:string,
+  item_name:string,
+  item_discounted_unit_price: number ,
+  item_quantity:number,
+  item_image_url:string
+}
+
 export default function Checkout() {
   const { items, clearBasket } = useBasketStore();
   const { user } = useUser();
@@ -46,7 +54,7 @@ export default function Checkout() {
 
 
   const totalPrice = items.reduce((acc, item) => acc + item.price * item.quantity, 0);
-  const shippingCharge = totalPrice > 1000 ? 0 : 50;
+  const shippingCharge = totalPrice > 1000 ? 0 : 100;
   const grandTotal = totalPrice + shippingCharge;
 
   const handleAddressChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -112,18 +120,23 @@ export default function Checkout() {
         setIsSubmitting(false)
     }, 1000)
     try {
-      const cart_items = items.map((item)=>{
+        const cart_items = items.map((item)=>{
+                const matchingSize = item.product?.variants?.flatMap(variant => variant.sizes || [])
+          .find(size => size.sku === item.sku);
+
+        const discount = matchingSize?.discount || 0;
         return {
           item_id:item.product._id,
           item_name:item.product.title,
           item_discounted_unit_price: item.price ,
-          item_quantity:item.quantity
+          itme_original_unit_price: discount ? Math.round((item.price * 100) / (100 - discount)) : item.price,
+          item_quantity:item.quantity,
+          item_tags:[item.product._id, item.color, item.price, item.quantity,item.size,item.sku, discount]
         }
       })
       const orderData = {
         paymentProvider: paymentMethod,
         paymentStatus: paymentMethod === "cod" ? "pending" : "pending", // Will update after payment
-        orderNumber: `ORD-${Date.now()}`,
         clerkUserId: user?.id,
         customerName: shippingAddress.name,
         email: user?.emailAddresses[0].emailAddress,
@@ -154,6 +167,8 @@ export default function Checkout() {
         
         if (response.data.success) {
           toast.success("COD order placed successfully!");
+          console.log(response.data);
+          
           clearBasket();
           router.push(`/order-confirmation/${response.data.order._id}`);
         } else {
