@@ -9,7 +9,7 @@ Cashfree.XEnvironment = Cashfree.Environment.PRODUCTION;
 export async function POST(req: Request) {
   const body = await req.json();
   const cartItems = body.cart_details.cart_items as CartItem[]
-  const shippingDetails = body.shippingDetails
+//   const shippingDetails = body.shippingDetails
   console.log(body.cart_details.cart_items);
 
   if(cartItems.length===0){
