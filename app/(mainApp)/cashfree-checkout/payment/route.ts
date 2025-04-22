@@ -53,7 +53,7 @@ export async function POST(req: Request) {
             _type: "reference",
             _ref: productRef,
         },
-        sku,
+        sku:sku as string,
         color,
         quantity: item.item_quantity,
         price: item.item_discounted_unit_price,
@@ -92,9 +92,36 @@ export async function POST(req: Request) {
         _type:"order",
         ...orderData
      })
-     return Response.json({ success: true, orderData });
+     await updateProductStocks(sanityProducts)
+     return Response.json({ success: true, order });
   }else{
 
+    // try {
+    //         const request = {
+    //             "order_amount": orderData.totalPrice,
+    //             "order_currency": "INR",
+    //             "order_id": orderData.orderNumber, // ✅ Unique with crypto
+    //             "customer_details": {
+    //                 "customer_id": orderData.customerName,
+    //                 "customer_phone": orderData.shippingDetails.phone
+    //             }
+    //         };
+
+    //         const order = await Cashfree.PGCreateOrder("2023-08-01", request)
+
+    //         if(order){
+    //             console.log('Order Created successfully:',order.data)
+    //             console.log("session id ", order.data.payment_session_id);            
+    //             return new Response(order.data.payment_session_id,{status:201,headers:{'Content-Type':"application/json"}})
+    //         }  
+    //         return new Response("Not successs", {status:400})   
+
+    //     }catch (error) {
+    //         if(error instanceof Error){
+    //             console.log("cashfree error", error);
+    //             return new Response("Cashfree order error", { status: 500 });
+    //         }
+    //     } 
   }
 
   return Response.json({ success: true, updatedUser: patchResponse });
@@ -104,30 +131,53 @@ export async function POST(req: Request) {
 
 
 
+async function updateProductStocks(products: {
+    product: { _ref: string };
+    sku?: string;
+    quantity: number;
+  }[]) {
+    for (const item of products) {
+      const { _ref } = item.product;
+      const sku = item.sku;
+      const quantity = item.quantity;
+  
+      if (!sku || !quantity) continue;
+  
+      const product = await backendClient.fetch(
+        `*[_type == "product" && _id == $id][0]`,
+        { id: _ref }
+      );
+  
+      if (!product || !product.variants) continue;
+  
+      let updated = false;
+  
+      for (const [variantIndex, variant] of product.variants.entries()) {
+        for (const [sizeIndex, size] of (variant.sizes ?? []).entries()) {
+          if (size.sku === sku) {
+            const newStock = Math.max(0, (size.stock ?? 0) - quantity);
+  
+            await backendClient.patch(product._id)
+              .set({
+                [`variants[${variantIndex}].sizes[${sizeIndex}].stock`]: newStock
+              })
+              .commit();
+  
+            console.log(`Stock updated for SKU ${sku}: ${size.stock} → ${newStock}`);
+            updated = true;
+            break;
+          }
+        }
+        if (updated) break;
+      }
+  
+      if (!updated) {
+        console.warn(`SKU ${sku} not found in product ${_ref}`);
+      }
+    }
+  }
 
-// try {
-    //     const request = {
-    //         "order_amount": 1,
-    //         "order_currency": "INR",
-    //         "order_id": `order_${crypto.randomUUID()}`, // ✅ Unique with crypto
-    //         "customer_details": {
-    //             "customer_id": "aj",
-    //             "customer_phone": "7895339580"
-    //         }
-    //     };
 
-    //     const order = await Cashfree.PGCreateOrder("2023-08-01", request)
 
-    //     if(order){
-    //         console.log('Order Created successfully:',order.data)
-    //         console.log("session id ", order.data.payment_session_id);            
-    //         return new Response(order.data.payment_session_id,{status:201,headers:{'Content-Type':"application/json"}})
-    //     }  
-    //     return new Response("Not successs", {status:400})   
 
-    // }catch (error) {
-    //     if(error instanceof Error){
-    //         console.log("cashfree error", error);
-    //         return new Response("Cashfree order error", { status: 500 });
-    //     }
-    // } 
+

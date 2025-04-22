@@ -24,14 +24,6 @@ interface ShippingAddress {
   };
 }
 
-interface CART_ITEM_I {
-  item_id:string,
-  item_name:string,
-  item_discounted_unit_price: number ,
-  item_quantity:number,
-  item_image_url:string
-}
-
 export default function Checkout() {
   const { items, clearBasket } = useBasketStore();
   const { user } = useUser();
@@ -415,7 +407,7 @@ export default function Checkout() {
               
               {paymentMethod === "cashfree" && (
                 <div className="mt-4 p-4 bg-gray-50 rounded-md">
-                  <p className="text-sm mb-2">You'll be redirected to Cashfree for secure payment after submitting your order.</p>
+                  <p className="text-sm mb-2">You&apaos;ll be redirected to Cashfree for secure payment after submitting your order.</p>
                 </div>
               )}
             </div>

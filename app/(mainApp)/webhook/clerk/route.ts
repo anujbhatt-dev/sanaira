@@ -61,7 +61,7 @@ export async function POST(req: Request) {
 
     return NextResponse.json({ message: "Unhandled event type" }, { status: 200 });
 
-  } catch (error: any) {
+  } catch (error) {
     console.error("Clerk webhook error:", error);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
