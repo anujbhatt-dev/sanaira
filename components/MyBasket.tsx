@@ -11,8 +11,6 @@ import { SignedIn, SignedOut, SignInButton, useAuth, useUser } from "@clerk/next
 import axios from 'axios'
 import {Metadata} from "@/types"
 import {load} from "@cashfreepayments/cashfree-js"
-import { useRouter } from "next/navigation";
-
 
 export default function MyBasket() {
     const [isClient, setIsClient] = useState(false);
@@ -21,7 +19,6 @@ export default function MyBasket() {
     // const [orderId,setOrderId] = useState("")
     const {user} = useUser()
     const {isSignedIn} = useAuth()
-    const router  = useRouter();
 
     let cashfree: {
         checkout: (options: {
@@ -70,7 +67,7 @@ export default function MyBasket() {
     }
 
     if(0) handleStripeCheckout()
-
+    
     const getSessionId = async () =>{
         try {
             const res = await axios.post("/cashfree-checkout/payment");
@@ -82,8 +79,6 @@ export default function MyBasket() {
     }
 
     const handleCashfreeCheckout = async () =>{
-        router.push('/checkout')
-        return 
         setLoading(true);
         try {
             const sessionId = await getSessionId();
