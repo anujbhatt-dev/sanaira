@@ -128,36 +128,17 @@ export const userType = defineType({
               title: "Added At",
               type: "datetime",
               initialValue: (new Date()).toISOString(),
-            },
-            {
-              name: "variant",
-              title: "Variant",
-              type: "object",
-              fields: [
-                {
-                  name: "color",
-                  title: "Color",
-                  type: "string",
-                },
-                {
-                  name: "size",
-                  title: "Size",
-                  type: "string",
-                },
-              ],
-            },
+            }            
           ],
           preview: {
             select: {
               title: "product.title",
-              subtitle: "variant.color",
               media: "product.variants.0.variantImages.0",
             },
             prepare(selection) {
               const { title, subtitle, media } = selection;
               return {
                 title: title || "Unnamed Product",
-                subtitle: subtitle ? `Color: ${subtitle}` : "No variant selected",
                 media,
               };
             },

@@ -8,7 +8,7 @@ Cashfree.XEnvironment = Cashfree.Environment.PRODUCTION;
 
 export async function POST(req:Request) {
     const body = await req.json()
-    console.log(body.cart_details.cart_items);    
+    console.log(body);    
     // try {
     //     const request = {
     //         "order_amount": 1,
@@ -35,5 +35,7 @@ export async function POST(req:Request) {
     //         return new Response("Cashfree order error", { status: 500 });
     //     }
     // } 
+
+    
     return Response.json("grt")
 }
