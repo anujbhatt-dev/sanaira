@@ -161,14 +161,14 @@ export default function ProductThumbnail({ product, index }: { product: ProductP
           {isSignedIn ? (
             <button
               onClick={() => setShowQuickBuy(true)}
-              className={` lg:gap-x-2 p-1  bg-accent hover:bg-zinc-900 hover:text-white  text-white text-[0.6rem] uppercase  tracking-widest flex items-center cursor-pointer hover:bg-beige/90 transition-all duration-200 font-semibold `}
+              className={` lg:gap-x-2 p-2 lg:p-4 lg:px-8  bg-accent hover:bg-zinc-900 hover:text-white  text-white text-[0.6rem] uppercase  tracking-widest flex items-center cursor-pointer hover:bg-beige/90 transition-all duration-200 font-semibold `}
               title="Quick Buy"
             >
               <Plus className="font-semibold h-3 w-3 lg:hidden" /> <span className="hidden lg:flex">Quick Buy</span>
             </button>
           ) : (
             <SignInButton mode="modal">
-              <button className={`${ws.className} lg:gap-x-2 p-1  bg-accent hover:bg-zinc-900 hover:text-white  text-white text-[0.6rem] uppercase  tracking-widest flex items-center cursor-pointer hover:bg-beige/90 transition-all duration-200  `}>
+              <button className={`${ws.className} lg:gap-x-2 p-2 lg:p-4 lg:px-8  bg-accent hover:bg-zinc-900 hover:text-white  text-white text-[0.6rem] uppercase  tracking-widest flex items-center cursor-pointer hover:bg-beige/90 transition-all duration-200  `}>
                 <Plus className="font-semibold h-3 w-3 lg:hidden" /> <span className="hidden lg:flex">Quick Buy</span>
               </button>
             </SignInButton>
