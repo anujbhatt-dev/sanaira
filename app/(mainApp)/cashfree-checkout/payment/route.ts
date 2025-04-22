@@ -116,20 +116,19 @@ export async function POST(req: Request) {
                 "customer_details": {
                     "customer_id": orderData.customerName,
                     "customer_phone": orderData.shippingDetails.phone,
-                    "customer_shipping_address":{
-                        "full_name":shippingDetails.name,
-                        "country":shippingDetails.address.country,
-                        "city":shippingDetails.address.city,
-                        "state":shippingDetails.address.state,
-                        "pincode":shippingDetails.address.postal_code,
-                        "address_1":shippingDetails.address.line1,
-                        "address_2":shippingDetails.address.line_2
-                    }
+                    // "customer_shipping_address":{
+                    //     "full_name":shippingDetails.name,
+                    //     "country":shippingDetails.address.country,
+                    //     "city":shippingDetails.address.city,
+                    //     "state":shippingDetails.address.state,
+                    //     "pincode":shippingDetails.address.postal_code,
+                    //     "address_1":shippingDetails.address.line1,
+                    //     "address_2":shippingDetails.address.line_2
+                    // }
                 },
-                "cart_details":{
-                    "cart_items":cashfreeCartItems
-                    
-                }
+                // "cart_details":{
+                //     "cart_items":cashfreeCartItems                    
+                // }
             };
 
             const orderCashfree = await Cashfree.PGCreateOrder("2023-08-01", request)
