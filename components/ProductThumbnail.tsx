@@ -1,6 +1,6 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import { IndianRupeeIcon, Plus } from 'lucide-react';
+import { Heart, IndianRupeeIcon, Plus } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import { imageUrl } from '@/lib/imageUrl';
@@ -9,6 +9,8 @@ import { useRouter } from 'next/navigation';
 import { poppins, ws, cinzel } from '@/utils/font';
 import { useAuth, useUser, SignInButton } from '@clerk/nextjs';
 import axios from 'axios';
+import { useRecentlyViewedStore } from '@/store/useRecentlyViewed';
+import { useWishlistStore } from '@/store/useWishlistStore';
 
 export default function ProductThumbnail({ product, index }: { product: ProductPageType; index: number }) {
   const router = useRouter();
@@ -19,6 +21,9 @@ export default function ProductThumbnail({ product, index }: { product: ProductP
   const [quickBuySize, setQuickBuySize] = useState<string | null>(null);
   const [quantity, setQuantity] = useState<number>(1);
   const [isLoading, setIsLoading] = useState(false);
+  const addViewedItem = useRecentlyViewedStore((state) => state.addViewedItem)
+  const { addToWishlist, removeFromWishlist, isWishlisted } = useWishlistStore()
+  const isSaved = isWishlisted(product._id)
 
   const { isSignedIn } = useAuth();
   const { user } = useUser();
@@ -30,6 +35,7 @@ export default function ProductThumbnail({ product, index }: { product: ProductP
   const handleClick = () => {
     const path = product.productPath?.slice(0, 3).join('/');
     if (path && product.slug?.current && currentVariant?._key) {
+      addViewedItem(product)
       router.push(`/${path}/${product.slug.current}?v=${currentVariant._key}`);
     }
   };
@@ -174,6 +180,12 @@ export default function ProductThumbnail({ product, index }: { product: ProductP
             </SignInButton>
           )}
         </div>
+
+        {
+          <div className='absolute top-0 right-0 m-2'>
+          {isSaved?<Heart onClick={()=>removeFromWishlist(product._id)} className='fill-red-600 text-red-600 w-5 h-5'/>: <Heart onClick={()=>addToWishlist(product)} className='fill-transparent w-5 h-5'/>}
+          </div>
+        }
         
       </div>
 
