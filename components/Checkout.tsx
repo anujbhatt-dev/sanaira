@@ -41,7 +41,7 @@ export default function Checkout() {
 
     const initializeSDK = async () => {
         cashfree = await load({
-            mode:"production"
+            mode:"sandbox"
         })
     }
 
@@ -214,9 +214,12 @@ export default function Checkout() {
         try {
             const res = await axios.post("/cashfree-checkout/payment", orderData);
             const sessionId = res.data
+            console.log(sessionId);
+            
             const checkoutOptions = {
                 paymentSessionId:sessionId as string,
-                redirectTarget:"_modal" as string
+                redirectTarget:"_modal" as string,
+                
             }
             const paymentInitialize = await cashfree.checkout(checkoutOptions)
             console.log("payment initialize" , paymentInitialize);

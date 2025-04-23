@@ -1,17 +1,24 @@
 import { backendClient } from "@/sanity/lib/backendClient";
 import { CartItem } from "@/types";
+import axios from "axios";
 import { Cashfree } from "cashfree-pg";
 
-Cashfree.XClientId = process.env.PROD_CASHFREE_CLIENT_ID!;
-Cashfree.XClientSecret = process.env.PROD_CASHFREE_CLIENT_SECRET!;
-Cashfree.XEnvironment = Cashfree.Environment.PRODUCTION;
+const headers = {
+  'Content-Type': 'application/json',
+  'x-api-version': '2023-08-01',
+  'x-client-id': process.env.CASHFREE_CLIENT_ID!,
+  'x-client-secret': process.env.CASHFREE_CLIENT_SECRET!
+};
 
 export async function POST(req: Request) {
+  // if (!Cashfree.XClientId || !Cashfree.XClientSecret) {
+  //   console.error("Cashfree credentials missing!");
+  // }
   const body = await req.json();
   const cartItems = body.cart_details.cart_items as CartItem[]
-//   const shippingDetails = body.shippingDetails
+  const shippingDetails = body.shippingDetails
   
-  console.log(body.cart_details.cart_items);
+  // console.log(body.cart_details.cart_items);
 
   if(cartItems.length===0){
     return Response.json({ success: false, message: "No Itmes in Cart" }, { status: 404 });
@@ -97,55 +104,71 @@ export async function POST(req: Request) {
      await updateProductStocks(sanityProducts)
      return Response.json({ success: true, order });
   }else{
-    // const cashfreeCartItems = cartItems.map((item)=>{
-    //     return {
-    //         "item_id":item.item_id,
-    //         "item_name":item.item_name,
-    //         "item_original_unit_price":item.item_discounted_unit_price,
-    //         "item_discounted_unit_price":item.item_original_unit_price,
-    //         "item_quantity":item.item_quantity,
-    //         "item_tags":item.item_tags as string[]
-    //     }
-    // })
+    const cashfreeCartItems = cartItems.map((item)=>{
+        return {
+            "item_id":item.item_id,
+            "item_name":item.item_name,
+            "item_original_unit_price":item.item_discounted_unit_price,
+            "item_discounted_unit_price":item.item_original_unit_price,
+            "item_quantity":item.item_quantity,
+            // "item_tags":item.item_tags as string[]
+        }
+    })
 
+    const request = {
+        "order_amount": orderData.totalPrice,
+        "order_currency": "INR",
+        "order_id": orderData.orderNumber, // ✅ Unique with crypto
+        "customer_details": {
+            "customer_id": orderData.clerkUserId,
+            "customer_phone": orderData.shippingDetails.phone,
+          },
+          "cart_details":{
+                "cart_items":cashfreeCartItems,                    
+                "customer_shipping_address":{
+                    "full_name":shippingDetails.name,
+                    "country":shippingDetails.address.country,
+                    "city":shippingDetails.address.city,
+                    "state":shippingDetails.address.state,
+                    "pincode":shippingDetails.address.postal_code,
+                    "address_1":shippingDetails.address.line1,
+                    "address_2":shippingDetails.address.line2
+                }
+        }
+    };
+    const headers = {
+      'Content-Type': 'application/json',
+      'x-api-version': '2025-01-01',
+      'x-client-id': process.env.CASHFREE_CLIENT_ID,
+      'x-client-secret': process.env.CASHFREE_CLIENT_SECRET
+    };
+    
     try {
-            const request = {
-                "order_amount": orderData.totalPrice,
-                "order_currency": "INR",
-                "order_id": orderData.orderNumber, // ✅ Unique with crypto
-                "customer_details": {
-                    "customer_id": orderData.customerName,
-                    "customer_phone": orderData.shippingDetails.phone,
-                    // "customer_shipping_address":{
-                    //     "full_name":shippingDetails.name,
-                    //     "country":shippingDetails.address.country,
-                    //     "city":shippingDetails.address.city,
-                    //     "state":shippingDetails.address.state,
-                    //     "pincode":shippingDetails.address.postal_code,
-                    //     "address_1":shippingDetails.address.line1,
-                    //     "address_2":shippingDetails.address.line_2
-                    // }
-                },
-                // "cart_details":{
-                //     "cart_items":cashfreeCartItems                    
-                // }
-            };
-
-            const orderCashfree = await Cashfree.PGCreateOrder("2023-08-01", request)
-
-            if(orderCashfree){
-                console.log('Order Created successfully:',orderCashfree.data)
-                console.log("session id ", orderCashfree.data.payment_session_id);            
-                return new Response(orderCashfree.data.payment_session_id,{status:201,headers:{'Content-Type':"application/json"}})
-            }  
-            return new Response("Not successs", {status:400})   
-
-        }catch (error) {
-            if(error instanceof Error){
-                console.log("cashfree error", error);
-                return new Response("Cashfree order error " + error , { status: 500 });
-            }
-        } 
+      const cashfreeResponse = await axios.post(
+        'https://sandbox.cashfree.com/pg/orders', // use production endpoint if needed
+        request,
+        { headers }
+      );
+      console.log(cashfreeResponse);      
+      const sessionId = cashfreeResponse.data.payment_session_id;
+      console.log('Order Created successfully:', cashfreeResponse.data);
+    
+      return new Response(sessionId, {
+        status: 201,
+        headers: { 'Content-Type': 'application/json' }
+      });
+    
+    } catch (error: any) {
+      console.error("Cashfree error", {
+        message: error.message,
+        response: error.response?.data,
+        status: error.response?.status
+      });
+    
+      return new Response("Cashfree order error: " + JSON.stringify(error.response?.data), {
+        status: 500
+      });
+    }
   }
 
   return Response.json({ success: true, updatedUser: patchResponse });
