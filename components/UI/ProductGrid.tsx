@@ -1,11 +1,11 @@
 "use client"
-import { ALL_PRODUCTS_QUERYResult } from '@/sanity.types'
 import React, { useEffect } from 'react'
 import ProductThumbnail from '../ProductThumbnail'
 import { usePreferenceStore } from '@/store/usePreferenceStore'
 import { ws } from '@/utils/font'
+import { ProductMini, ProductPageType } from '@/types'
 
-export default function ProductGrid({ products }: { products: ALL_PRODUCTS_QUERYResult }) {
+export default function ProductGrid({ products, similarProduct }: { products?: ProductPageType[], similarProduct?:ProductMini[] }) {
   const { productGridCols, setProductGridCols } = usePreferenceStore()
 
   useEffect(() => {
@@ -33,6 +33,8 @@ export default function ProductGrid({ products }: { products: ALL_PRODUCTS_QUERY
   const gridStyle = {
     gridTemplateColumns: `repeat(${productGridCols}, minmax(0, 1fr))`
   }
+
+  
 
   return (
     <div>
@@ -68,8 +70,11 @@ export default function ProductGrid({ products }: { products: ALL_PRODUCTS_QUERY
         </div>
       </div>
       <div className={`grid grid-cols-2 gap-2`} style={gridStyle}>
-        {products.map((product, i) => (
+        {products && products.map((product, i) => (
           <ProductThumbnail key={product._id} product={product} index={i} />
+        ))}
+        {similarProduct && similarProduct.map((product, i) => (
+          <ProductThumbnail key={product._id} similarProduct={product} index={i} />
         ))}
       </div>
     </div>

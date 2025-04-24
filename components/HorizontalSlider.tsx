@@ -5,7 +5,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ALL_PRODUCTS_QUERYResult } from "@/sanity.types";
 import { mulish } from "@/utils/font";
-import ProductThumbnail from "./ProductThumbnail";
+// import ProductThumbnail from "./ProductThumbnail";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -55,7 +55,7 @@ function HorizontalSlider({products}:{products:ALL_PRODUCTS_QUERYResult}) {
             {products.map((product)=>(
               <div className="relative shrink-0" key={product._id} >
                   <div className="w-[23vw]  shrink-0">
-                     <ProductThumbnail key={product._id} product={product} index={0}/>
+                     {/* <ProductThumbnail key={product._id} product={product} index={0}/> */}
                 </div>
               </div>
             ))}

@@ -2,6 +2,8 @@ import Product from '@/components/Product'
 import Reviews from '@/components/Reviews'
 import SimilarProduct from '@/components/SimilarProduct'
 import { getProductBySlug } from '@/sanity/lib/products/getProductBySlug'
+import { getSimilarProductBySlug } from '@/sanity/lib/products/getSimilarProductsBySlug'
+import { ProductPageType } from '@/types'
 import { cinzel } from '@/utils/font'
 import React from 'react'
 
@@ -16,6 +18,8 @@ export default async function ProductPage({params,searchParams}:{params:Promise<
     const {topCategory,subCategory,baseCategory,productSlug} = await params;
     const {v=""} = await searchParams 
     const product = await getProductBySlug(productSlug);
+    const similarProducts = await getSimilarProductBySlug(productSlug)
+    const youMayAlsoLike = similarProducts?.youMayAlsoLike
     
   return (
     <div className='px-4 lg:px-[5rem]'>
@@ -36,7 +40,7 @@ export default async function ProductPage({params,searchParams}:{params:Promise<
            <Product product={product} v={v}/>
         }        
         <Reviews />
-        <SimilarProduct products={product?.youMayAlsoLike ?? []}/> 
+        <SimilarProduct products={similarProducts}/> 
     </div>
   )
 }

@@ -1,14 +1,6 @@
 import { backendClient } from "@/sanity/lib/backendClient";
 import { CartItem } from "@/types";
 import axios from "axios";
-import { Cashfree } from "cashfree-pg";
-
-const headers = {
-  'Content-Type': 'application/json',
-  'x-api-version': '2023-08-01',
-  'x-client-id': process.env.CASHFREE_CLIENT_ID!,
-  'x-client-secret': process.env.CASHFREE_CLIENT_SECRET!
-};
 
 export async function POST(req: Request) {
   // if (!Cashfree.XClientId || !Cashfree.XClientSecret) {
@@ -158,14 +150,11 @@ export async function POST(req: Request) {
         headers: { 'Content-Type': 'application/json' }
       });
     
-    } catch (error: any) {
-      console.error("Cashfree error", {
-        message: error.message,
-        response: error.response?.data,
-        status: error.response?.status
-      });
+    } catch (error) {
+      if(error instanceof Error)
+      console.error("Cashfree error", error);
     
-      return new Response("Cashfree order error: " + JSON.stringify(error.response?.data), {
+      return new Response("Cashfree order error: " + JSON.stringify(error), {
         status: 500
       });
     }
