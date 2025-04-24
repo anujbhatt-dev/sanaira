@@ -36,7 +36,7 @@ export default async function ProductPage({params,searchParams}:{params:Promise<
            <Product product={product} v={v}/>
         }        
         <Reviews />
-        <SimilarProduct /> 
+        <SimilarProduct products={product?.youMayAlsoLike ?? []}/> 
     </div>
   )
 }

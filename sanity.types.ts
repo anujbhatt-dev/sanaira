@@ -261,10 +261,6 @@ export type User = {
       [internalGroqTypeReferenceTo]?: "product";
     };
     addedAt?: string;
-    variant?: {
-      color?: string;
-      size?: string;
-    };
     _key: string;
   }>;
   recentlyViewed?: Array<{
@@ -369,6 +365,13 @@ export type Product = {
     metaDescription?: string;
     keywords?: Array<string>;
   };
+  youMayAlsoLike?: Array<{
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    _key: string;
+    [internalGroqTypeReferenceTo]?: "product";
+  }>;
   accessControl?: "public" | "private";
 };
 
@@ -764,6 +767,13 @@ export type COLLECTION_BY_SLUG_QUERYResult = {
       metaDescription?: string;
       keywords?: Array<string>;
     };
+    youMayAlsoLike?: Array<{
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      _key: string;
+      [internalGroqTypeReferenceTo]?: "product";
+    }>;
     accessControl?: "private" | "public";
   }> | null;
   description: Array<{
@@ -943,12 +953,19 @@ export type ALL_PRODUCTS_QUERYResult = Array<{
     metaDescription?: string;
     keywords?: Array<string>;
   };
+  youMayAlsoLike?: Array<{
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    _key: string;
+    [internalGroqTypeReferenceTo]?: "product";
+  }>;
   accessControl?: "private" | "public";
 }>;
 
 // Source: ./sanity/lib/products/getProductBySlug.ts
 // Variable: PRODUCT_BY_SLUG_QUERY
-// Query: *[_type == "product" && slug.current == $slug][0]{            ...,            "productPath": [                category->parent->parent->slug.current,                 category->parent->slug.current,                 category->slug.current            ]        }
+// Query: *[_type == "product" && slug.current == $slug][0]{            ...,                youMayAlsoLike[]->{                ...,                "productPath": [                category->parent->parent->slug.current,                 category->parent->slug.current,                 category->slug.current            ]            },                    "productPath": [                category->parent->parent->slug.current,                 category->parent->slug.current,                 category->slug.current            ]        }
 export type PRODUCT_BY_SLUG_QUERYResult = {
   _id: string;
   _type: "product";
@@ -1026,6 +1043,92 @@ export type PRODUCT_BY_SLUG_QUERYResult = {
     metaDescription?: string;
     keywords?: Array<string>;
   };
+  youMayAlsoLike: Array<{
+    _id: string;
+    _type: "product";
+    _createdAt: string;
+    _updatedAt: string;
+    _rev: string;
+    title?: string;
+    slug?: Slug;
+    description?: Array<{
+      children?: Array<{
+        marks?: Array<string>;
+        text?: string;
+        _type: "span";
+        _key: string;
+      }>;
+      style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "normal";
+      listItem?: "bullet";
+      markDefs?: Array<{
+        href?: string;
+        _type: "link";
+        _key: string;
+      }>;
+      level?: number;
+      _type: "block";
+      _key: string;
+    } | {
+      asset?: {
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+      };
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      alt?: string;
+      _type: "image";
+      _key: string;
+    }>;
+    category?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "category";
+    };
+    video?: string;
+    variants?: Array<{
+      name?: string;
+      color?: string;
+      sizes?: Array<{
+        size?: string;
+        price?: number;
+        stock?: number;
+        sku?: string;
+        discount?: number;
+        _key: string;
+      }>;
+      variantImages?: Array<{
+        asset?: {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+        };
+        hotspot?: SanityImageHotspot;
+        crop?: SanityImageCrop;
+        alt?: string;
+        _type: "image";
+        _key: string;
+      }>;
+      _key: string;
+    }>;
+    productPath: Array<string | null>;
+    seo?: {
+      metaTitle?: string;
+      metaDescription?: string;
+      keywords?: Array<string>;
+    };
+    youMayAlsoLike?: Array<{
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      _key: string;
+      [internalGroqTypeReferenceTo]?: "product";
+    }>;
+    accessControl?: "private" | "public";
+  }> | null;
   accessControl?: "private" | "public";
 } | null;
 
@@ -1109,6 +1212,13 @@ export type PRODUCTS_BY_SEARCH_QUERYResult = Array<{
     metaDescription?: string;
     keywords?: Array<string>;
   };
+  youMayAlsoLike?: Array<{
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    _key: string;
+    [internalGroqTypeReferenceTo]?: "product";
+  }>;
   accessControl?: "private" | "public";
 }>;
 
@@ -1121,7 +1231,7 @@ declare module "@sanity/client" {
     "\n        *[_type == \"collection\" && slug.current == $slug][0]{\n            title,\n            slug,\n            products[]->{\n                ...,\n                \"productPath\": [\n                    category->parent->parent->slug.current,\n                    category->parent->slug.current,\n                    category->slug.current\n                ]\n            },\n            description,\n            image\n        }\n    ": COLLECTION_BY_SLUG_QUERYResult;
     "\n        *[_type == \"order\" && clerkUserId == $clerkUserId] | order(orderDate desc) {\n          _id,\n          orderNumber,\n          stripeCheckoutSessionId,\n          stripeCustomerId,\n          clerkUserId,\n          customerName,\n          email,\n          stripePaymentIntentId,\n          products[] {\n            product-> {\n              _id,\n              title,\n              \"slug\": slug.current,\n              variants[]{\n                variantImages[]{\n                    asset->{\n                        url\n                    }\n                },\n                color  \n              },\n            },\n            quantity,\n            sku,\n            color,\n            price\n          },\n          totalPrice,\n          currency,\n          amountDiscount,\n          status,\n          orderDate,\n          refundStatus,\n          refundAmount,\n          returnReason,\n          refundDate,\n          shippingDetails {\n            name,\n            phone,\n            address {\n              line1,\n              line2,\n              city,\n              state,\n              postal_code,\n              country\n            }\n          }\n        }\n      ": MY_ORDERS_QUERYResult;
     "\n        *[_type == \"product\"]{\n            ...,\n            \"productPath\": [\n                category->parent->parent->slug.current, \n                category->parent->slug.current, \n                category->slug.current\n            ]\n        }\n    ": ALL_PRODUCTS_QUERYResult;
-    "\n        *[_type == \"product\" && slug.current == $slug][0]{\n            ...,\n            \"productPath\": [\n                category->parent->parent->slug.current, \n                category->parent->slug.current, \n                category->slug.current\n            ]\n        }\n    ": PRODUCT_BY_SLUG_QUERYResult;
+    "\n        *[_type == \"product\" && slug.current == $slug][0]{\n            ...,    \n            youMayAlsoLike[]->{\n                ...,\n                \"productPath\": [\n                category->parent->parent->slug.current, \n                category->parent->slug.current, \n                category->slug.current\n            ]\n            },        \n            \"productPath\": [\n                category->parent->parent->slug.current, \n                category->parent->slug.current, \n                category->slug.current\n            ]\n        }\n    ": PRODUCT_BY_SLUG_QUERYResult;
     "\n        *[\n          _type==\"product\" && \n          (\n            title match $q || \n            description[].children[].text match $q // Corrected description search\n          )\n        ] | order(title asc){\n            ...,\n            \"productPath\": [\n                category->parent->parent->slug.current, \n                category->parent->slug.current, \n                category->slug.current\n            ]\n        }\n    ": PRODUCTS_BY_SEARCH_QUERYResult;
   }
 }

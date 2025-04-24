@@ -26,6 +26,8 @@ function Product({product,v}:{product:ProductPageType,v: string}) {
   if(!currentVariant){
     currentVariant = product.variants && product.variants[0];
   }  
+  console.log(product.youMayAlsoLike);
+  
 
   const [selectedMedia,setSelectedMedia] = useState<number>(0);
   const [showShippingPolicy,setShowShippingPolicy] = useState<boolean>(true);

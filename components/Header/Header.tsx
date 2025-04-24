@@ -3,10 +3,12 @@ import Link from "next/link";
 import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
 import SearchBar from "../SearchBar";
 import { cinzel, poppins } from "@/utils/font";
-import { LogIn, ShoppingBag} from "lucide-react";
+import { Heart, LogIn, ShoppingBag} from "lucide-react";
 import TotalItemCount from "../TotalItemsCount";
 import { ALL_FEATURED_CATEGORIES_QUERYResult } from "@/sanity.types";
 import { useEffect, useState } from "react";
+import { useBasketStore } from "@/store/useBasketStore";
+import { useWishlistStore } from "@/store/useWishlistStore";
 
 interface IHeader {
   categories: ALL_FEATURED_CATEGORIES_QUERYResult;
@@ -16,6 +18,10 @@ interface IHeader {
 const Header = ({  isPro }: IHeader) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
+  const {getItemCount} = useBasketStore()
+  const  {getWishlist} = useWishlistStore()
+  const totalCartItems = getItemCount()
+  const totalWishlistItems = getWishlist().length
 
   useEffect(() => {
     const handleScroll = () => {
@@ -97,15 +103,18 @@ const Header = ({  isPro }: IHeader) => {
 
           {isPro && (
             <span className={`${poppins.className} bg-white absolute -bottom-2 right-0 px-1 text-blue-600 font-semibold rounded-lg text-[0.6rem] translate-x-[50%]`}>
-              Plus
+                Plus
             </span>
           )}
         </div>
         </SignedIn>
-
+        <Link href="/my-wishlist" className="relative flex items-center">
+          <Heart className="w-8 h-8 hover:text-accent transition-colors" />
+          {totalWishlistItems > 0  && <TotalItemCount total={totalWishlistItems}/>}
+        </Link>
         <Link href="/my-basket" className="relative flex items-center">
           <ShoppingBag className="w-8 h-8 hover:text-accent transition-colors" />
-          <TotalItemCount />
+          {totalCartItems > 0 && <TotalItemCount total={totalCartItems} />}
         </Link>
       </div>
     </header>

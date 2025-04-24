@@ -192,7 +192,18 @@ export const productType = defineType({
         { name: 'keywords', title: 'Keywords', type: 'array', of: [{ type: 'string' }] },
       ],
     }),
-
+    defineField({
+      name: 'youMayAlsoLike',
+      title: 'You may also like',
+      type: 'array',
+      of: [
+        {
+          type: 'reference',
+          to: [{ type: 'product' }],
+        },
+      ],
+      description: 'Manually select similar products to display alongside this product.',
+    }),
     defineField({
       name: 'accessControl',
       title: 'Access Control',

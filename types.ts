@@ -1,6 +1,13 @@
 import { Product } from "./sanity.types";
 
-export  type ProductPageType = Omit<Product, "productPath"> & {productPath: (string | null)[];}
+export type ProductMini = Omit<Product, "productPath"> & {
+  productPath: (string | null)[];
+};
+
+export type ProductPageType = Omit<Product, "productPath" | "youMayAlsoLike"> & {
+  productPath: (string | null)[];
+  youMayAlsoLike: ProductMini[] | null;
+};
 
 export interface CartItem {
   item_id: string;
