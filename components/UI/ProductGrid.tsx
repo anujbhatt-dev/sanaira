@@ -5,7 +5,7 @@ import { usePreferenceStore } from '@/store/usePreferenceStore'
 import { ws } from '@/utils/font'
 import { ProductMini, ProductPageType } from '@/types'
 
-export default function ProductGrid({ products, similarProduct }: { products?: ProductPageType[], similarProduct?:ProductMini[] }) {
+export default function ProductGrid({ products }: { products: ProductPageType[]  }) {
   const { productGridCols, setProductGridCols } = usePreferenceStore()
 
   useEffect(() => {
@@ -72,9 +72,6 @@ export default function ProductGrid({ products, similarProduct }: { products?: P
       <div className={`grid grid-cols-2 gap-2`} style={gridStyle}>
         {products && products.map((product, i) => (
           <ProductThumbnail key={product._id} product={product} index={i} />
-        ))}
-        {similarProduct && similarProduct.map((product, i) => (
-          <ProductThumbnail key={product._id} similarProduct={product} index={i} />
         ))}
       </div>
     </div>
