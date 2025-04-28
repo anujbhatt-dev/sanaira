@@ -4,15 +4,7 @@ import { sanityFetch } from "../live";
 export const getProductBySlug = async (slug:string) => {
     const PRODUCT_BY_SLUG_QUERY = defineQuery(`
         *[_type == "product" && slug.current == $slug][0]{
-            ...,    
-            youMayAlsoLike[]->{
-                ...,
-                "productPath": [
-                category->parent->parent->slug.current, 
-                category->parent->slug.current, 
-                category->slug.current
-            ]
-            },        
+            ...,          
             "productPath": [
                 category->parent->parent->slug.current, 
                 category->parent->slug.current, 

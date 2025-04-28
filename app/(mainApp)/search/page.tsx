@@ -1,6 +1,7 @@
 import Heading from '@/components/Heading';
-import ProductGrid from '@/components/UI/ProductGrid';
+// import ProductGrid from '@/components/UI/ProductGrid';
 import { getSearchedProducts } from '@/sanity/lib/products/getSearchProducts';
+// import { ProductPageType } from '@/types';
 import React from 'react'
 
 export default async function SearchPage({
@@ -21,7 +22,7 @@ export default async function SearchPage({
           <Heading text="Results"/>
         </div>
         <div className='mx-auto'>
-        <ProductGrid products={products}/>
+        {/* <ProductGrid products={products}/> */}
         </div>
     </div>
   )

@@ -3,9 +3,10 @@ import React, { useEffect } from 'react'
 import ProductThumbnail from '../ProductThumbnail'
 import { usePreferenceStore } from '@/store/usePreferenceStore'
 import { ws } from '@/utils/font'
-import { ProductMini, ProductPageType } from '@/types'
+import { ProductPageType } from '@/types'
+// import { PRODUCTS_BY_SEARCH_QUERYResult } from '@/sanity.types'
 
-export default function ProductGrid({ products }: { products: ProductPageType[]  }) {
+export default function ProductGrid({ products }: { products: ProductPageType[]}) {
   const { productGridCols, setProductGridCols } = usePreferenceStore()
 
   useEffect(() => {

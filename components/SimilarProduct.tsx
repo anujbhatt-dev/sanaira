@@ -1,13 +1,15 @@
 import React from 'react'
 import Heading from './Heading'
-// import { getAllProducts } from '@/sanity/lib/products/getAllProducts';
-import ProductGrid from './UI/ProductGrid';
-import { ProductMini, ProductPageType } from '@/types';
-import { SIMILAR_PRODUCT_BY_SLUG_QUERYResult } from '@/sanity.types';
+import { getSimilarProductBySlug } from '@/sanity/lib/products/getSimilarProductsBySlug';
+import ProductGridSimilar from './UI/ProductGridSimilar';
 
 
-export default async function SimilarProduct({products}:{products:SIMILAR_PRODUCT_BY_SLUG_QUERYResult}) {
-  const youMayAlsoLike = products?.youMayAlsoLike
+export default async function SimilarProduct({productSlug}:{productSlug:string}) {
+  const similarProducts = await getSimilarProductBySlug(productSlug)
+  const youMayAlsoLike = similarProducts?.youMayAlsoLike
+  if(youMayAlsoLike && youMayAlsoLike.length < 1){
+    return null
+  }
   return (
     <div className='mt-12'>     
         <div className="text-xl md:text-3xl flex items-center justify-center gap-x-4">
@@ -15,7 +17,7 @@ export default async function SimilarProduct({products}:{products:SIMILAR_PRODUC
             <Heading text="Products" />
         </div>
         {youMayAlsoLike &&
-        <ProductGrid similarProduct={youMayAlsoLike}  />
+        <ProductGridSimilar similarProduct={similarProducts}  />
         }
     </div>
   )

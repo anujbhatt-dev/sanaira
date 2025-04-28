@@ -3,12 +3,14 @@
 import Heading from './Heading'
 import React from 'react'
 import ProductGrid from './UI/ProductGrid';
-import { ALL_PRODUCTS_QUERYResult, COLLECTION_BY_SLUG_QUERYResult } from '@/sanity.types';
+import { COLLECTION_BY_SLUG_QUERYResult } from '@/sanity.types';
 import { cinzel } from '@/utils/font';
 
 
 export default function Collection({collection}:{collection:COLLECTION_BY_SLUG_QUERYResult}) {  
-  const products = collection?.products;
+  const products = collection?.products;  
+  
+  
   return (
         <div className='px-[0.2rem] md:px-[2rem] '>
         {
@@ -19,7 +21,11 @@ export default function Collection({collection}:{collection:COLLECTION_BY_SLUG_Q
                     <Heading text={collection?.title || ""}/>
                     </div>
                 </div>
-                    <ProductGrid products={products as ALL_PRODUCTS_QUERYResult}/>            
+                {
+                   products  &&  
+                   // @ts-ignore
+                    <ProductGrid products={products}/>                                
+                }
                 </div>
             )
         }        
